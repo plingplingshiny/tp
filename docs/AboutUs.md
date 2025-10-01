@@ -17,7 +17,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[homepage](https://kin-chong.github.io/casey-website/)]
 [[github](https://github.com/kin-chong)]
-[[portfolio](team/johndoe.md)]
+[[portfolio](team/kin-chong.md)]
 
 * Role: Project Advisor
 
