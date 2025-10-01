@@ -11,12 +11,12 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### John Doe
+### Casey Low
 
-<img src="images/johndoe.png" width="200px">
+<img src="images/kin-chong.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
-[[github](https://github.com/johndoe)]
+[[homepage](https://kin-chong.github.io/casey-website/)]
+[[github](https://github.com/kin-chong)]
 [[portfolio](team/johndoe.md)]
 
 * Role: Project Advisor
@@ -49,13 +49,3 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
-
-### James Doe
-
-<img src="images/johndoe.png" width="200px">
-
-[[github](http://github.com/johndoe)]
-[[portfolio](team/johndoe.md)]
-
-* Role: Developer
-* Responsibilities: UI
