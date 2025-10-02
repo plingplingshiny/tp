@@ -332,13 +332,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+4.  Should be able to start up quickly within a few seconds on a typical computer.
+5.  Should be able to run on laptops with 4GB RAM and above.
+6.  Error messages should be easy to understand by an average user.
+7.  Change in user preferences should be persisted across sessions.
+8.  All features work without internet access.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
 * **Private contact detail**: A contact detail that is not meant to be shared with others
+* **Command**: A text instruction entered by the user (e.g., add, delete) to perform an action.
+* **CLI**: Command Line Interface
+* **GUI**: Graphical User Interface
+* **JavaFx**: A Java library for building GUI applications
+* **FXMl**: An XML-based language for defining the layout of JavaFx GUIs
+* **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
+* **Tag**: A short label (e.g., friend, colleague) that can be attached to a contact for categorization.
 
 --------------------------------------------------------------------------------------------------------------------
 
