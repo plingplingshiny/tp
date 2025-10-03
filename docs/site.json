@@ -1,10 +1,12 @@
 {
   "baseUrl": "",
   "titlePrefix": "PropertyPal",
-  "titleSuffix": "AddressBook Level-3",
-  "faviconPath": "images/SeEduLogo.png",
+  "titleSuffix": "PropertyPal",
+  "faviconPath": "images/propertyPal.png",
   "style": {
-    "codeTheme": "light"
+    "bootstrapTheme": "bootswatch-pulse",
+    "codeTheme": "light",
+    "codeLineNumbers": true
   },
   "ignore": [
     "_markbind/layouts/*",
