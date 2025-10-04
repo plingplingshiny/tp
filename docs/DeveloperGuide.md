@@ -275,56 +275,163 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
+* real estate agents who manage a large number of client contacts
+* frequently need to search or filter clients by specific details (e.g., name, phone, tags)
 * prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**:
+
+* allows efficient searching and filtering of clients by any field (name, phone, email, address, tags)
+* enables quick addition, editing, and deletion of client contact details
 
 
 ### User stories
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| `* * *`  | new user                                   | see usage instructions       | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person             |                                                                        |
-| `* * *`  | user                                       | delete a person              | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name        | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name         | locate a person easily                                                 |
+| Priority | As a …​           | I want to …​                        | So that I can…​                                                 |
+|----------|-------------------|-------------------------------------|-----------------------------------------------------------------|
+| `* * *`  | real estate agent | add a new client’s contact details  | manage potential buyers and sellers                             |
+| `* * *`  | real estate agent | delete a client's contact           | remove entries that I no longer need                            |
+| `* * *`  | real estate agent | view a list of all clients          | get an overview of my client database                           |
+| `* * *`  | real estate agent | find a client by any field          | locate a client even if I only recall part of their details     |
+| `* *`    | real estate agent | sort clients alphabetically by name | locate a client more easily                                     |
+| `* *`    | real estate agent | filter contacts by tags             | group and manage contacts based on relationship type or purpose |
 
 *{More to be added}*
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `PropertyPal` and the **Actor** is the `user (real estate agent)`, unless specified otherwise)
 
-**Use case: Delete a person**
+**Use case 1: Add a client contact**
+
+**Guarantees:**
+* Client details are saved if all fields are valid and unique. 
+* No duplicates will be created.
 
 **MSS**
 
-1.  User requests to list persons
-2.  AddressBook shows a list of persons
-3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+1.  User enters the add command with all required details in a single line. 
+2.  PropertyPal adds the new client and displays a success message.
 
     Use case ends.
 
 **Extensions**
 
-* 2a. The list is empty.
+* 1a. Invalid input (e.g. wrong format)
 
-  Use case ends.
+    * 1a1. PropertyPal displays an error message indicating the correct format.
+    * 1a2. User re-enters data.
 
-* 3a. The given index is invalid.
+        Steps 1a1 - 1a2 are repeated until the input entered is valid.
 
-    * 3a1. AddressBook shows an error message.
+        Use case resumes from step 2.
 
-      Use case resumes at step 2.
+
+* 1b. Duplicate client detected
+
+    * 1b1. PropertyPal displays a message indicating client already exists.
+
+      Use case ends.
+
+
+**Use case 2: Delete a client contact**
+
+**Guarantees:**
+* The specified client is removed from the list if a valid name is provided. 
+* No deletion occurs without user confirmation when multiple matches exist.
+
+**MSS**
+
+1.  User enters delete command with the full name of the client.
+2.  If exactly one match is found, PropertyPal deletes the client and displays a success message.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. No matching record found
+
+    * 1a1. PropertyPal displays a message indicating no such record found.
+
+      Use case ends.
+
+
+* 1b. Multiple matches found
+
+    * 1b1. PropertyPal lists all matching clients with indices.
+    * 1b2. User enters the index of the client to delete.
+    * 1b3. PropertyPal deletes the client and displays a success message.
+
+      Use case ends.
+
+
+* 1c. Invalid input (e.g. empty name, invalid characters).
+
+    * 1c1. PropertyPal displays an error message indicating the correct format.
+    * 1c2. User re-enters data.
+
+        Steps 1c1 - 1c2 are repeated until the input entered is valid.
+
+        Use case resumes from step 2.
+
+
+**Use case 3: List all client contacts**
+
+**MSS**
+
+1.  User enters list command.
+2.  PropertyPal displays a list of all clients in the order they were added.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. No clients stored
+
+    * 1a1. PropertyPal displays a message indicating no clients saved.
+
+      Use case ends.
+
+
+* 1b. Invalid input (e.g. extra parameters)
+
+    * 1b1. PropertyPal displays an error message indicating the correct format.
+
+      Use case ends.
+
+
+**Use case 4: Find clients by specific field(s)**
+
+**Guarantees:**
+* PropertyPal displays all clients that match the given search keyword(s).
+* Each matching client is displayed only once, even if it matches multiple criteria.
+
+**MSS**
+
+1.  User enters find command with prefix and keyword(s).
+2.  PropertyPal displays a list of all matching clients in the order they were added.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Invalid input (e.g. missing prefix or keyword, input too short)
+
+    * 1a1. PropertyPal displays an error message indicating the correct format.
+    * 1a2. User re-enters data.
+
+        Steps 1a1 - 1a2 are repeated until the input entered is valid. 
+
+        Use case resumes from step 2.
+
+
+* 1b. No matches found
+
+    * 1b1. PropertyPal displays a message indicating no matching clients found.
+
+      Use case ends.
 
 *{More to be added}*
 
