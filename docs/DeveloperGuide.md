@@ -457,6 +457,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **FXMl**: An XML-based language for defining the layout of JavaFx GUIs
 * **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
 * **Tag**: A short label (e.g., friend, colleague) that can be attached to a contact for categorization.
+* **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
+* **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
+* **Duplicate entry**: A contact record that has the same name, phone number, email, and address as an existing record.
 
 --------------------------------------------------------------------------------------------------------------------
 
