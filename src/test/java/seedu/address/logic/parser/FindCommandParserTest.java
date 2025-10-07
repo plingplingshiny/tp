@@ -5,30 +5,58 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailur
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.FindCommand;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.PersonContainsKeywordsPredicate;
 
+/**
+ * Tests for {@code FindCommandParser}.
+ * Updated for n/ and t/ prefixes, supporting OR semantics and multi-word values.
+ */
 public class FindCommandParserTest {
 
-    private FindCommandParser parser = new FindCommandParser();
+    private final FindCommandParser parser = new FindCommandParser();
 
     @Test
     public void parse_emptyArg_throwsParseException() {
-        assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "     ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_validArgs_returnsFindCommand() {
-        // no leading and trailing whitespaces
-        FindCommand expectedFindCommand =
-                new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob")));
-        assertParseSuccess(parser, "Alice Bob", expectedFindCommand);
+    public void parse_validNameArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(Arrays.asList("alice", "bob"), Collections.emptyList());
+        FindCommand expectedFindCommand = new FindCommand(predicate);
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n Alice \n \t Bob  \t", expectedFindCommand);
+        // single prefix, multiple words
+        assertParseSuccess(parser, " n/Alice Bob", expectedFindCommand);
+
+        // multiple prefixes with single keywords
+        assertParseSuccess(parser, " n/Alice n/Bob", expectedFindCommand);
+
+        // extra whitespace
+        assertParseSuccess(parser, " \n n/Alice \n \t n/Bob  \t", expectedFindCommand);
     }
 
+    @Test
+    public void parse_validTagArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(Collections.emptyList(), Arrays.asList("friends", "colleagues"));
+        FindCommand expectedFindCommand = new FindCommand(predicate);
+
+        assertParseSuccess(parser, " t/friends t/colleagues", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_bothNameAndTagArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(Arrays.asList("alice"), Arrays.asList("friend"));
+        FindCommand expectedFindCommand = new FindCommand(predicate);
+
+        assertParseSuccess(parser, " n/Alice t/friend", expectedFindCommand);
+    }
 }
