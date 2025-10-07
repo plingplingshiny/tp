@@ -28,11 +28,11 @@ public class FindCommandParser implements Parser<FindCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
 
         List<String> rawNames = argMultimap.getAllValues(PREFIX_NAME);
-        List<String> rawTags  = argMultimap.getAllValues(PREFIX_TAG);
+        List<String> rawTags = argMultimap.getAllValues(PREFIX_TAG);
 
         // Split each value by whitespace and dedupe
         List<String> nameKeywords = splitNormalizeDedup(rawNames);
-        List<String> tagKeywords  = splitNormalizeDedup(rawTags);
+        List<String> tagKeywords = splitNormalizeDedup(rawTags);
 
         if (nameKeywords.isEmpty() && tagKeywords.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
@@ -44,8 +44,10 @@ public class FindCommandParser implements Parser<FindCommand> {
     private static List<String> splitNormalizeDedup(List<String> rawValues) {
         Set<String> out = new LinkedHashSet<>();
         for (String v : rawValues) {
-            if (v == null) continue;
-            for (String token : v.trim().split("\\s+")) {  // <-- split multi-word
+            if (v == null) {
+                continue;
+            }
+            for (String token : v.trim().split("\\s+")) {
                 String t = token.trim().toLowerCase();
                 if (!t.isEmpty()) {
                     out.add(t);
