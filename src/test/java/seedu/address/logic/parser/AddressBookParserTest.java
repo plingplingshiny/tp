@@ -10,7 +10,6 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -70,7 +69,7 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_find_nameOnly_multiWordAndPrefixes() throws Exception {
+    public void parseCommand_findMultiWordPrefixes() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
 
         // Input must use n/ now; multi-word inside one prefix is supported
