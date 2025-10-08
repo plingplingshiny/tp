@@ -129,4 +129,18 @@ public class ModelManagerTest {
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
     }
+
+    @Test
+    public void sortFilteredPersonListByName_sortsAlphabetically() {
+        AddressBook addressBook = new AddressBookBuilder()
+                .withPerson(BENSON)
+                .withPerson(ALICE)
+                .build();
+        ModelManager modelManager = new ModelManager(addressBook, new UserPrefs());
+
+        assertEquals("Benson Meier", modelManager.getFilteredPersonList().get(0).getName().fullName);
+        modelManager.sortFilteredPersonListByName();
+        assertEquals("Alice Pauline", modelManager.getFilteredPersonList().get(0).getName().fullName);
+        assertEquals("Benson Meier", modelManager.getFilteredPersonList().get(1).getName().fullName);
+    }
 }
