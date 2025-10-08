@@ -151,7 +151,7 @@ public class ModelManager implements Model {
     @Override
     public void sortFilteredPersonListByName() {
         sortedPersons.setComparator((p1, p2) ->
-                (p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName)));
+                p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName));
     }
 
 }
