@@ -38,6 +38,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidNameArgsWithPreamble_throwsParseException() {
-        assertParseFailure(parser, "extra n/Alice Pauline", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "extra n/Alice Pauline",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
     }
 }
