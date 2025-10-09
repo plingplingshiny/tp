@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
@@ -126,6 +127,19 @@ public class DeleteCommandTest {
 
         // different target type -> returns false
         assertFalse(deleteFirstCommand.equals(deleteByNameCommand));
+    }
+
+    @Test
+    public void hashCodeMethod() {
+        DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+        DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
+        DeleteCommand deleteByNameCommand = new DeleteCommand(new Name("Alice Pauline"));
+
+        // same values -> same hashcode
+        assertEquals(deleteFirstCommand.hashCode(), deleteFirstCommandCopy.hashCode());
+
+        // different values -> different hashcode
+        assertNotEquals(deleteFirstCommand.hashCode(), deleteByNameCommand.hashCode());
     }
 
     @Test
