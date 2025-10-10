@@ -194,7 +194,8 @@ public class DeleteCommandTest {
         Person firstPerson = model.getFilteredPersonList().get(0);
 
         List<Name> namesToDelete = Arrays.asList(firstPerson.getName());
-        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false); // single deletion doesn't need confirmation
+        // single deletion doesn't need confirmation
+        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(firstPerson));

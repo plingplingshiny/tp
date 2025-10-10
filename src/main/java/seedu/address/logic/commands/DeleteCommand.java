@@ -211,6 +211,8 @@ public class DeleteCommand extends Command {
                 builder.add("target", targetName);
             case MULTIPLE_NAMES ->
                 builder.add("targets", targetNames).add("confirmed", isConfirmed);
+            default ->
+                throw new AssertionError("Unknown target type: " + targetType);
         }
 
         return builder.toString();
