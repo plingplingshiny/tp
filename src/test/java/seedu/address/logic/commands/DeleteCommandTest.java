@@ -1,28 +1,27 @@
 package seedu.address.logic.commands;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
-import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
+import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -146,10 +145,36 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void hashCodeMethod_multipleNames() {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person secondPerson = model.getFilteredPersonList().get(1);
+        List<Name> names1 = Arrays.asList(firstPerson.getName(), secondPerson.getName());
+        List<Name> names2 = Arrays.asList(firstPerson.getName(), secondPerson.getName());
+        DeleteCommand deleteCommand1 = new DeleteCommand(names1, true);
+        DeleteCommand deleteCommand2 = new DeleteCommand(names2, true);
+        DeleteCommand deleteCommand3 = new DeleteCommand(names1, false);
+
+        // same values -> same hashcode
+        assertEquals(deleteCommand1.hashCode(), deleteCommand2.hashCode());
+        // different confirmation -> different hashcode
+        assertNotEquals(deleteCommand1.hashCode(), deleteCommand3.hashCode());
+    }
+
+    @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
         DeleteCommand deleteCommand = new DeleteCommand(targetIndex);
         String expected = DeleteCommand.class.getCanonicalName() + "{targetType=INDEX, target=" + targetIndex + "}";
+        assertEquals(expected, deleteCommand.toString());
+    }
+
+    @Test
+    public void toStringMethod_multipleNames() {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person secondPerson = model.getFilteredPersonList().get(1);
+        List<Name> names = Arrays.asList(firstPerson.getName(), secondPerson.getName());
+        DeleteCommand deleteCommand = new DeleteCommand(names, true);
+        String expected = DeleteCommand.class.getCanonicalName() + "{targetType=MULTIPLE_NAMES, targets=" + names + ", confirmed=true}";
         assertEquals(expected, deleteCommand.toString());
     }
 
