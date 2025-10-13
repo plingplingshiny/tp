@@ -64,6 +64,9 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
+* The `find` command now supports prefix-based searches (`n/`, `p/`, `e/`, `a/`, `t/`) instead of plain keywords.
+  Prefixes specify which fields to search in. For example, find `n/Alex e/gmail` searches by name and email.
+
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
 
@@ -114,23 +117,31 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by prefix: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose name, phone, email, address, or tags contain any of the given keywords.
+The search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find n/NAME…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`
 
+* At least one prefix must be provided.
+* You may include multiple prefixes in the same command — results are combined using OR semantics (a person matches if any field matches).
+* Keywords are case-insensitive and may contain multiple words separated by spaces.
+* Parameters can appear in any order.
 * The search is case-insensitive. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find n/Alex` — finds persons whose name contains “alex”.
+* `find p/9123` — finds persons whose phone number contains “9123”.
+* `find e/gmail` — finds persons whose email contains “gmail”.
+* `find a/Clementi` — finds persons whose address contains “Clementi”.
+* `find t/friend` — finds persons with a tag containing “friend”.
+* `find n/Alex p/9123 t/friend` — finds persons whose name, phone, or tag match any of the given keywords.
+![result for 'find n/alex p/9927'](images/findAlex9927.png)
+  
 
 ### Deleting a person : `delete`
 
@@ -201,6 +212,6 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find**   | `find n/NAME…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
 **List**   | `list`
 **Help**   | `help`
