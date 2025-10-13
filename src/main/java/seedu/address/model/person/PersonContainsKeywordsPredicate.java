@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
  */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> nameKeywords;
+    private final List<String> phoneKeywords;
+    private final List<String> emailKeywords;
+    private final List<String> addressKeywords;
     private final List<String> tagKeywords;
 
     /**
@@ -30,21 +33,35 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
      * @param nameKeywords a list of keywords to match against a person's name; may be empty but not {@code null}
      * @param tagKeywords a list of keywords to match against a person's tags; may be empty but not {@code null}
      */
-    public PersonContainsKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords) {
+    public PersonContainsKeywordsPredicate(List<String> nameKeywords, List<String> phoneKeywords,
+                                           List<String> emailKeywords, List<String> addressKeywords, List<String> tagKeywords) {
         this.nameKeywords = nameKeywords;
+        this.phoneKeywords = phoneKeywords;
+        this.emailKeywords = emailKeywords;
+        this.addressKeywords = addressKeywords;
         this.tagKeywords = tagKeywords;
+
     }
 
     @Override
     public boolean test(Person person) {
         boolean nameMatches = nameKeywords.stream()
-                .anyMatch(keyword -> person.getName().fullName.toLowerCase().contains(keyword.toLowerCase()));
+                .anyMatch(k -> person.getName().fullName.toLowerCase().contains(k.toLowerCase()));
+
+        boolean phoneMatches = phoneKeywords.stream()
+                .anyMatch(k -> person.getPhone().value.toLowerCase().contains(k.toLowerCase()));
+
+        boolean emailMatches = emailKeywords.stream()
+                .anyMatch(k -> person.getEmail().value.toLowerCase().contains(k.toLowerCase()));
+
+        boolean addressMatches = addressKeywords.stream()
+                .anyMatch(k -> person.getAddress().value.toLowerCase().contains(k.toLowerCase()));
 
         boolean tagMatches = tagKeywords.stream()
-                .anyMatch(keyword -> person.getTags().stream()
-                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(keyword.toLowerCase())));
+                .anyMatch(k -> person.getTags().stream()
+                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
 
-        return nameMatches || tagMatches;
+        return nameMatches || phoneMatches || emailMatches || addressMatches || tagMatches;
     }
 
     @Override
@@ -56,10 +73,16 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
             return false;
         }
         PersonContainsKeywordsPredicate o = (PersonContainsKeywordsPredicate) other;
-        return nameKeywords.stream().map(String::toLowerCase).collect(Collectors.toSet())
-                .equals(o.nameKeywords.stream().map(String::toLowerCase).collect(Collectors.toSet()))
-                && tagKeywords.stream().map(String::toLowerCase).collect(Collectors.toSet())
-                .equals(o.tagKeywords.stream().map(String::toLowerCase).collect(Collectors.toSet()));
+        return equalIgnoreCase(nameKeywords, o.nameKeywords)
+                && equalIgnoreCase(phoneKeywords, o.phoneKeywords)
+                && equalIgnoreCase(emailKeywords, o.emailKeywords)
+                && equalIgnoreCase(addressKeywords, o.addressKeywords)
+                && equalIgnoreCase(tagKeywords, o.tagKeywords);
+    }
+
+    private boolean equalIgnoreCase(List<String> a, List<String> b) {
+        return a.stream().map(String::toLowerCase).collect(Collectors.toSet())
+                .equals(b.stream().map(String::toLowerCase).collect(Collectors.toSet()));
     }
 
 }

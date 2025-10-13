@@ -1,7 +1,10 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
@@ -24,21 +27,29 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
 
         List<String> rawNames = argMultimap.getAllValues(PREFIX_NAME);
+        List<String> rawPhones = argMultimap.getAllValues(PREFIX_PHONE);
+        List<String> rawEmails = argMultimap.getAllValues(PREFIX_EMAIL);
+        List<String> rawAddresses = argMultimap.getAllValues(PREFIX_ADDRESS);
         List<String> rawTags = argMultimap.getAllValues(PREFIX_TAG);
 
         // Split each value by whitespace and dedupe
         List<String> nameKeywords = splitNormalizeDedup(rawNames);
+        List<String> phoneKeywords = splitNormalizeDedup(rawPhones);
+        List<String> emailKeywords = splitNormalizeDedup(rawEmails);
+        List<String> addressKeywords = splitNormalizeDedup(rawAddresses);
         List<String> tagKeywords = splitNormalizeDedup(rawTags);
 
-        if (nameKeywords.isEmpty() && tagKeywords.isEmpty()) {
+        if (nameKeywords.isEmpty() && tagKeywords.isEmpty() &&
+                phoneKeywords.isEmpty() && emailKeywords.isEmpty() &&
+                addressKeywords.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        return new FindCommand(new PersonContainsKeywordsPredicate(nameKeywords, tagKeywords));
+        return new FindCommand(new PersonContainsKeywordsPredicate(nameKeywords, phoneKeywords, emailKeywords, addressKeywords, tagKeywords));
     }
 
     private static List<String> splitNormalizeDedup(List<String> rawValues) {
