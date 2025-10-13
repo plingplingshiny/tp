@@ -33,8 +33,11 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
      * @param nameKeywords a list of keywords to match against a person's name; may be empty but not {@code null}
      * @param tagKeywords a list of keywords to match against a person's tags; may be empty but not {@code null}
      */
-    public PersonContainsKeywordsPredicate(List<String> nameKeywords, List<String> phoneKeywords,
-                                           List<String> emailKeywords, List<String> addressKeywords, List<String> tagKeywords) {
+    public PersonContainsKeywordsPredicate(List<String> nameKeywords,
+                                           List<String> phoneKeywords,
+                                           List<String> emailKeywords,
+                                           List<String> addressKeywords,
+                                           List<String> tagKeywords) {
         this.nameKeywords = nameKeywords;
         this.phoneKeywords = phoneKeywords;
         this.emailKeywords = emailKeywords;
