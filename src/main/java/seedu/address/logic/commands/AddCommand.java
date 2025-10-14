@@ -40,7 +40,6 @@ public class AddCommand extends Command {
         + "WARNING: A person with the same name already exists in the address book";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
 
-
     private final Person toAdd;
 
     /**

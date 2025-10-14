@@ -54,6 +54,20 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_duplicateName_addSuccessful() throws Exception {
+        Person validPerson = new PersonBuilder().build();
+        Person sameNamePerson = new PersonBuilder().withPhone("91246521").withAddress("321 MacPherson Street").build();
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        new AddCommand(validPerson).execute(modelStub);
+        CommandResult commandResult = new AddCommand(sameNamePerson).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_DUPLICATE_NAME, Messages.format(sameNamePerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(validPerson, sameNamePerson), modelStub.personsAdded);
+    }
+
+    @Test
     public void equals() {
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
