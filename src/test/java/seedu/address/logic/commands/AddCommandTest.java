@@ -134,6 +134,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasName(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasPerson(Person person) {
             throw new AssertionError("This method should not be called.");
         }
@@ -187,6 +192,12 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+
+        @Override
+        public boolean hasName(Person person) {
+            requireNonNull(person);
+            return personsAdded.stream().anyMatch(person::isSameName);
+        }
 
         @Override
         public boolean hasPerson(Person person) {

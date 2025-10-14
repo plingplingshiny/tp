@@ -81,7 +81,7 @@ public class FindCommandTest {
     @Test
     public void execute_tagKeyword_personsFoundByTag() {
         // Assuming some TypicalPersons have tags like "friends" or "colleagues"
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 4);
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(Collections.emptyList(), Collections.singletonList("friends"));
         FindCommand command = new FindCommand(predicate);
