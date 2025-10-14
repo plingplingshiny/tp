@@ -72,27 +72,32 @@ public class AddressBookParserTest {
     public void parseCommand_findMultiWordPrefixes() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
 
-        // Input must use n/ now; multi-word inside one prefix is supported
         String input = FindCommand.COMMAND_WORD + " n/" + String.join(" ", keywords);
-
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
-        // Expected predicate: names filled, tags empty
         FindCommand expected = new FindCommand(
-                new PersonContainsKeywordsPredicate(keywords, Collections.emptyList()));
+                new PersonContainsKeywordsPredicate(
+                        keywords,
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
 
         assertEquals(expected, parsed);
     }
 
     @Test
     public void parseCommand_find_multipleNamePrefixes() throws Exception {
-        // Multiple n/ prefixes also supported: n/foo n/bar n/baz
         String input = FindCommand.COMMAND_WORD + " n/foo n/bar n/baz";
-
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
         FindCommand expected = new FindCommand(
-                new PersonContainsKeywordsPredicate(Arrays.asList("foo", "bar", "baz"), Collections.emptyList()));
+                new PersonContainsKeywordsPredicate(
+                        Arrays.asList("foo", "bar", "baz"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
 
         assertEquals(expected, parsed);
     }
@@ -100,24 +105,79 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_find_tagOnly() throws Exception {
         String input = FindCommand.COMMAND_WORD + " t/friends t/colleagues";
-
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
         FindCommand expected = new FindCommand(
-                new PersonContainsKeywordsPredicate(Collections.emptyList(), Arrays.asList("friends", "colleagues")));
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("friends", "colleagues")));
 
         assertEquals(expected, parsed);
     }
 
     @Test
-    public void parseCommand_find_nameAndTag() throws Exception {
-        String input = FindCommand.COMMAND_WORD + " n/Alice t/friend";
-
+    public void parseCommand_find_phoneOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " p/1234 p/5678";
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
-        // Parser lowercases tokens; reflect that in expected predicate.
         FindCommand expected = new FindCommand(
-                new PersonContainsKeywordsPredicate(Arrays.asList("alice"), Arrays.asList("friend")));
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Arrays.asList("1234", "5678"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
+
+        assertEquals(expected, parsed);
+    }
+
+    @Test
+    public void parseCommand_find_emailOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " e/gmail e/example";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("gmail", "example"),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
+
+        assertEquals(expected, parsed);
+    }
+
+    @Test
+    public void parseCommand_find_addressOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " a/street a/avenue";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("street", "avenue"),
+                        Collections.emptyList()));
+
+        assertEquals(expected, parsed);
+    }
+
+    @Test
+    public void parseCommand_find_multipleFields() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " n/Alice p/9123 e/gmail a/street t/friend";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Arrays.asList("alice"),
+                        Arrays.asList("9123"),
+                        Arrays.asList("gmail"),
+                        Arrays.asList("street"),
+                        Arrays.asList("friend")));
 
         assertEquals(expected, parsed);
     }
