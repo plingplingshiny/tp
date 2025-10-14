@@ -150,8 +150,21 @@ public class ModelManager implements Model {
 
     @Override
     public void sortFilteredPersonListByName() {
-        sortedPersons.setComparator((p1, p2) ->
-                p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName));
+        sortedPersons.setComparator((p1, p2) -> {
+            int cmp = p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName);
+            if (cmp != 0) {
+                return cmp;
+            }
+            cmp = p1.getPhone().value.compareTo(p2.getPhone().value);
+            if (cmp != 0) {
+                return cmp;
+            }
+            cmp = p1.getAddress().value.compareToIgnoreCase(p2.getAddress().value);
+            if (cmp != 0) {
+                return cmp;
+            }
+            return p1.getEmail().value.compareToIgnoreCase(p2.getEmail().value);
+                });
     }
 
 }
