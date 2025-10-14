@@ -91,6 +91,12 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public boolean hasName(Person person) {
+        requireNonNull(person);
+        return addressBook.hasName(person);
+    }
+
+    @Override
     public boolean hasPerson(Person person) {
         requireNonNull(person);
         return addressBook.hasPerson(person);
