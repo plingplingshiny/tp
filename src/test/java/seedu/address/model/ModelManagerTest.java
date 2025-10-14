@@ -145,4 +145,25 @@ public class ModelManagerTest {
         assertEquals("Alice Pauline", modelManager.getFilteredPersonList().get(0).getName().fullName);
         assertEquals("Benson Meier", modelManager.getFilteredPersonList().get(1).getName().fullName);
     }
+
+    @Test
+    public void sortFilteredPersonListByName_sortsDuplicatesByOtherFields() {
+        Person alice1 = new PersonBuilder(ALICE).withPhone("11111111").withEmail("a@example.com").build();
+        Person alice2 = new PersonBuilder(ALICE).withPhone("22222222").withEmail("b@example.com").build();
+        Person alice3 = new PersonBuilder(ALICE).withPhone("22222222").withEmail("a@example.com").build();
+
+        AddressBook addressBook = new AddressBookBuilder()
+                .withPerson(alice2)
+                .withPerson(alice3)
+                .withPerson(alice1)
+                .build();
+        ModelManager modelManager = new ModelManager(addressBook, new UserPrefs());
+
+        modelManager.sortFilteredPersonListByName();
+
+        assertEquals(alice1, modelManager.getFilteredPersonList().get(0));
+        assertEquals(alice3, modelManager.getFilteredPersonList().get(1));
+        assertEquals(alice2, modelManager.getFilteredPersonList().get(2));
+    }
+
 }
