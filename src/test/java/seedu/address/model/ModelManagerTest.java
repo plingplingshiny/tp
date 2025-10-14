@@ -151,10 +151,14 @@ public class ModelManagerTest {
         Person alice1 = new PersonBuilder(ALICE).withPhone("11111111").withEmail("a@example.com").build();
         Person alice2 = new PersonBuilder(ALICE).withPhone("22222222").withEmail("b@example.com").build();
         Person alice3 = new PersonBuilder(ALICE).withPhone("22222222").withEmail("a@example.com").build();
+        Person benson1 = new PersonBuilder(BENSON).withAddress("123 Alpha Street").build();
+        Person benson2 = new PersonBuilder(BENSON).withAddress("456 Beta Avenue").build();
 
         AddressBook addressBook = new AddressBookBuilder()
                 .withPerson(alice2)
+                .withPerson(benson2)
                 .withPerson(alice3)
+                .withPerson(benson1)
                 .withPerson(alice1)
                 .build();
         ModelManager modelManager = new ModelManager(addressBook, new UserPrefs());
@@ -164,6 +168,9 @@ public class ModelManagerTest {
         assertEquals(alice1, modelManager.getFilteredPersonList().get(0));
         assertEquals(alice3, modelManager.getFilteredPersonList().get(1));
         assertEquals(alice2, modelManager.getFilteredPersonList().get(2));
+        assertEquals(benson1, modelManager.getFilteredPersonList().get(3));
+        assertEquals(benson2, modelManager.getFilteredPersonList().get(4));
+
     }
 
 }
