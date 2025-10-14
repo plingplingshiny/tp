@@ -65,7 +65,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * The `find` command now supports prefix-based searches (`n/`, `p/`, `e/`, `a/`, `t/`) instead of plain keywords.
-  Prefixes specify which fields to search in. For example, find `n/Alex e/gmail` searches by name and email.
+  Prefixes specify which fields to search in. For example, `find n/Alex e/gmail` searches by name and email.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </box>
@@ -122,7 +122,7 @@ Examples:
 Finds persons whose name, phone, email, address, or tags contain any of the given keywords.
 The search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
-Format: `find n/NAME…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`
+Format: `find [n/NAME]…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`
 
 * At least one prefix must be provided.
 * You may include multiple prefixes in the same command — results are combined using OR semantics (a person matches if any field matches).
@@ -140,7 +140,7 @@ Examples:
 * `find a/Clementi` — finds persons whose address contains “Clementi”.
 * `find t/friend` — finds persons with a tag containing “friend”.
 * `find n/Alex p/9123 t/friend` — finds persons whose name, phone, or tag match any of the given keywords.
-![result for 'find n/alex p/9927'](images/findAlex9927.png)
+![result for 'find n/alex p/9927'](images/findAlex9927Result.png)
   
 
 ### Deleting a person : `delete`
@@ -212,6 +212,6 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find n/NAME…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
+**Find**   | `find [n/NAME]…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
 **List**   | `list`
 **Help**   | `help`
