@@ -170,7 +170,7 @@ public class ModelManager implements Model {
                 return cmp;
             }
             return p1.getEmail().value.compareToIgnoreCase(p2.getEmail().value);
-                });
+        });
     }
 
 }
