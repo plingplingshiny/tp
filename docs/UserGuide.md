@@ -147,15 +147,19 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: `delete INDEX` or `delete n/NAME [n/NAME]... [confirm/yes]`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* Deletes the person at the specified `INDEX`, or by the specified `NAME`(s).
+* The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* For deletion by name, the name must match exactly.
+* When deleting multiple persons by name, add `confirm/yes` to confirm the deletion.
+* If deleting more than one person without confirmation, the app will prompt for confirmation.
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `delete n/John Doe` deletes the person named John Doe.
+* `delete n/John Doe n/Jane Smith confirm/yes` deletes both John Doe and Jane Smith.
 
 ### Clearing all entries : `clear`
 
@@ -210,7 +214,7 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear**  | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete INDEX` or `delete n/NAME [n/NAME]... [confirm/yes]`<br> e.g., `delete 3` or `delete n/John Doe confirm/yes`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find [n/NAME]…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
 **List**   | `list`
