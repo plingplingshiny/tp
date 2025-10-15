@@ -1,8 +1,7 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -58,25 +57,29 @@ public class DeleteCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        Person personToDelete;
 
-        if (targetType == TargetType.INDEX) {
-            List<Person> lastShownList = model.getFilteredPersonList();
-            if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-            }
-            personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        } else {
-            // Find by name
-            personToDelete = model.getAddressBook().getPersonList().stream()
-                    .filter(person -> person.getName().equals(targetName))
-                    .findFirst()
-                    .orElseThrow(() -> new CommandException(
-                    Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX));
-        }
+        Person personToDelete = targetType == TargetType.INDEX
+                ? getPersonToDeleteByIndex(model)
+                : getPersonToDeleteByName(model);
 
         model.deletePerson(personToDelete);
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+    }
+
+    private Person getPersonToDeleteByIndex(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        }
+        return lastShownList.get(targetIndex.getZeroBased());
+    }
+
+    private Person getPersonToDeleteByName(Model model) throws CommandException {
+        return model.getAddressBook().getPersonList().stream()
+                .filter(person -> person.getName().equals(targetName))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(
+                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX));
     }
 
     @Override
