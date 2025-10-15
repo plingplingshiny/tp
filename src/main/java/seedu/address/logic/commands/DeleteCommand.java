@@ -1,10 +1,10 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -91,6 +91,8 @@ public class DeleteCommand extends Command {
                 executeDeleteByName(model);
             case MULTIPLE_NAMES ->
                 executeDeleteMultipleNames(model);
+            default ->
+                throw new IllegalStateException("Unexpected value: " + targetType);
         };
     }
 
@@ -211,6 +213,8 @@ public class DeleteCommand extends Command {
                 targetName.hashCode();
             case MULTIPLE_NAMES ->
                 targetNames.hashCode() + Boolean.hashCode(isConfirmed);
+            default ->
+                throw new IllegalStateException("Unexpected value: " + targetType);
         };
     }
 
@@ -230,6 +234,8 @@ public class DeleteCommand extends Command {
                 builder.add("targetNames", targetNames);
                 builder.add("isConfirmed", isConfirmed);
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + targetType);
         }
 
         return builder.toString();
