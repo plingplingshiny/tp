@@ -1,8 +1,9 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
@@ -84,12 +85,12 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
 
         return switch (targetType) {
-            case INDEX ->
-                executeDeleteByIndex(model);
-            case NAME ->
-                executeDeleteByName(model);
-            case MULTIPLE_NAMES ->
-                executeDeleteMultipleNames(model);
+        case INDEX ->
+            executeDeleteByIndex(model);
+        case NAME ->
+            executeDeleteByName(model);
+        case MULTIPLE_NAMES ->
+            executeDeleteMultipleNames(model);
         };
     }
 
@@ -204,12 +205,12 @@ public class DeleteCommand extends Command {
     @Override
     public int hashCode() {
         return switch (targetType) {
-            case INDEX ->
-                targetIndex.hashCode();
-            case NAME ->
-                targetName.hashCode();
-            case MULTIPLE_NAMES ->
-                targetNames.hashCode() + Boolean.hashCode(isConfirmed);
+        case INDEX ->
+            targetIndex.hashCode();
+        case NAME ->
+            targetName.hashCode();
+        case MULTIPLE_NAMES ->
+            targetNames.hashCode() + Boolean.hashCode(isConfirmed);
         };
     }
 
@@ -219,17 +220,17 @@ public class DeleteCommand extends Command {
                 .add("targetType", targetType);
 
         switch (targetType) {
-            case INDEX:
-                builder.add("target", targetIndex);
-                break;
-            case NAME:
-                builder.add("target", targetName);
-                break;
-            case MULTIPLE_NAMES:
-                builder.add("targets", targetNames).add("confirmed", isConfirmed);
-                break;
-            default:
-                throw new AssertionError("Unknown target type: " + targetType);
+        case INDEX:
+            builder.add("target", targetIndex);
+            break;
+        case NAME:
+            builder.add("target", targetName);
+            break;
+        case MULTIPLE_NAMES:
+            builder.add("targets", targetNames).add("confirmed", isConfirmed);
+            break;
+        default:
+            throw new AssertionError("Unknown target type: " + targetType);
         }
 
         return builder.toString();
