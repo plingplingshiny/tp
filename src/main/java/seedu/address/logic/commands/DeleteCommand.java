@@ -1,15 +1,10 @@
 package seedu.address.logic.commands;
 
-<<<<<<< HEAD
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-=======
-import static java.util.Objects.requireNonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
->>>>>>> 3c4158d5f330460e632ffec71dcce374ea6e30b4
+
+import static java.util.Objects.requireNonNull;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -89,19 +84,13 @@ public class DeleteCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-<<<<<<< HEAD
-        Person personToDelete = targetType == TargetType.INDEX
-                ? getPersonToDeleteByIndex(model)
-                : getPersonToDeleteByName(model);
-
-=======
         return switch (targetType) {
-        case INDEX ->
-            executeDeleteByIndex(model);
-        case NAME ->
-            executeDeleteByName(model);
-        case MULTIPLE_NAMES ->
-            executeDeleteMultipleNames(model);
+            case INDEX ->
+                executeDeleteByIndex(model);
+            case NAME ->
+                executeDeleteByName(model);
+            case MULTIPLE_NAMES ->
+                executeDeleteMultipleNames(model);
         };
     }
 
@@ -111,27 +100,10 @@ public class DeleteCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
->>>>>>> 3c4158d5f330460e632ffec71dcce374ea6e30b4
         model.deletePerson(personToDelete);
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
     }
 
-<<<<<<< HEAD
-    private Person getPersonToDeleteByIndex(Model model) throws CommandException {
-        List<Person> lastShownList = model.getFilteredPersonList();
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-        }
-        return lastShownList.get(targetIndex.getZeroBased());
-    }
-
-    private Person getPersonToDeleteByName(Model model) throws CommandException {
-        return model.getAddressBook().getPersonList().stream()
-                .filter(person -> person.getName().equals(targetName))
-                .findFirst()
-                .orElseThrow(() -> new CommandException(
-                Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX));
-=======
     private CommandResult executeDeleteByName(Model model) throws CommandException {
         Person personToDelete = model.getAddressBook().getPersonList().stream()
                 .filter(person -> person.getName().equals(targetName))
@@ -206,7 +178,6 @@ public class DeleteCommand extends Command {
             return new CommandResult(String.format(MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
                     personsToDelete.size(), personsStr));
         }
->>>>>>> 3c4158d5f330460e632ffec71dcce374ea6e30b4
     }
 
     @Override
@@ -234,12 +205,12 @@ public class DeleteCommand extends Command {
     @Override
     public int hashCode() {
         return switch (targetType) {
-        case INDEX ->
-            targetIndex.hashCode();
-        case NAME ->
-            targetName.hashCode();
-        case MULTIPLE_NAMES ->
-            targetNames.hashCode() + Boolean.hashCode(isConfirmed);
+            case INDEX ->
+                targetIndex.hashCode();
+            case NAME ->
+                targetName.hashCode();
+            case MULTIPLE_NAMES ->
+                targetNames.hashCode() + Boolean.hashCode(isConfirmed);
         };
     }
 
@@ -249,17 +220,16 @@ public class DeleteCommand extends Command {
                 .add("targetType", targetType);
 
         switch (targetType) {
-        case INDEX:
-            builder.add("target", targetIndex);
-            break;
-        case NAME:
-            builder.add("target", targetName);
-            break;
-        case MULTIPLE_NAMES:
-            builder.add("targets", targetNames).add("confirmed", isConfirmed);
-            break;
-        default:
-            throw new AssertionError("Unknown target type: " + targetType);
+            case INDEX:
+                builder.add("targetIndex", targetIndex);
+                break;
+            case NAME:
+                builder.add("targetName", targetName);
+                break;
+            case MULTIPLE_NAMES:
+                builder.add("targetNames", targetNames);
+                builder.add("isConfirmed", isConfirmed);
+                break;
         }
 
         return builder.toString();
