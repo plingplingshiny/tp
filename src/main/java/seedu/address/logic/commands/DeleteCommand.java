@@ -114,7 +114,16 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeDeleteMultipleNames(Model model) throws CommandException {
-        // Find all persons that match the target names
+        List<Person> personsToDelete = findPersonsToDelete(model);
+        CommandResult confirmationResult = checkConfirmationRequired(personsToDelete);
+        if (confirmationResult != null) {
+            return confirmationResult;
+        }
+        deletePersons(model, personsToDelete);
+        return createSuccessMessage(personsToDelete);
+    }
+
+    private List<Person> findPersonsToDelete(Model model) throws CommandException {
         List<Person> personsToDelete = new ArrayList<>();
         List<Name> notFoundNames = new ArrayList<>();
 
@@ -131,7 +140,6 @@ public class DeleteCommand extends Command {
             }
         }
 
-        // If some names were not found, throw an exception
         if (!notFoundNames.isEmpty()) {
             String notFoundNamesStr = notFoundNames.stream()
                     .map(Name::toString)
@@ -139,7 +147,10 @@ public class DeleteCommand extends Command {
             throw new CommandException("The following persons were not found: " + notFoundNamesStr);
         }
 
-        // If no confirmation provided and multiple persons to delete, ask for confirmation
+        return personsToDelete;
+    }
+
+    private CommandResult checkConfirmationRequired(List<Person> personsToDelete) {
         if (!isConfirmed && personsToDelete.size() > 1) {
             String personsStr = personsToDelete.stream()
                     .map(Messages::format)
@@ -147,13 +158,16 @@ public class DeleteCommand extends Command {
             return new CommandResult(String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE,
                     personsToDelete.size(), personsStr));
         }
+        return null;
+    }
 
-        // Delete all persons
+    private void deletePersons(Model model, List<Person> personsToDelete) {
         for (Person person : personsToDelete) {
             model.deletePerson(person);
         }
+    }
 
-        // Return appropriate success message
+    private CommandResult createSuccessMessage(List<Person> personsToDelete) {
         if (personsToDelete.size() == 1) {
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
                     Messages.format(personsToDelete.get(0))));
