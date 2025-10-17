@@ -96,7 +96,9 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all persons in the address book in alphabetical order.
+
+For persons with duplicate fields, they will be sorted alphabetically or lexicographically based on phone number, address and email respectively.
 
 Format: `list`
 
