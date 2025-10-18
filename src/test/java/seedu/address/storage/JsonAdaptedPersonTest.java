@@ -133,7 +133,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidPrice_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                 VALID_PROPERTY_TYPE, INVALID_PRICE, VALID_TAGS);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Price.class.getSimpleName());
+        String expectedMessage = Price.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
     }
 
