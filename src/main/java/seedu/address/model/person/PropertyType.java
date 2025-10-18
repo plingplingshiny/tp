@@ -61,5 +61,4 @@ public class PropertyType {
     public int hashCode() {
         return value.hashCode();
     }
-
 }
