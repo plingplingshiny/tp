@@ -136,4 +136,86 @@ public class PersonTest {
                 + ALICE.getPropertyType() + ", price=" + ALICE.getPrice() + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
+
+    @Test
+    public void constructor_null_throwsNullPointerException() {
+        // All fields null
+        assertThrows(NullPointerException.class, () ->
+                new Person(null, null, null, null, null, null, null));
+
+        // Individual null fields, test each required field
+        assertThrows(NullPointerException.class, () ->
+                new Person(null, ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), null, ALICE.getEmail(), ALICE.getAddress(),
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), null, ALICE.getAddress(),
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), null,
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+
+        // Test the new fields specifically - propertyType
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                        null, ALICE.getPrice(), ALICE.getTags()));
+
+        // Test the new fields specifically - price
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                        ALICE.getPropertyType(), null, ALICE.getTags()));
+
+        // Tags null
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                        ALICE.getPropertyType(), ALICE.getPrice(), null));
+    }
+
+    @Test
+    public void hashCode_test() {
+        // Same person -> same hashcode
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
+
+        // Different propertyType -> different hashcode
+        Person differentPropertyType = new PersonBuilder(ALICE)
+                .withPropertyType(VALID_PROPERTY_TYPE_BOB).build();
+        assertFalse(ALICE.hashCode() == differentPropertyType.hashCode());
+
+        // Different price -> different hashcode
+        Person differentPrice = new PersonBuilder(ALICE)
+                .withPrice(VALID_PRICE_BOB).build();
+        assertFalse(ALICE.hashCode() == differentPrice.hashCode());
+
+        // multiple calls return same hashcode
+        int firstHashCode = ALICE.hashCode();
+        int secondHashCode = ALICE.hashCode();
+        assertEquals(firstHashCode, secondHashCode);
+    }
+
+    @Test
+    public void isSamePerson_withDifferentPropertyType_returnsFalse() {
+        // Specifically test that different propertyType makes isSamePerson return false
+        Person editedAlice = new PersonBuilder(ALICE).withPropertyType(VALID_PROPERTY_TYPE_BOB).build();
+        assertFalse(ALICE.isSamePerson(editedAlice));
+    }
+
+    @Test
+    public void isSamePerson_withDifferentPrice_returnsFalse() {
+        // Specifically test that different price makes isSamePerson return false
+        Person editedAlice = new PersonBuilder(ALICE).withPrice(VALID_PRICE_BOB).build();
+        assertFalse(ALICE.isSamePerson(editedAlice));
+    }
+
+    @Test
+    public void isSamePerson_sameFieldsExceptTags_returnsTrue() {
+        // Test that isSamePerson returns true when only tags are different
+        Person editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
+        assertTrue(ALICE.isSamePerson(editedAlice));
+    }
 }

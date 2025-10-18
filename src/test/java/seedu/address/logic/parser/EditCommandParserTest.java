@@ -193,36 +193,6 @@ public class EditCommandParserTest {
     }
 
     @Test
-    public void debug_propertyType_parsing() {
-        System.out.println("=== DEBUGGING PROPERTY TYPE PARSING ===");
-
-        String userInput = "3 h/hdb 3 room";
-        System.out.println("Testing: '" + userInput + "'");
-
-        // Test the tokenizer first
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(userInput,
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE,
-                PREFIX_TAG);
-
-        System.out.println("Preamble: '" + argMultimap.getPreamble() + "'");
-        System.out.println("PropertyType present: " + argMultimap.getValue(PREFIX_PROPERTY_TYPE).isPresent());
-        System.out.println("PropertyType value: '" + argMultimap.getValue(PREFIX_PROPERTY_TYPE)
-                .orElse("MISSING") + "'");
-
-        // Now test the descriptor
-        EditPersonDescriptor descriptor = new EditPersonDescriptor();
-        if (argMultimap.getValue(PREFIX_PROPERTY_TYPE).isPresent()) {
-            String propertyTypeValue = argMultimap.getValue(PREFIX_PROPERTY_TYPE).get();
-            System.out.println("Setting propertyType to: '" + propertyTypeValue + "'");
-            descriptor.setPropertyType(new PropertyType(propertyTypeValue));
-            System.out.println("Descriptor propertyType: " + descriptor.getPropertyType().orElse(null));
-            System.out.println("Is any field edited? " + descriptor.isAnyFieldEdited());
-        }
-
-        System.out.println("=== END DEBUGGING ===");
-    }
-
-    @Test
     public void parse_multipleRepeatedFields_failure() {
         // More extensive testing of duplicate parameter detections is done in
         // AddCommandParserTest#parse_repeatedNonTagValue_failure()
