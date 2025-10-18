@@ -50,7 +50,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
-import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -202,11 +201,13 @@ public class EditCommandParserTest {
 
         // Test the tokenizer first
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(userInput,
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE, PREFIX_TAG);
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE,
+                PREFIX_TAG);
 
         System.out.println("Preamble: '" + argMultimap.getPreamble() + "'");
         System.out.println("PropertyType present: " + argMultimap.getValue(PREFIX_PROPERTY_TYPE).isPresent());
-        System.out.println("PropertyType value: '" + argMultimap.getValue(PREFIX_PROPERTY_TYPE).orElse("MISSING") + "'");
+        System.out.println("PropertyType value: '" + argMultimap.getValue(PREFIX_PROPERTY_TYPE)
+                .orElse("MISSING") + "'");
 
         // Now test the descriptor
         EditPersonDescriptor descriptor = new EditPersonDescriptor();
