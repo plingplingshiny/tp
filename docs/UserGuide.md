@@ -149,7 +149,7 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: `delete INDEX` OR `delete n/NAME`
 
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
