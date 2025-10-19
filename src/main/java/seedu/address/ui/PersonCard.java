@@ -10,7 +10,7 @@ import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * A UI component that displays information of a {@code Person}.
  */
 public class PersonCard extends UiPart<Region> {
 
@@ -29,19 +29,19 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private HBox cardPane;
     @FXML
-    private Label name;
+    Label name;
     @FXML
-    private Label id;
+    Label id;
     @FXML
-    private Label phone;
+    Label phone;
     @FXML
-    private Label address;
+    Label address;
     @FXML
-    private Label email;
+    Label email;
     @FXML
-    private Label propertyType;
+    Label propertyType;
     @FXML
-    private Label price;
+    Label price;
     @FXML
     private FlowPane tags;
 
