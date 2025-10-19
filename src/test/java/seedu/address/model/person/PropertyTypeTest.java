@@ -29,9 +29,9 @@ public class PropertyTypeTest {
         assertFalse(PropertyType.isValidPropertyType(" ")); // spaces only
 
         // valid property types
-        assertTrue(Address.isValidAddress("condominium"));
-        assertTrue(Address.isValidAddress("hdb 3-room flat"));
-        assertTrue(Address.isValidAddress("5 room flat hdb (furnished)"));
+        assertTrue(PropertyType.isValidPropertyType("condominium"));
+        assertTrue(PropertyType.isValidPropertyType("hdb 3-room flat"));
+        assertTrue(PropertyType.isValidPropertyType("5 room flat hdb (furnished)"));
     }
 
     @Test
@@ -51,6 +51,6 @@ public class PropertyTypeTest {
         assertFalse(propertyType.equals(5.0f));
 
         // different values -> returns false
-        assertFalse(propertyType.equals(new Address("Other valid property type")));
+        assertFalse(propertyType.equals(new PropertyType("Other valid property type")));
     }
 }
