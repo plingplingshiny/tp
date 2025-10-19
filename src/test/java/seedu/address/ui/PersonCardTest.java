@@ -3,10 +3,12 @@ package seedu.address.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.swing.SwingUtilities;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,11 +17,24 @@ import javafx.scene.control.Label;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
+/**
+ * Tests for {@code PersonCard}.
+ * These tests verify that the intention chips render correctly
+ * and that the ID and name labels display the expected values.
+ *
+ * In headless environments (like CI servers without a display),
+ * the entire test class is skipped to avoid JavaFX initialization errors.
+ */
 public class PersonCardTest {
 
     @BeforeAll
     public static void initJfx() throws Exception {
-        // Initialize JavaFX toolkit
+        // Skip JavaFX initialization entirely if running headless (e.g., in CI)
+        if (GraphicsEnvironment.isHeadless()) {
+            Assumptions.assumeTrue(false, "Skipping JavaFX tests in headless environment");
+        }
+
+        // Otherwise, initialize the JavaFX runtime using a dummy JFXPanel
         SwingUtilities.invokeAndWait(JFXPanel::new);
     }
 
@@ -63,10 +78,12 @@ public class PersonCardTest {
         assertEquals(person.getName().fullName, name.getText());
     }
 
+    /**
+     * Utility helper to access private fields in the {@code PersonCard}.
+     */
     private Object getPrivateField(Object target, String name) throws Exception {
         Field f = target.getClass().getDeclaredField(name);
         f.setAccessible(true);
         return f.get(target);
     }
 }
-
