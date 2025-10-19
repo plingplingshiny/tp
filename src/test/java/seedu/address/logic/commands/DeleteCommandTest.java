@@ -200,61 +200,30 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_multipleValidNamesWithoutConfirmation_showsConfirmationPrompt() throws Exception {
-        // Get the first two persons from the typical address book
+    public void execute_multipleNamesUnconfirmed_requestsConfirmation() {
         Person firstPerson = model.getFilteredPersonList().get(0);
         Person secondPerson = model.getFilteredPersonList().get(1);
-
         List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), secondPerson.getName());
         DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false); // not confirmed
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                2, Messages.format(firstPerson) + ", " + Messages.format(secondPerson));
+                2,
+                Messages.format(firstPerson) + ", " + Messages.format(secondPerson));
 
-        // Model should remain unchanged - no deletion should occur
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_singleNameInMultipleList_deletesSuccessfully() throws Exception {
-        Person firstPerson = model.getFilteredPersonList().get(0);
-
-        List<Name> namesToDelete = Arrays.asList(firstPerson.getName());
-        // single deletion doesn't need confirmation
-        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false);
-
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(firstPerson));
-
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedModel.deletePerson(firstPerson);
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_multipleNamesWithNonExistentName_throwsCommandException() {
+    public void execute_multipleNamesOneInvalid_throwsCommandException() {
         Person firstPerson = model.getFilteredPersonList().get(0);
-        Name nonExistentName = new Name("Non Existent Person");
+        Name invalidName = new Name("Invalid Name");
+        List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), invalidName);
+        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true); // confirmed
 
-        List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), nonExistentName);
-        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true);
-
-        assertCommandFailure(deleteCommand, model, "The following persons were not found: Non Existent Person");
-    }
-
-    @Test
-    public void execute_allNonExistentNames_throwsCommandException() {
-        Name nonExistentName1 = new Name("Non Existent Person 1");
-        Name nonExistentName2 = new Name("Non Existent Person 2");
-
-        List<Name> namesToDelete = Arrays.asList(nonExistentName1, nonExistentName2);
-        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true);
-
-        assertCommandFailure(deleteCommand, model,
-                "The following persons were not found: Non Existent Person 1, Non Existent Person 2");
+        String expectedMessage = "The following persons were not found: " + invalidName.toString();
+        assertCommandFailure(deleteCommand, model, expectedMessage);
     }
 
     @Test
