@@ -4,7 +4,7 @@
     "phone": "9482424",
     "email": "invalid@email!3e",
     "address": "4th street",
-    "property type" : "condo",
+    "propertyType" : "condo",
     "price" : "1000000"
   } ]
 }
