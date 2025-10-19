@@ -29,19 +29,19 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private HBox cardPane;
     @FXML
-    Label name;
+    private Label name;
     @FXML
-    Label id;
+    private Label id;
     @FXML
-    Label phone;
+    private Label phone;
     @FXML
-    Label address;
+    private Label address;
     @FXML
-    Label email;
+    private Label email;
     @FXML
-    Label propertyType;
+    private Label propertyType;
     @FXML
-    Label price;
+    private Label price;
     @FXML
     private FlowPane tags;
 
@@ -62,4 +62,5 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
+
 }
