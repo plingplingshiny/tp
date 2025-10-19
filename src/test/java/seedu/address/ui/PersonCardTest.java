@@ -93,7 +93,6 @@ public class PersonCardTest {
 
     @Test
     public void personCard_shouldHandleDifferentPhoneFormats() {
-        // Valid phone formats with at least 7 digits
         Person personWithSpaces = new PersonBuilder().withPhone("9876 5432").build();
         assertEquals("9876 5432", personWithSpaces.getPhone().value);
 
@@ -221,9 +220,8 @@ public class PersonCardTest {
 
     @Test
     public void personCard_shouldHandleFormattedPrices() {
-        // Assuming your Price class only allows digits (no commas)
         Person formattedPrice = new PersonBuilder()
-                .withPrice("1250000")  // 1,250,000 without commas
+                .withPrice("1250000")
                 .build();
         assertEquals("1250000", formattedPrice.getPrice().value);
     }
