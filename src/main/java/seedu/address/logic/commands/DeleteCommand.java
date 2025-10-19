@@ -225,14 +225,14 @@ public class DeleteCommand extends Command {
 
         switch (targetType) {
             case INDEX:
-                builder.add("targetIndex", targetIndex);
+                builder.add("target", targetIndex);
                 break;
             case NAME:
-                builder.add("targetName", targetName);
+                builder.add("target", targetName);
                 break;
             case MULTIPLE_NAMES:
-                builder.add("targetNames", targetNames);
-                builder.add("isConfirmed", isConfirmed);
+                builder.add("targets", targetNames);
+                builder.add("confirmed", isConfirmed);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + targetType);

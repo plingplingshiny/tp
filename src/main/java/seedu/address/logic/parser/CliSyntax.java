@@ -13,5 +13,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_ADDRESS = new Prefix("a/");
     public static final Prefix PREFIX_TAG = new Prefix("t/");
     public static final Prefix PREFIX_CONFIRM = new Prefix("confirm/");
+    // New intention prefix replacing tag usage for add command
+    public static final Prefix PREFIX_INTENTION = new Prefix("i/");
 
 }

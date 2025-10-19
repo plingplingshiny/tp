@@ -14,6 +14,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.intention.Intention;
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -108,6 +109,19 @@ public class ParserUtil {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
         return new Tag(trimmedTag);
+    }
+
+    /**
+     * Parses {@code String intention} into an {@code Intention}.
+     * Only 'sell' or 'rent' (case-insensitive) are allowed.
+     */
+    public static Intention parseIntention(String intention) throws ParseException {
+        requireNonNull(intention);
+        String trimmed = intention.trim();
+        if (!Intention.isValidIntentionName(trimmed)) {
+            throw new ParseException(Intention.MESSAGE_CONSTRAINTS);
+        }
+        return new Intention(trimmed);
     }
 
     /**

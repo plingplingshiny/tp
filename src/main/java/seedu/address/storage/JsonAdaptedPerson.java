@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -28,6 +29,7 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
+    private final String intention;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -36,7 +38,8 @@ class JsonAdaptedPerson {
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("intention") String intention) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -44,6 +47,14 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.intention = intention; // may be null for legacy JSON
+    }
+
+    /**
+     * Backward-compatible constructor without intention; defaults intention to 'sell'.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, tags, null);
     }
 
     /**
@@ -54,6 +65,7 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        intention = source.getIntention().intentionName;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -102,8 +114,15 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
+        // intention: default to 'sell' if absent for backward compatibility
+        final String effectiveIntention = (intention == null || intention.trim().isEmpty()) ? "sell" : intention;
+        if (!Intention.isValidIntentionName(effectiveIntention)) {
+            throw new IllegalValueException(Intention.MESSAGE_CONSTRAINTS);
+        }
+        final Intention modelIntention = new Intention(effectiveIntention);
+
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelIntention);
     }
 
 }
