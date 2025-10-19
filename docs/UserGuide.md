@@ -83,7 +83,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS h/PROPERTY_TYPE c/PRICE [t/TAG]…​`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE [t/TAG]…​`
 
 <box type="tip" seamless>
 
@@ -91,8 +91,8 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS h/PROPERTY_TYPE c/PRICE [t/
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 h/HDB 3 room flat c/470000`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison h/prison cell c/0 p/1234567 t/criminal`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000`
+* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison pt/prison cell pr/0 p/1234567 t/criminal`
 
 ### Listing all persons : `list`
 
@@ -106,7 +106,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [h/PROPERTY_TYPE] [c/PRICE] [t/TAG]…​`
+Format: `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [pt/PROPERTY_TYPE] [pr/PRICE] [t/TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -124,7 +124,7 @@ Examples:
 Finds persons whose name, phone, email, address, or tags contain any of the given keywords.
 The search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
-Format: `find [n/NAME]…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`
+Format: `find [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [t/TAG]…​`
 
 * At least one prefix must be provided.
 * You may include multiple prefixes in the same command — results are combined using OR semantics (a person matches if any field matches).
