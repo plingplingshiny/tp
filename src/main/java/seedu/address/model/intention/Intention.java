@@ -29,7 +29,7 @@ public class Intention {
      * Returns true if a given string is a valid intention name.
      */
     public static boolean isValidIntentionName(String test) {
-        return test.matches(VALIDATION_REGEX);
+        return test.toLowerCase().matches(VALIDATION_REGEX);
     }
 
     @Override
