@@ -18,7 +18,6 @@ public class PersonContainsKeywordsPredicateTest {
 
     @Test
     public void constructor_allNonNullLists_assertionsPass() {
-        // This should not throw AssertionError since all lists are non-null
         new PersonContainsKeywordsPredicate(
                 Collections.emptyList(),
                 Collections.emptyList(),
@@ -28,7 +27,6 @@ public class PersonContainsKeywordsPredicateTest {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList());
-        // If we reach here, all assertions have passed
         assertTrue(true);
     }
 

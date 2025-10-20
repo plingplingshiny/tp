@@ -44,13 +44,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                                            List<String> intentionKeywords) {
 
         assert nameKeywords != null : "Name keyword list should not be null.";
-        assert phoneKeywords != null : "Phone keyword list should not be null.";
-        assert emailKeywords != null : "Email keyword list should not be null.";
-        assert addressKeywords != null : "Address keyword list should not be null.";
-        assert tagKeywords != null : "Tag keyword list should not be null.";
-        assert priceKeywords != null : "Price keyword list should not be null.";
-        assert propertyTypeKeywords != null : "Property type keyword list should not be null.";
-        assert intentionKeywords != null : "Intention keyword list should not be null.";
 
         this.nameKeywords = nameKeywords;
         this.phoneKeywords = phoneKeywords;
