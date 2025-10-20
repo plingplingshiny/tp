@@ -227,6 +227,21 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_multipleNamesOneValid_success() {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        List<Name> namesToDelete = Arrays.asList(firstPerson.getName());
+        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false); // not confirmed, but not required
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(firstPerson));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(firstPerson);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void equals_multipleNames() {
         Person firstPerson = model.getFilteredPersonList().get(0);
         Person secondPerson = model.getFilteredPersonList().get(1);

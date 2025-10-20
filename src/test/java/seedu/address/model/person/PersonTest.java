@@ -271,4 +271,19 @@ public class PersonTest {
         );
         assertEquals(new Intention("sell"), person.getIntention());
     }
+
+    @Test
+    public void constructorWithIntention() {
+        Person person = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                ALICE.getTags(), new Intention("rent"));
+
+        assertEquals(ALICE.getName(), person.getName());
+        assertEquals(ALICE.getPhone(), person.getPhone());
+        assertEquals(ALICE.getEmail(), person.getEmail());
+        assertEquals(ALICE.getAddress(), person.getAddress());
+        assertEquals(new PropertyType("unspecified"), person.getPropertyType());
+        assertEquals(new Price("0"), person.getPrice());
+        assertEquals(ALICE.getTags(), person.getTags());
+        assertEquals(new Intention("rent"), person.getIntention());
+    }
 }
