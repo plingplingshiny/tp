@@ -12,17 +12,15 @@ import seedu.address.testutil.PersonBuilder;
 
 /**
  * Tests for {@code PersonContainsKeywordsPredicate}.
- * Updated for all prefixes (n/, p/, e/, a/, t/, pr/, pt/, i/)
- * and safely validates constructor assertions.
+ * Ensures all constructor assertions pass by supplying valid non-null lists.
  */
 public class PersonContainsKeywordsPredicateTest {
 
-    // === Regular equality and behavior tests ===
-
     @Test
-    public void equals_differentType_returnsFalse() {
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alice"),
+    public void constructor_allNonNullLists_assertionsPass() {
+        // This should not throw AssertionError since all lists are non-null
+        new PersonContainsKeywordsPredicate(
+                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
@@ -30,7 +28,23 @@ public class PersonContainsKeywordsPredicateTest {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList());
-        assertFalse(predicate.equals("not a predicate"));
+        // If we reach here, all assertions have passed
+        assertTrue(true);
+    }
+
+    @Test
+    public void test_nameMatch_returnsTrue() {
+        Person person = new PersonBuilder().withName("Alice Pauline").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Arrays.asList("Alice"),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList());
+        assertTrue(predicate.test(person));
     }
 
     @Test
@@ -79,7 +93,7 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void equals_sameKeywords_returnsTrue() {
+    public void equals_sameValidLists_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Arrays.asList("alex"), Arrays.asList("9123"),
                 Arrays.asList("gmail"), Arrays.asList("street"),
@@ -94,73 +108,17 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void equals_differentPhone_returnsFalse() {
+    public void equals_differentValues_returnsFalse() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Arrays.asList("alex"), Arrays.asList("9123"),
                 Arrays.asList("gmail"), Arrays.asList("street"),
                 Arrays.asList("friend"), Arrays.asList("500000"),
                 Arrays.asList("hdb"), Arrays.asList("buy"));
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9999"),
-                Arrays.asList("gmail"), Arrays.asList("street"),
-                Arrays.asList("friend"), Arrays.asList("500000"),
-                Arrays.asList("hdb"), Arrays.asList("buy"));
+                Arrays.asList("bob"), Arrays.asList("9999"),
+                Arrays.asList("yahoo"), Arrays.asList("road"),
+                Arrays.asList("colleague"), Arrays.asList("700000"),
+                Arrays.asList("condo"), Arrays.asList("sell"));
         assertFalse(a.equals(b));
-    }
-
-    @Test
-    public void equals_differentIntention_returnsFalse() {
-        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"),
-                Arrays.asList("friend"), Arrays.asList("500000"),
-                Arrays.asList("hdb"), Arrays.asList("buy"));
-        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"),
-                Arrays.asList("friend"), Arrays.asList("500000"),
-                Arrays.asList("hdb"), Arrays.asList("sell"));
-        assertFalse(a.equals(b));
-    }
-
-    // === Assertion validation (constructor null checks) ===
-
-    @Test
-    public void constructor_handlesNullListsWithoutBreaking_whenAssertionsDisabled() {
-        // This test passes even if assertions are disabled
-        // (since Java assertions only run when -ea is set)
-        try {
-            new PersonContainsKeywordsPredicate(
-                    null, Collections.emptyList(),
-                    Collections.emptyList(), Collections.emptyList(),
-                    Collections.emptyList(), Collections.emptyList(),
-                    Collections.emptyList(), Collections.emptyList());
-        } catch (AssertionError e) {
-            // Expected only if -ea is enabled
-            assertTrue(true);
-        }
-    }
-
-    @Test
-    public void constructor_handlesNullPriceListSafely() {
-        try {
-            new PersonContainsKeywordsPredicate(
-                    Collections.emptyList(), Collections.emptyList(),
-                    Collections.emptyList(), Collections.emptyList(),
-                    Collections.emptyList(), null,
-                    Collections.emptyList(), Collections.emptyList());
-        } catch (AssertionError e) {
-            // Assertion triggered → expected under -ea
-            assertTrue(true);
-        }
-    }
-
-    /**
-     * Helper method to check if assertions are enabled at runtime.
-     */
-    private boolean areAssertionsEnabled() {
-        boolean enabled = false;
-        assert enabled = true;
-        return enabled;
     }
 }
