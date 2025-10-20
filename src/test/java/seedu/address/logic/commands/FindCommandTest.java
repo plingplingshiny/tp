@@ -22,7 +22,7 @@ import seedu.address.model.person.PersonContainsKeywordsPredicate;
 
 /**
  * Integration tests for {@code FindCommand}.
- * Updated for all prefixes (n/, p/, e/, a/, t/) and OR semantics.
+ * Updated for all searchable prefixes (n/, p/, e/, a/, t/, pr/, pt/, i/).
  */
 public class FindCommandTest {
 
@@ -37,11 +37,17 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList());
 
         PersonContainsKeywordsPredicate secondPredicate =
                 new PersonContainsKeywordsPredicate(
                         Collections.singletonList("second"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
@@ -76,6 +82,9 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -89,6 +98,9 @@ public class FindCommandTest {
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(
                         Arrays.asList("Kurz", "Elle", "Kunz"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
@@ -109,7 +121,10 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Collections.singletonList("friends"));
+                        Collections.singletonList("friends"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
@@ -120,6 +135,9 @@ public class FindCommandTest {
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(
                         Arrays.asList("keyword"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),

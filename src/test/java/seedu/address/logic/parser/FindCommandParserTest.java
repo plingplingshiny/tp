@@ -14,7 +14,7 @@ import seedu.address.model.person.PersonContainsKeywordsPredicate;
 
 /**
  * Tests for {@code FindCommandParser}.
- * Updated for all prefixes: n/, p/, e/, a/, and t/.
+ * Updated for all prefixes: n/, p/, e/, a/, t/, pr/, pt/, and i/.
  */
 public class FindCommandParserTest {
 
@@ -34,14 +34,14 @@ public class FindCommandParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand expectedFindCommand = new FindCommand(predicate);
 
-        // single prefix, multiple words
         assertParseSuccess(parser, " n/Alice Bob", expectedFindCommand);
-        // multiple prefixes with single keywords
         assertParseSuccess(parser, " n/Alice n/Bob", expectedFindCommand);
-        // extra whitespace
         assertParseSuccess(parser, " \n n/Alice \n \t n/Bob  \t", expectedFindCommand);
     }
 
@@ -51,6 +51,9 @@ public class FindCommandParserTest {
                 new PersonContainsKeywordsPredicate(
                         Collections.emptyList(),
                         Arrays.asList("1234", "9876"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList());
@@ -66,6 +69,9 @@ public class FindCommandParserTest {
                         Collections.emptyList(),
                         Arrays.asList("gmail", "example"),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand expectedFindCommand = new FindCommand(predicate);
         assertParseSuccess(parser, " e/gmail e/example", expectedFindCommand);
@@ -79,6 +85,9 @@ public class FindCommandParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Arrays.asList("street", "avenue"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand expectedFindCommand = new FindCommand(predicate);
         assertParseSuccess(parser, " a/street a/avenue", expectedFindCommand);
@@ -92,9 +101,60 @@ public class FindCommandParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Arrays.asList("friends", "colleagues"));
+                        Arrays.asList("friends", "colleagues"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList());
         FindCommand expectedFindCommand = new FindCommand(predicate);
         assertParseSuccess(parser, " t/friends t/colleagues", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validPriceArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("500000", "600000"),
+                        Collections.emptyList(),
+                        Collections.emptyList());
+        FindCommand expectedFindCommand = new FindCommand(predicate);
+        assertParseSuccess(parser, " pr/500000 pr/600000", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validPropertyTypeArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("hdb", "condo"),
+                        Collections.emptyList());
+        FindCommand expectedFindCommand = new FindCommand(predicate);
+        assertParseSuccess(parser, " pt/HDB pt/Condo", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validIntentionArgs_returnsFindCommand() {
+        PersonContainsKeywordsPredicate predicate =
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("buy", "sell"));
+        FindCommand expectedFindCommand = new FindCommand(predicate);
+        assertParseSuccess(parser, " i/Buy i/Sell", expectedFindCommand);
     }
 
     @Test
@@ -105,8 +165,12 @@ public class FindCommandParserTest {
                         Arrays.asList("9123"),
                         Arrays.asList("gmail"),
                         Arrays.asList("street"),
-                        Arrays.asList("friend"));
+                        Arrays.asList("friend"),
+                        Arrays.asList("500000"),
+                        Arrays.asList("hdb"),
+                        Arrays.asList("buy"));
         FindCommand expectedFindCommand = new FindCommand(predicate);
-        assertParseSuccess(parser, " n/Alice p/9123 e/gmail a/street t/friend", expectedFindCommand);
+        assertParseSuccess(parser, " n/Alice p/9123 e/gmail a/street t/friend pr/500000 pt/HDB i/Buy",
+                expectedFindCommand);
     }
 }
