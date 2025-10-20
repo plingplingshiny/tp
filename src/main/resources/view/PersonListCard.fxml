@@ -25,12 +25,17 @@
             <Region fx:constant="USE_PREF_SIZE" />
           </minWidth>
         </Label>
-        <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
+        <Label fx:id="name" text="$first" styleClass="cell_big_label" />
       </HBox>
-      <FlowPane fx:id="tags" />
-      <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
-      <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
-      <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
+      <!-- Intention label (Sell or Rent) -->
+      <Label fx:id="intention" styleClass="cell_small_label" text="Intent" />
+      <!-- Tags removed from view -->
+      <!-- <FlowPane fx:id="tags" /> -->
+      <Label fx:id="phone" styleClass="cell_small_label" text="$phone" />
+      <Label fx:id="address" styleClass="cell_small_label" text="$address" />
+      <Label fx:id="email" styleClass="cell_small_label" text="$email" />
+      <Label fx:id="propertyType" styleClass="cell_small_label" text="\$propertyType" />
+      <Label fx:id="price" styleClass="cell_small_label" text="\$price" />
     </VBox>
   </GridPane>
 </HBox>

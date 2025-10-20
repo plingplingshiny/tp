@@ -84,14 +84,16 @@ public class DeleteCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        return switch (targetType) {
-        case INDEX ->
-            executeDeleteByIndex(model);
-        case NAME ->
-            executeDeleteByName(model);
-        case MULTIPLE_NAMES ->
-            executeDeleteMultipleNames(model);
-        };
+        switch (targetType) {
+        case INDEX:
+            return executeDeleteByIndex(model);
+        case NAME:
+            return executeDeleteByName(model);
+        case MULTIPLE_NAMES:
+            return executeDeleteMultipleNames(model);
+        default:
+            throw new IllegalStateException("Unexpected value: " + targetType);
+        }
     }
 
     private CommandResult executeDeleteByIndex(Model model) throws CommandException {
@@ -204,14 +206,16 @@ public class DeleteCommand extends Command {
 
     @Override
     public int hashCode() {
-        return switch (targetType) {
-        case INDEX ->
-            targetIndex.hashCode();
-        case NAME ->
-            targetName.hashCode();
-        case MULTIPLE_NAMES ->
-            targetNames.hashCode() + Boolean.hashCode(isConfirmed);
-        };
+        switch (targetType) {
+        case INDEX:
+            return targetIndex.hashCode();
+        case NAME:
+            return targetName.hashCode();
+        case MULTIPLE_NAMES:
+            return targetNames.hashCode() + Boolean.hashCode(isConfirmed);
+        default:
+            throw new IllegalStateException("Unexpected value: " + targetType);
+        }
     }
 
     @Override
@@ -227,10 +231,11 @@ public class DeleteCommand extends Command {
             builder.add("target", targetName);
             break;
         case MULTIPLE_NAMES:
-            builder.add("targets", targetNames).add("confirmed", isConfirmed);
+            builder.add("targets", targetNames);
+            builder.add("confirmed", isConfirmed);
             break;
         default:
-            throw new AssertionError("Unknown target type: " + targetType);
+            throw new IllegalStateException("Unexpected value: " + targetType);
         }
 
         return builder.toString();

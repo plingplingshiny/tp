@@ -9,10 +9,13 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Price;
+import seedu.address.model.person.PropertyType;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -81,6 +84,36 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String property type} into a {@code PropertyType}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code property type} is invalid.
+     */
+    public static PropertyType parsePropertyType(String propertyType) throws ParseException {
+        requireNonNull(propertyType);
+        String trimmedPropertyType = propertyType.trim();
+        if (!PropertyType.isValidPropertyType(trimmedPropertyType)) {
+            throw new ParseException(PropertyType.MESSAGE_CONSTRAINTS);
+        }
+        return new PropertyType(trimmedPropertyType);
+    }
+
+    /**
+     * Parses a {@code String price} into a {@code Price}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code string} is invalid.
+     */
+    public static Price parsePrice(String price) throws ParseException {
+        requireNonNull(price);
+        String trimmedPrice = price.trim();
+        if (!Price.isValidPrice(trimmedPrice)) {
+            throw new ParseException(Price.MESSAGE_CONSTRAINTS);
+        }
+        return new Price(trimmedPrice);
+    }
+
+    /**
      * Parses a {@code String email} into an {@code Email}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -108,6 +141,19 @@ public class ParserUtil {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
         return new Tag(trimmedTag);
+    }
+
+    /**
+     * Parses {@code String intention} into an {@code Intention}.
+     * Only 'sell' or 'rent' (case-insensitive) are allowed.
+     */
+    public static Intention parseIntention(String intention) throws ParseException {
+        requireNonNull(intention);
+        String trimmed = intention.trim();
+        if (!Intention.isValidIntentionName(trimmed)) {
+            throw new ParseException(Intention.MESSAGE_CONSTRAINTS);
+        }
+        return new Intention(trimmed);
     }
 
     /**
