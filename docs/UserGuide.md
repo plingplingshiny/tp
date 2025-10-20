@@ -71,6 +71,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
   </box>
 
 * The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions, either selling or renting. This helps in categorizing clients based on their property-related goals.
+  * **Accepted values:** `sell` or `rent` (lowercase only); other values, abbreviations, or synonyms are not accepted.
 
 ### Viewing help : `help`
 
@@ -123,7 +124,7 @@ Examples:
 
 ### Locating persons by prefix: `find`
 
-Finds persons whose name, phone, email, address, or tags contain any of the given keywords.
+Finds persons whose name, phone, email, address, intention, property type, price, or tags contain any of the given keywords.
 The search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
 Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE] [t/TAG]…​`
@@ -220,6 +221,6 @@ Action     | Format, Examples
 **Clear**  | `clear`
 **Delete** | `delete INDEX` or `delete n/NAME [n/NAME]... [confirm/yes]`<br> e.g., `delete 3` or `delete n/John Doe confirm/yes`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [pt/PROPERTY_TYPE] [pr/PRICE] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `find [i/INTENTION] [n/NAME]…​ [p/PHONE]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE] [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
+**Find**   | `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE] [t/TAG]…​`<br> e.g., `find n/James p/9876 e/gmail a/Clementi t/friend`
 **List**   | `list`
 **Help**   | `help`
