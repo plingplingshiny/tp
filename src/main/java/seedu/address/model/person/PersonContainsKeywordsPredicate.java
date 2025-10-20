@@ -55,14 +55,14 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         assert nameKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Name keywords contain null/blank.";
         assert phoneKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Phone keywords contain null/blank.";
         assert emailKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Email keywords contain null/blank.";
-        assert addressKeywords.stream().noneMatch(k -> k == null ||
-                k.isBlank()) : "Address keywords contain null/blank.";
+        assert addressKeywords.stream().noneMatch(k -> k == null
+                || k.isBlank()) : "Address keywords contain null/blank.";
         assert tagKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Tag keywords contain null/blank.";
         assert priceKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Price keywords contain null/blank.";
-        assert propertyTypeKeywords.stream().noneMatch(k -> k == null ||
-                k.isBlank()) : "Property type keywords contain null/blank.";
-        assert intentionKeywords.stream().noneMatch(k -> k == null ||
-                k.isBlank()) : "Intention keywords contain null/blank.";
+        assert propertyTypeKeywords.stream().noneMatch(k -> k == null
+                || k.isBlank()) : "Property type keywords contain null/blank.";
+        assert intentionKeywords.stream().noneMatch(k -> k == null
+                || k.isBlank()) : "Intention keywords contain null/blank.";
 
         this.nameKeywords = nameKeywords;
         this.phoneKeywords = phoneKeywords;
