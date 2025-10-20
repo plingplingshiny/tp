@@ -24,18 +24,24 @@ public class Person {
 
     // Data fields
     private final Address address;
+    private final PropertyType propertyType;
+    private final Price price;
     private final Set<Tag> tags = new HashSet<>();
     private final Intention intention;
+
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Intention intention) {
-        requireAllNonNull(name, phone, email, address, tags, intention);
+    public Person(Name name, Phone phone, Email email, Address address, PropertyType propertyType, Price price,
+                  Set<Tag> tags, Intention intention) {
+        requireAllNonNull(name, phone, email, address, propertyType, price, tags, intention));
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.propertyType = propertyType;
+        this.price = price;
         this.tags.addAll(tags);
         this.intention = intention;
     }
@@ -61,6 +67,14 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public PropertyType getPropertyType() {
+        return propertyType;
+    }
+
+    public Price getPrice() {
+        return price;
     }
 
     public Intention getIntention() {
@@ -107,6 +121,8 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && propertyType.equals(otherPerson.propertyType)
+                && price.equals(otherPerson.price)
                 && intention.equals(otherPerson.intention);
     }
 
@@ -130,6 +146,8 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && propertyType.equals(otherPerson.propertyType)
+                && price.equals(otherPerson.price)
                 && tags.equals(otherPerson.tags)
                 && intention.equals(otherPerson.intention);
     }
@@ -137,7 +155,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, intention);
+        return Objects.hash(name, phone, email, address, propertyType, price, tags, intention);
     }
 
     @Override
@@ -147,6 +165,8 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("property type", propertyType)
+                .add("price", price)
                 .add("tags", tags)
                 .add("intention", intention)
                 .toString();
