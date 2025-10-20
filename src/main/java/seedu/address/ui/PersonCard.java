@@ -1,10 +1,7 @@
 package seedu.address.ui;
 
-import java.util.Comparator;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
@@ -43,7 +40,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label price;
     @FXML
-    private FlowPane tags;
+    private Label intention;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -58,9 +55,19 @@ public class PersonCard extends UiPart<Region> {
         email.setText(person.getEmail().value);
         propertyType.setText(person.getPropertyType().value);
         price.setText(person.getPrice().value);
-        person.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        // intention label and color
+        String intent = person.getIntention().intentionName;
+        String className = intent.equals("sell") ? "intention-sell" : "intention-rent";
+        String labelText = intent.substring(0, 1).toUpperCase() + intent.substring(1);
+        intention.setText(labelText);
+        // add chip styling + intent-specific color
+        intention.getStyleClass().add("intention-chip");
+        intention.getStyleClass().add(className);
+
+        // Remove tags from view
+        // person.getTags().stream()
+        //         .sorted(Comparator.comparing(tag -> tag.tagName))
+        //         .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
     }
 
 }

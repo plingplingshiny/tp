@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -32,6 +33,7 @@ class JsonAdaptedPerson {
     private final String address;
     private final String propertyType;
     private final String price;
+    private final String intention;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
@@ -41,7 +43,8 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
                              @JsonProperty("email") String email, @JsonProperty("address") String address,
                              @JsonProperty("propertyType") String propertyType, @JsonProperty("price") String price,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("intention") String intention) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -51,6 +54,23 @@ class JsonAdaptedPerson {
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.intention = intention; // may be null for legacy JSON
+    }
+
+    /**
+     * Backward-compatible constructor for legacy JSON missing new fields.
+     * Defaults: propertyType='unspecified', price='0', intention defaults in toModelType.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address, List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, "unspecified", "0", tags, null);
+    }
+
+    /**
+     * Backward-compatible constructor for legacy JSON missing intention only.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address,
+                             String propertyType, String price, List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, propertyType, price, tags, null);
     }
 
     /**
@@ -63,6 +83,7 @@ class JsonAdaptedPerson {
         address = source.getAddress().value;
         propertyType = source.getPropertyType().value;
         price = source.getPrice().value;
+        intention = source.getIntention().intentionName;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -111,6 +132,13 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
+        // intention: default to 'sell' if absent for backward compatibility
+        final String effectiveIntention = (intention == null || intention.trim().isEmpty()) ? "sell" : intention;
+        if (!Intention.isValidIntentionName(effectiveIntention)) {
+            throw new IllegalValueException(Intention.MESSAGE_CONSTRAINTS);
+        }
+        final Intention modelIntention = new Intention(effectiveIntention);
+
         if (propertyType == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     PropertyType.class.getSimpleName()));
@@ -129,7 +157,16 @@ class JsonAdaptedPerson {
         final Price modelPrice = new Price(price);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelPropertyType, modelPrice, modelTags);
+        return new Person(
+                modelName,
+                modelPhone,
+                modelEmail,
+                modelAddress,
+                modelPropertyType,
+                modelPrice,
+                modelTags,
+                modelIntention
+        );
     }
 
 }

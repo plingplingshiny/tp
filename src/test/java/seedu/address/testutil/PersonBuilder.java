@@ -3,6 +3,7 @@ package seedu.address.testutil;
 import java.util.HashSet;
 import java.util.Set;
 
+import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -24,6 +25,7 @@ public class PersonBuilder {
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_PROPERTY_TYPE = "hdb 4-room flat";
     public static final String DEFAULT_PRICE = "1200000";
+    public static final String DEFAULT_INTENTION = "sell";
 
     private Name name;
     private Phone phone;
@@ -32,6 +34,7 @@ public class PersonBuilder {
     private PropertyType propertyType;
     private Price price;
     private Set<Tag> tags;
+    private Intention intention;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -44,6 +47,7 @@ public class PersonBuilder {
         propertyType = new PropertyType(DEFAULT_PROPERTY_TYPE);
         price = new Price(DEFAULT_PRICE);
         tags = new HashSet<>();
+        intention = new Intention(DEFAULT_INTENTION);
     }
 
     /**
@@ -57,6 +61,7 @@ public class PersonBuilder {
         propertyType = personToCopy.getPropertyType();
         price = personToCopy.getPrice();
         tags = new HashSet<>(personToCopy.getTags());
+        intention = personToCopy.getIntention();
     }
 
     /**
@@ -115,8 +120,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Intention} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withIntention(String intention) {
+        this.intention = new Intention(intention);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, propertyType, price, tags);
+        return new Person(name, phone, email, address, propertyType, price, tags, intention);
     }
 
 }

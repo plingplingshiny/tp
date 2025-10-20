@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.intention.Intention;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -26,14 +27,15 @@ public class Person {
     private final PropertyType propertyType;
     private final Price price;
     private final Set<Tag> tags = new HashSet<>();
+    private final Intention intention;
 
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, PropertyType propertyType, Price price,
-                  Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, propertyType, price, tags);
+                  Set<Tag> tags, Intention intention) {
+        requireAllNonNull(name, phone, email, address, propertyType, price, tags, intention);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -41,6 +43,30 @@ public class Person {
         this.propertyType = propertyType;
         this.price = price;
         this.tags.addAll(tags);
+        this.intention = intention;
+    }
+
+    /**
+     * Backward-compatible constructor defaulting propertyType to 'unspecified', price to '0',
+     * and intention to 'sell'.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        this(name, phone, email, address,
+                new PropertyType("unspecified"),
+                new Price("0"),
+                tags,
+                new Intention("sell"));
+    }
+
+    /**
+     * Backward-compatible constructor defaulting propertyType to 'unspecified' and price to '0'.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Intention intention) {
+        this(name, phone, email, address,
+                new PropertyType("unspecified"),
+                new Price("0"),
+                tags,
+                intention);
     }
 
     public Name getName() {
@@ -65,6 +91,10 @@ public class Person {
 
     public Price getPrice() {
         return price;
+    }
+
+    public Intention getIntention() {
+        return intention;
     }
 
     /**
@@ -108,7 +138,8 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && propertyType.equals(otherPerson.propertyType)
-                && price.equals(otherPerson.price);
+                && price.equals(otherPerson.price)
+                && intention.equals(otherPerson.intention);
     }
 
     /**
@@ -133,13 +164,14 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && propertyType.equals(otherPerson.propertyType)
                 && price.equals(otherPerson.price)
-                && tags.equals(otherPerson.tags);
+                && tags.equals(otherPerson.tags)
+                && intention.equals(otherPerson.intention);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, propertyType, price, tags);
+        return Objects.hash(name, phone, email, address, propertyType, price, tags, intention);
     }
 
     @Override
@@ -152,6 +184,7 @@ public class Person {
                 .add("property type", propertyType)
                 .add("price", price)
                 .add("tags", tags)
+                .add("intention", intention)
                 .toString();
     }
 

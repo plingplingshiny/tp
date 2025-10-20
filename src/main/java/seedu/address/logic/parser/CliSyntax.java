@@ -15,5 +15,6 @@ public class CliSyntax {
     public static final Prefix PREFIX_CONFIRM = new Prefix("confirm/");
     public static final Prefix PREFIX_PRICE = new Prefix("pr/");
     public static final Prefix PREFIX_PROPERTY_TYPE = new Prefix("pt/");
+    public static final Prefix PREFIX_INTENTION = new Prefix("i/");
 
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
@@ -140,6 +141,19 @@ public class ParserUtil {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
         return new Tag(trimmedTag);
+    }
+
+    /**
+     * Parses {@code String intention} into an {@code Intention}.
+     * Only 'sell' or 'rent' (case-insensitive) are allowed.
+     */
+    public static Intention parseIntention(String intention) throws ParseException {
+        requireNonNull(intention);
+        String trimmed = intention.trim();
+        if (!Intention.isValidIntentionName(trimmed)) {
+            throw new ParseException(Intention.MESSAGE_CONSTRAINTS);
+        }
+        return new Intention(trimmed);
     }
 
     /**

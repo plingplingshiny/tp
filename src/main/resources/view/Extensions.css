@@ -1,4 +1,3 @@
-
 .error {
     -fx-text-fill: #d06651 !important; /* The error class should always override the default text-fill style */
 }
@@ -17,4 +16,21 @@
 
 .tooltip-text {
     -fx-text-fill: white;
+}
+
+/* Intention label colors */
+.intention-sell {
+    -fx-background-color: #d32f2f !important; /* red */
+}
+.intention-rent {
+    -fx-background-color: #f57c00 !important; /* orange */
+}
+
+/* Intention chip base style: rounded, padded, white text */
+.intention-chip {
+    -fx-text-fill: white !important;
+    -fx-padding: 1 6 1 6;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-font-size: 11px;
 }
