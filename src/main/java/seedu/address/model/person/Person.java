@@ -35,7 +35,7 @@ public class Person {
      */
     public Person(Name name, Phone phone, Email email, Address address, PropertyType propertyType, Price price,
                   Set<Tag> tags, Intention intention) {
-        requireAllNonNull(name, phone, email, address, propertyType, price, tags, intention));
+        requireAllNonNull(name, phone, email, address, propertyType, price, tags, intention);
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -47,10 +47,26 @@ public class Person {
     }
 
     /**
-     * Backward-compatible constructor defaulting intention to 'sell'.
+     * Backward-compatible constructor defaulting propertyType to 'unspecified', price to '0',
+     * and intention to 'sell'.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        this(name, phone, email, address, tags, new Intention("sell"));
+        this(name, phone, email, address,
+                new PropertyType("unspecified"),
+                new Price("0"),
+                tags,
+                new Intention("sell"));
+    }
+
+    /**
+     * Backward-compatible constructor defaulting propertyType to 'unspecified' and price to '0'.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Intention intention) {
+        this(name, phone, email, address,
+                new PropertyType("unspecified"),
+                new Price("0"),
+                tags,
+                intention);
     }
 
     public Name getName() {

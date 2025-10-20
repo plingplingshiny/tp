@@ -46,12 +46,17 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_INTENTION, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE, PREFIX_TAG);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_INTENTION, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_PROPERTY_TYPE, PREFIX_PRICE)
+        if (!arePrefixesPresent(argMultimap,
+                PREFIX_INTENTION, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_PROPERTY_TYPE, PREFIX_PRICE)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_INTENTION, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE);
+        argMultimap.verifyNoDuplicatePrefixesFor(
+                PREFIX_INTENTION, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
+                PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE
+        );
         Intention intention = ParserUtil.parseIntention(argMultimap.getValue(PREFIX_INTENTION).get());
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());

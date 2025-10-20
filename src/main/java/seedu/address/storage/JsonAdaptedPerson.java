@@ -58,10 +58,19 @@ class JsonAdaptedPerson {
     }
 
     /**
-     * Backward-compatible constructor without intention; defaults intention to 'sell'.
+     * Backward-compatible constructor for legacy JSON missing new fields.
+     * Defaults: propertyType='unspecified', price='0', intention defaults in toModelType.
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address, List<JsonAdaptedTag> tags) {
-        this(name, phone, email, address, tags, null);
+        this(name, phone, email, address, "unspecified", "0", tags, null);
+    }
+
+    /**
+     * Backward-compatible constructor for legacy JSON missing intention only.
+     */
+    public JsonAdaptedPerson(String name, String phone, String email, String address,
+                             String propertyType, String price, List<JsonAdaptedTag> tags) {
+        this(name, phone, email, address, propertyType, price, tags, null);
     }
 
     /**
@@ -148,7 +157,16 @@ class JsonAdaptedPerson {
         final Price modelPrice = new Price(price);
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelPropertyType, modelPrice, modelTags, modelIntention);
+        return new Person(
+                modelName,
+                modelPhone,
+                modelEmail,
+                modelAddress,
+                modelPropertyType,
+                modelPrice,
+                modelTags,
+                modelIntention
+        );
     }
 
 }

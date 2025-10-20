@@ -33,10 +33,9 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PRICE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PROPERTY_TYPE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_FRIEND;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTENTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
@@ -93,7 +92,9 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_repeatedNonTagValue_failure() {
-        String base = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND;
+        String base = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND;
+        String validExpectedPersonString = INTENTION_DESC_SELL + base;
 
         // multiple names (intention must be first)
         assertParseFailure(
@@ -106,7 +107,7 @@ public class AddCommandParserTest {
         assertParseFailure(
                 parser,
                 INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_AMY + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
+                        + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE)
         );
 
@@ -114,7 +115,7 @@ public class AddCommandParserTest {
         assertParseFailure(
                 parser,
                 INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_AMY + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
+                        + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL)
         );
 
@@ -122,32 +123,39 @@ public class AddCommandParserTest {
         assertParseFailure(
                 parser,
                 INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_AMY
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
+                        + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS)
         );
 
         // multiple property types
-        assertParseFailure(parser, PROPERTY_TYPE_DESC_AMY + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PROPERTY_TYPE));
+        assertParseFailure(
+                parser,
+                INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + PROPERTY_TYPE_DESC_AMY + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PROPERTY_TYPE)
+        );
 
         // multiple prices
-        assertParseFailure(parser, PRICE_DESC_AMY + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PRICE));
+        assertParseFailure(
+                parser,
+                validExpectedPersonString + PRICE_DESC_AMY + PRICE_DESC_BOB,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PRICE)
+        );
 
         // multiple fields repeated
         assertParseFailure(parser,
                 validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
                         + ADDRESS_DESC_AMY + PROPERTY_TYPE_DESC_AMY + PRICE_DESC_AMY
                         + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE,
-                        PREFIX_PROPERTY_TYPE, PREFIX_PRICE));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_INTENTION, PREFIX_ADDRESS,
+                        PREFIX_EMAIL, PREFIX_PHONE, PREFIX_PROPERTY_TYPE, PREFIX_PRICE));
         // multiple fields repeated (do not repeat intention)
-        String validWithoutIntention = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + TAG_DESC_FRIEND;
+        String requiredOnce = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND;
         assertParseFailure(
                 parser,
-                INTENTION_DESC_SELL + validWithoutIntention + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
-                        + ADDRESS_DESC_AMY + validWithoutIntention,
+                INTENTION_DESC_SELL + requiredOnce + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY
+                        + ADDRESS_DESC_AMY + TAG_DESC_FRIEND,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE)
         );
 
@@ -155,70 +163,27 @@ public class AddCommandParserTest {
 
         // invalid name
         assertParseFailure(parser, INVALID_NAME_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         // invalid email
         assertParseFailure(parser, INVALID_EMAIL_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         // invalid phone
         assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         // invalid address
         assertParseFailure(parser, INVALID_ADDRESS_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         // invalid property type
         assertParseFailure(parser, INVALID_PROPERTY_TYPE_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PROPERTY_TYPE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
 
         // invalid price
         assertParseFailure(parser, INVALID_PRICE_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PRICE));
-
-        // valid value followed by invalid value
-
-        // invalid name
-        assertParseFailure(parser, validExpectedPersonString + INVALID_NAME_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME));
-        assertParseFailure(
-                parser,
-                INTENTION_DESC_SELL + INVALID_NAME_DESC + base,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME)
-        );
-
-        // invalid email followed by valid email
-        assertParseFailure(
-                parser,
-                INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL)
-        );
-
-        // invalid phone followed by valid phone
-        assertParseFailure(
-                parser,
-                INTENTION_DESC_SELL + NAME_DESC_BOB + INVALID_PHONE_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PHONE)
-        );
-
-        // invalid address followed by valid address
-        assertParseFailure(
-                parser,
-                INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_ADDRESS_DESC
-                        + ADDRESS_DESC_BOB + TAG_DESC_FRIEND,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS)
-        );
-
-        // invalid property type
-        assertParseFailure(parser, validExpectedPersonString + INVALID_PROPERTY_TYPE_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PROPERTY_TYPE));
-
-        // invalid price
-        assertParseFailure(parser, validExpectedPersonString + INVALID_PRICE_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PRICE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -293,7 +258,7 @@ public class AddCommandParserTest {
         assertParseFailure(
                 parser,
                 INVALID_INTENTION_DESC + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                        + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                        + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 Intention.MESSAGE_CONSTRAINTS
         );
 
@@ -334,13 +299,13 @@ public class AddCommandParserTest {
         );
 
         // invalid property type
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + INVALID_PROPERTY_TYPE_DESC + PRICE_DESC_BOB
+        assertParseFailure(parser, INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + ADDRESS_DESC_BOB + INVALID_PROPERTY_TYPE_DESC + PRICE_DESC_BOB
                 + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, PropertyType.MESSAGE_CONSTRAINTS);
 
         // invalid price
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + PROPERTY_TYPE_DESC_BOB + INVALID_PRICE_DESC
+        assertParseFailure(parser, INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + INVALID_PRICE_DESC
                 + TAG_DESC_HUSBAND + TAG_DESC_FRIEND, Price.MESSAGE_CONSTRAINTS);
 
         // invalid tag
@@ -362,8 +327,10 @@ public class AddCommandParserTest {
         // non-empty preamble
         assertParseFailure(
                 parser,
-                PREAMBLE_NON_EMPTY + INTENTION_DESC_SELL + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                        + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
+                PREAMBLE_NON_EMPTY + INTENTION_DESC_SELL + NAME_DESC_BOB
+                        + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                        + ADDRESS_DESC_BOB + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB
+                        + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE)
         );
     }

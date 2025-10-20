@@ -155,9 +155,14 @@ public class PersonTest {
 
     @Test
     public void toStringMethod() {
-        String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", property type="
-                + ALICE.getPropertyType() + ", price=" + ALICE.getPrice() + ", tags=" + ALICE.getTags()
+        String expected = Person.class.getCanonicalName()
+                + "{name=" + ALICE.getName()
+                + ", phone=" + ALICE.getPhone()
+                + ", email=" + ALICE.getEmail()
+                + ", address=" + ALICE.getAddress()
+                + ", property type=" + ALICE.getPropertyType()
+                + ", price=" + ALICE.getPrice()
+                + ", tags=" + ALICE.getTags()
                 + ", intention=" + ALICE.getIntention() + "}";
         assertEquals(expected, ALICE.toString());
     }
@@ -166,39 +171,44 @@ public class PersonTest {
     public void constructor_null_throwsNullPointerException() {
         // All fields null
         assertThrows(NullPointerException.class, () ->
-                new Person(null, null, null, null, null, null, null));
+                new Person(null, null, null, null, null, null, null, null));
 
         // Individual null fields, test each required field
         assertThrows(NullPointerException.class, () ->
                 new Person(null, ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), null, ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), null, ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), null,
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
 
         // Test the new fields specifically - propertyType
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        null, ALICE.getPrice(), ALICE.getTags()));
+                        null, ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
 
         // Test the new fields specifically - price
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), null, ALICE.getTags()));
+                        ALICE.getPropertyType(), null, ALICE.getTags(), ALICE.getIntention()));
 
         // Tags null
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), null));
+                        ALICE.getPropertyType(), ALICE.getPrice(), null, ALICE.getIntention()));
+
+        // Intention null
+        assertThrows(NullPointerException.class, () ->
+                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), null));
     }
 
     @Test
