@@ -6,6 +6,9 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PROPERTY_TYPE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTENTION;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -17,40 +20,47 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.PersonContainsKeywordsPredicate;
 
 /**
- * Parses input arguments and creates a new FindCommand object
+ * Parses input arguments and creates a new FindCommand object.
+ * Supports prefix-based searches by name, phone, email, address, tag,
+ * price, property type, and intention.
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments in the context of the FindCommand
-     * and returns a FindCommand object for execution.
-     * @throws ParseException if the user input does not conform the expected format
-     */
+    @Override
     public FindCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
-                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_TAG);
+                PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
+                PREFIX_TAG, PREFIX_PRICE, PREFIX_PROPERTY_TYPE, PREFIX_INTENTION);
 
         List<String> rawNames = argMultimap.getAllValues(PREFIX_NAME);
         List<String> rawPhones = argMultimap.getAllValues(PREFIX_PHONE);
         List<String> rawEmails = argMultimap.getAllValues(PREFIX_EMAIL);
         List<String> rawAddresses = argMultimap.getAllValues(PREFIX_ADDRESS);
         List<String> rawTags = argMultimap.getAllValues(PREFIX_TAG);
+        List<String> rawPrices = argMultimap.getAllValues(PREFIX_PRICE);
+        List<String> rawPropertyTypes = argMultimap.getAllValues(PREFIX_PROPERTY_TYPE);
+        List<String> rawIntentions = argMultimap.getAllValues(PREFIX_INTENTION);
 
-        // Split each value by whitespace and dedupe
         List<String> nameKeywords = splitNormalizeDedup(rawNames);
         List<String> phoneKeywords = splitNormalizeDedup(rawPhones);
         List<String> emailKeywords = splitNormalizeDedup(rawEmails);
         List<String> addressKeywords = splitNormalizeDedup(rawAddresses);
         List<String> tagKeywords = splitNormalizeDedup(rawTags);
+        List<String> priceKeywords = splitNormalizeDedup(rawPrices);
+        List<String> propertyTypeKeywords = splitNormalizeDedup(rawPropertyTypes);
+        List<String> intentionKeywords = splitNormalizeDedup(rawIntentions);
 
-        if (nameKeywords.isEmpty() && tagKeywords.isEmpty()
-                && phoneKeywords.isEmpty() && emailKeywords.isEmpty()
-                && addressKeywords.isEmpty()) {
+        if (nameKeywords.isEmpty() && phoneKeywords.isEmpty() && emailKeywords.isEmpty()
+                && addressKeywords.isEmpty() && tagKeywords.isEmpty()
+                && priceKeywords.isEmpty() && propertyTypeKeywords.isEmpty() && intentionKeywords.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        return new FindCommand(new PersonContainsKeywordsPredicate(nameKeywords, phoneKeywords,
-                emailKeywords, addressKeywords, tagKeywords));
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                nameKeywords, phoneKeywords, emailKeywords, addressKeywords,
+                tagKeywords, priceKeywords, propertyTypeKeywords, intentionKeywords);
+
+        return new FindCommand(predicate);
     }
 
     private static List<String> splitNormalizeDedup(List<String> rawValues) {
@@ -68,5 +78,4 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         return new ArrayList<>(out);
     }
-
 }

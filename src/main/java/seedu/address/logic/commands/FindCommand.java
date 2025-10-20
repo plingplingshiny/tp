@@ -8,20 +8,22 @@ import seedu.address.model.Model;
 import seedu.address.model.person.PersonContainsKeywordsPredicate;
 
 /**
- * Finds and lists all persons in address book whose name contains any of the argument keywords.
- * Keyword matching is case insensitive.
+ * Finds and lists all persons in the address book whose fields contain any of the given keywords.
+ * Keyword matching is case-insensitive and substring-based.
  */
 public class FindCommand extends Command {
 
     public static final String COMMAND_WORD = "find";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds persons by any prefix.\n"
-            + "Parameters: [n/NAME_KEYWORDS] [p/PHONE_KEYWORDS] "
-            + "[e/EMAIL_KEYWORDS] [a/ADDRESS_KEYWORDS] [t/TAG_KEYWORDS]\n"
-            + "At least one prefix is required. Keywords are case-insensitive.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds persons by any combination of prefixes.\n"
+            + "Parameters: [n/NAME_KEYWORDS] [p/PHONE_KEYWORDS] [e/EMAIL_KEYWORDS] [a/ADDRESS_KEYWORDS] "
+            + "[t/TAG_KEYWORDS] [pr/PRICE_KEYWORDS] [pt/PROPERTY_TYPE_KEYWORDS] [i/INTENTION_KEYWORDS]\n"
+            + "At least one prefix is required. Keywords are case-insensitive and may contain spaces.\n"
             + "Examples:\n"
             + "  find n/Alice p/9123\n"
-            + "  find e/example.com a/Street t/friend\n";
+            + "  find e/example.com a/Street t/friend\n"
+            + "  find pr/500000 pt/HDB i/Sell\n";
+
 
     private final PersonContainsKeywordsPredicate predicate;
 
@@ -43,7 +45,6 @@ public class FindCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof FindCommand)) {
             return false;
         }
