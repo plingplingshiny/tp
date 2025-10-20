@@ -74,7 +74,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                         .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
 
         boolean priceMatches = priceKeywords.stream()
-                .anyMatch(k -> person.getPrice().value.toLowerCase().contains(k.toLowerCase()));
+                .anyMatch(k -> person.getPrice().value.contains(k));
 
         boolean propertyTypeMatches = propertyTypeKeywords.stream()
                 .anyMatch(k -> person.getPropertyType().value.toLowerCase().contains(k.toLowerCase()));

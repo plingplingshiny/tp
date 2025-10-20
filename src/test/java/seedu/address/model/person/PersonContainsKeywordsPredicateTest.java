@@ -185,6 +185,11 @@ public class PersonContainsKeywordsPredicateTest {
 
     @Test
     public void equals_priceKeywordsDifferentCase_returnsTrue() {
+        /*
+        Although Price should normally contain only digits, commas, and decimals,
+        this test is retained to validate case-insensitive equality in case
+        future domain changes allow currency symbols or suffixes.
+        */
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList(),
