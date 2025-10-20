@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Intention {
 
     public static final String MESSAGE_CONSTRAINTS = "Intention must be 'sell' or 'rent'";
-    public static final String VALIDATION_REGEX = "(?i)sell|rent"; // case insensitive
+    public static final String VALIDATION_REGEX = "sell|rent"; // case sensitive
 
     public final String intentionName;
 

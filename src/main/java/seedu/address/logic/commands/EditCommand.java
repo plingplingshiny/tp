@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INTENTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
@@ -31,6 +32,7 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.PropertyType;
 import seedu.address.model.tag.Tag;
+import seedu.address.model.intention.Intention;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -49,6 +51,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_PROPERTY_TYPE + "PROPERTY TYPE]"
             + "[" + PREFIX_PRICE + "PRICE]"
+            + "[" + PREFIX_INTENTION + "INTENTION]"
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -109,9 +112,10 @@ public class EditCommand extends Command {
                 .orElse(personToEdit.getPropertyType());
         Price updatedPrice = editPersonDescriptor.getPrice().orElse(personToEdit.getPrice());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        Intention updatedIntention = editPersonDescriptor.getIntention().orElse(personToEdit.getIntention());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedPropertyType,
-                updatedPrice, updatedTags, personToEdit.getIntention());
+                updatedPrice, updatedTags, updatedIntention);
     }
 
     @Override
@@ -150,6 +154,7 @@ public class EditCommand extends Command {
         private PropertyType propertyType;
         private Price price;
         private Set<Tag> tags;
+        private Intention intention;
 
         public EditPersonDescriptor() {}
 
@@ -165,13 +170,14 @@ public class EditCommand extends Command {
             setPropertyType(toCopy.propertyType);
             setPrice(toCopy.price);
             setTags(toCopy.tags);
+            setIntention(toCopy.intention);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, propertyType, price, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, propertyType, price, tags, intention);
         }
 
         public void setName(Name name) {
@@ -239,6 +245,14 @@ public class EditCommand extends Command {
             return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
         }
 
+        public void setIntention(Intention intention) {
+            this.intention = intention;
+        }
+
+        public Optional<Intention> getIntention() {
+            return Optional.ofNullable(intention);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -257,7 +271,8 @@ public class EditCommand extends Command {
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(propertyType, otherEditPersonDescriptor.propertyType)
                     && Objects.equals(price, otherEditPersonDescriptor.price)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
+                    && Objects.equals(intention, otherEditPersonDescriptor.intention);
         }
 
         @Override
@@ -270,6 +285,7 @@ public class EditCommand extends Command {
                     .add("property type", propertyType)
                     .add("price", price)
                     .add("tags", tags)
+                    .add("intention", intention)
                     .toString();
         }
     }
