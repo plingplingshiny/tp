@@ -28,9 +28,13 @@ public class FindCommandParser implements Parser<FindCommand> {
 
     @Override
     public FindCommand parse(String args) throws ParseException {
+        assert args != null : "Input arguments should not be null.";
+
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                 PREFIX_TAG, PREFIX_PRICE, PREFIX_PROPERTY_TYPE, PREFIX_INTENTION);
+
+        assert argMultimap != null : "ArgumentMultimap should not be null after tokenization.";
 
         List<String> rawNames = argMultimap.getAllValues(PREFIX_NAME);
         List<String> rawPhones = argMultimap.getAllValues(PREFIX_PHONE);
@@ -40,6 +44,9 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> rawPrices = argMultimap.getAllValues(PREFIX_PRICE);
         List<String> rawPropertyTypes = argMultimap.getAllValues(PREFIX_PROPERTY_TYPE);
         List<String> rawIntentions = argMultimap.getAllValues(PREFIX_INTENTION);
+
+        assert rawNames != null && rawPhones != null && rawEmails != null && rawAddresses != null;
+        assert rawTags != null && rawPrices != null && rawPropertyTypes != null && rawIntentions != null;
 
         List<String> nameKeywords = splitNormalizeDedup(rawNames);
         List<String> phoneKeywords = splitNormalizeDedup(rawPhones);

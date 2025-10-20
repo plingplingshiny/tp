@@ -42,6 +42,25 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                                            List<String> priceKeywords,
                                            List<String> propertyTypeKeywords,
                                            List<String> intentionKeywords) {
+
+        assert nameKeywords != null : "Name keyword list should not be null.";
+        assert phoneKeywords != null : "Phone keyword list should not be null.";
+        assert emailKeywords != null : "Email keyword list should not be null.";
+        assert addressKeywords != null : "Address keyword list should not be null.";
+        assert tagKeywords != null : "Tag keyword list should not be null.";
+        assert priceKeywords != null : "Price keyword list should not be null.";
+        assert propertyTypeKeywords != null : "Property type keyword list should not be null.";
+        assert intentionKeywords != null : "Intention keyword list should not be null.";
+
+        assert nameKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Name keywords contain null/blank.";
+        assert phoneKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Phone keywords contain null/blank.";
+        assert emailKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Email keywords contain null/blank.";
+        assert addressKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Address keywords contain null/blank.";
+        assert tagKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Tag keywords contain null/blank.";
+        assert priceKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Price keywords contain null/blank.";
+        assert propertyTypeKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Property type keywords contain null/blank.";
+        assert intentionKeywords.stream().noneMatch(k -> k == null || k.isBlank()) : "Intention keywords contain null/blank.";
+
         this.nameKeywords = nameKeywords;
         this.phoneKeywords = phoneKeywords;
         this.emailKeywords = emailKeywords;
