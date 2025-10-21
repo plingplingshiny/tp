@@ -81,7 +81,7 @@ public class PersonListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
                         ? null
-                        : getTableView().getItems().get(getIndex()).getName().fullName);
+                        : getTableView().getItems().get(getIndex()).getPhone().value);
             }
         });
 
@@ -91,7 +91,7 @@ public class PersonListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
                         ? null
-                        : getTableView().getItems().get(getIndex()).getName().fullName);
+                        : getTableView().getItems().get(getIndex()).getEmail().value);
             }
         });
 
@@ -101,7 +101,7 @@ public class PersonListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
                         ? null
-                        : getTableView().getItems().get(getIndex()).getName().fullName);
+                        : getTableView().getItems().get(getIndex()).getAddress().value);
             }
         });
 
@@ -111,7 +111,7 @@ public class PersonListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
                         ? null
-                        : getTableView().getItems().get(getIndex()).getName().fullName);
+                        : getTableView().getItems().get(getIndex()).getPropertyType().value);
             }
         });
 
@@ -121,7 +121,7 @@ public class PersonListPanel extends UiPart<Region> {
                 super.updateItem(item, empty);
                 setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
                         ? null
-                        : getTableView().getItems().get(getIndex()).getName().fullName);
+                        : getTableView().getItems().get(getIndex()).getPrice().value);
             }
         });
 
@@ -138,7 +138,7 @@ public class PersonListPanel extends UiPart<Region> {
                 }
 
                 String intent = getTableView().getItems().get(getIndex()).getIntention().intentionName;
-                String className = intent.equalsIgnoreCase("sell") ? "intention-sell" : "intention-rent";
+                String className = "intention-" + intent;
                 String labelText = intent.substring(0, 1).toUpperCase() + intent.substring(1);
                 setText(labelText);
                 getStyleClass().add("intention-chip");
