@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import seedu.address.model.person.Person;
