@@ -1,0 +1,98 @@
+/* PersonListPanel stylesheet template for the TableView */
+
+/* Scope styles to this table only */
+.person-table {
+    -fx-table-cell-border-color: transparent;
+    -fx-table-header-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-padding: 0;
+    /* Rounded corners and subtle outer border */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-background-insets: 0;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+}
+
+/* Header styling */
+.person-table .column-header-background {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 8 8 0 0; /* match rounded corners */
+    -fx-background-insets: 0;
+}
+
+.person-table .column-header {
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+.person-table .column-header .label {
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
+
+/* Selection */
+.person-table .table-row-cell:selected {
+    -fx-background-color: rgba(133, 30, 145, 0.5) !important;
+}
+
+.person-table .table-row-cell:filled:selected,
+.person-table .table-row-cell:filled:selected .table-cell,
+.person-table .table-row-cell:filled:selected .text {
+    -fx-text-fill: white;
+    -fx-fill: white;
+}
+
+/* Cell padding */
+.person-table .table-cell {
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 12px;
+    -fx-border-color: transparent; /* hide vertical cell borders */
+    -fx-text-fill: white; /* ensure default text is white */
+}
+
+/* Index column alignment */
+.person-table .table-column:first-child .table-cell {
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Also hide borders when selected/focused */
+.person-table .table-row-cell:selected .table-cell {
+    -fx-border-color: transparent;
+}
+
+/* Header borders */
+.person-table .column-header, .person-table .column-header-background, .person-table .filler {
+    -fx-border-color: transparent;
+}
+
+/* Ensure text nodes inside cells default to white as well */
+.person-table .text {
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
+    -fx-fill: white;
+}
+
+/* Faint horizontal divider between rows */
+.person-table .table-row-cell {
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-border-width: 0 0 1 0; /* bottom-only */
+    -fx-border-insets: 0;
+}
+
+/* Preserve divider visibility when selected */
+.person-table .table-row-cell:selected {
+    -fx-border-color: rgba(255,255,255,0.12);
+}
+
+/* Round the bottom corners of the last visible row to match table radius */
+.person-table .virtual-flow .clipped-container .sheet .table-row-cell:last-visible {
+    -fx-background-radius: 0 0 8 8;
+}
+
+
