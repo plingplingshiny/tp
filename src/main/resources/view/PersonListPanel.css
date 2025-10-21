@@ -58,7 +58,9 @@
 .person-table .table-cell {
     -fx-padding: 6 10 6 10;
     -fx-font-size: 12px;
-    -fx-border-color: transparent; /* hide vertical cell borders */
+    -fx-border-color: rgba(255,255,255,0.05);
+    -fx-border-width: 0 0 1 1;
+    -fx-border-insets: 0;
     -fx-text-fill: white; /* ensure default text is white */
 }
 
@@ -67,20 +69,10 @@
     -fx-alignment: CENTER_RIGHT;
 }
 
-/* Preserve divider visibility when selected */
-.person-table .table-row-cell:selected {
-    -fx-border-color: rgba(255,255,255,0.12);
-}
-
-/* Hide borders when selected/focused */
-.person-table .table-row-cell:selected .table-cell {
-    -fx-border-color: transparent;
-}
-
-/* Faint horizontal divider between rows */
+/* Faint divider between rows */
 .person-table .table-row-cell {
     -fx-border-color: rgba(255,255,255,0.05);
-    -fx-border-width: 0 0 1 0; /* bottom-only */
+    -fx-border-width: 0 0 1 1;
     -fx-border-insets: 0;
 }
 
