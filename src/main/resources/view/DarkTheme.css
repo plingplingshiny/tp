@@ -1,13 +1,13 @@
 .background {
-    -fx-background-color: #000000;
+    -fx-background-color: #000000 !important;
     background-color: #000000; /* Used in the default.html file */
 }
 
 .label {
-    -fx-font-size: 11pt;
+    -fx-font-size: 18pt;
     -fx-font-family: "Roboto Condensed", sans-serif;
     -fx-font-weight: bold;
-    -fx-text-fill: #555555;
+    -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
 
@@ -141,24 +141,34 @@
 
 .stack-pane {
      -fx-background-color: #000000;
+     -fx-background-radius: 8 !important;
+     -fx-border-radius: 8 !important;
 }
 
 .pane-with-border {
      -fx-background-color: #000000;
-     -fx-border-color: derive(#1d1d1d, 10%);
-     -fx-border-top-width: 1px;
+     -fx-border-color: derive(#1d1d1d, 5%);
+     -fx-border-width: 1;
 }
 
 .status-bar {
-    -fx-background-color: derive(#1d1d1d, 30%);
+    -fx-background-color: #000000;
+    -fx-padding: 0 8 0 8;
+    -fx-min-height: 22px;
 }
 
-.result-display {
-    -fx-background-color: transparent;
+.result-display,
+.result-display .content,
+.result-display .scroll-pane,
+.result-display .scroll-pane .viewport {
+    -fx-background-color: #000000 !important;
     -fx-font-family: "Roboto Condensed", sans-serif;
     -fx-font-weight: 300;
     -fx-font-size: 13pt;
     -fx-text-fill: white;
+    -fx-background-radius: 8 !important;
+    -fx-border-radius: 8 !important;
+    -fx-background-insets: 0;
 }
 
 .result-display .label {
@@ -167,15 +177,16 @@
 
 .status-bar .label {
     -fx-font-family: "Roboto Condensed", sans-serif;
-    -fx-font-weight: 300;
+    -fx-font-weight: normal;
+    -fx-font-size: 13px;
     -fx-text-fill: white;
-    -fx-padding: 4px;
-    -fx-pref-height: 30px;
+    -fx-padding: 2px 0 2px 0;
+    -fx-pref-height: 20px;
 }
 
 .status-bar-with-border {
     -fx-background-color: derive(#1d1d1d, 30%);
-    -fx-border-color: derive(#1d1d1d, 25%);
+    -fx-border-color: black;
     -fx-border-width: 1px;
 }
 
@@ -215,6 +226,15 @@
 
 .menu .left-container {
     -fx-background-color: black;
+}
+
+/* Menu hover styling */
+.menu:hover {
+    -fx-background-color: rgba(133, 30, 145, 0.5);
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(133, 30, 145, 0.5);
 }
 
 /*
@@ -330,22 +350,19 @@
 #commandTextField {
     -fx-background-color: transparent #383838 transparent #383838;
     -fx-background-insets: 0;
-    -fx-border-color: #383838 #383838 #ffffff #383838;
+    -fx-border-color: #383838 #383838 #383838 #383838;
     -fx-border-insets: 0;
     -fx-border-width: 1;
     -fx-font-family: "Roboto Condensed", sans-serif;
     -fx-font-weight: 300;
     -fx-font-size: 13pt;
     -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
 }
 
 #filterField, #personListPanel, #personWebpage {
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
-}
-
-#resultDisplay .content {
-    -fx-background-color: transparent, #383838, transparent, #383838;
-    -fx-background-radius: 0;
 }
 
 #tags {
