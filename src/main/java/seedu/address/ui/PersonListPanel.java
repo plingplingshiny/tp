@@ -69,7 +69,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getName().fullName);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
@@ -77,7 +79,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getPhone().value);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
@@ -85,7 +89,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getEmail().value);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
@@ -93,7 +99,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getAddress().value);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
@@ -101,7 +109,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getPropertyType().value);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
@@ -109,7 +119,9 @@ public class PersonListPanel extends UiPart<Region> {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                setText(empty ? null : getTableView().getItems().get(getIndex()).getPrice().value);
+                setText(empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()
+                        ? null
+                        : getTableView().getItems().get(getIndex()).getName().fullName);
             }
         });
 
