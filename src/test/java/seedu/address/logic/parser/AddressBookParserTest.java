@@ -71,7 +71,6 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_findMultiWordPrefixes() throws Exception {
         List<String> keywords = Arrays.asList("foo", "bar", "baz");
-
         String input = FindCommand.COMMAND_WORD + " n/" + String.join(" ", keywords);
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
@@ -81,8 +80,10 @@ public class AddressBookParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList()));
-
         assertEquals(expected, parsed);
     }
 
@@ -97,8 +98,10 @@ public class AddressBookParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList()));
-
         assertEquals(expected, parsed);
     }
 
@@ -113,8 +116,10 @@ public class AddressBookParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Arrays.asList("friends", "colleagues")));
-
+                        Arrays.asList("friends", "colleagues"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
         assertEquals(expected, parsed);
     }
 
@@ -129,8 +134,10 @@ public class AddressBookParserTest {
                         Arrays.asList("1234", "5678"),
                         Collections.emptyList(),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList()));
-
         assertEquals(expected, parsed);
     }
 
@@ -145,8 +152,10 @@ public class AddressBookParserTest {
                         Collections.emptyList(),
                         Arrays.asList("gmail", "example"),
                         Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList()));
-
         assertEquals(expected, parsed);
     }
 
@@ -161,14 +170,71 @@ public class AddressBookParserTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Arrays.asList("street", "avenue"),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
                         Collections.emptyList()));
+        assertEquals(expected, parsed);
+    }
 
+    @Test
+    public void parseCommand_find_priceOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " pr/500000 pr/600000";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("500000", "600000"),
+                        Collections.emptyList(),
+                        Collections.emptyList()));
+        assertEquals(expected, parsed);
+    }
+
+    @Test
+    public void parseCommand_find_propertyTypeOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " pt/HDB pt/Condo";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("hdb", "condo"),
+                        Collections.emptyList()));
+        assertEquals(expected, parsed);
+    }
+
+    @Test
+    public void parseCommand_find_intentionOnly() throws Exception {
+        String input = FindCommand.COMMAND_WORD + " i/Buy i/Sell";
+        FindCommand parsed = (FindCommand) parser.parseCommand(input);
+
+        FindCommand expected = new FindCommand(
+                new PersonContainsKeywordsPredicate(
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        Arrays.asList("buy", "sell")));
         assertEquals(expected, parsed);
     }
 
     @Test
     public void parseCommand_find_multipleFields() throws Exception {
-        String input = FindCommand.COMMAND_WORD + " n/Alice p/9123 e/gmail a/street t/friend";
+        String input = FindCommand.COMMAND_WORD + " n/Alice p/9123 e/gmail a/street "
+                + "t/friend pr/500000 pt/HDB i/Buy";
         FindCommand parsed = (FindCommand) parser.parseCommand(input);
 
         FindCommand expected = new FindCommand(
@@ -177,8 +243,10 @@ public class AddressBookParserTest {
                         Arrays.asList("9123"),
                         Arrays.asList("gmail"),
                         Arrays.asList("street"),
-                        Arrays.asList("friend")));
-
+                        Arrays.asList("friend"),
+                        Arrays.asList("500000"),
+                        Arrays.asList("hdb"),
+                        Arrays.asList("buy")));
         assertEquals(expected, parsed);
     }
 
@@ -196,8 +264,9 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
-        assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
-            -> parser.parseCommand(""));
+        assertThrows(ParseException.class,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        HelpCommand.MESSAGE_USAGE), () -> parser.parseCommand(""));
     }
 
     @Test

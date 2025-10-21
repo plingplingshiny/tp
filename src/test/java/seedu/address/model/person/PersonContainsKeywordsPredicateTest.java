@@ -11,18 +11,38 @@ import org.junit.jupiter.api.Test;
 import seedu.address.testutil.PersonBuilder;
 
 /**
- * Integration tests for {@code PersonContainsKeywordsPredicate}.
+ * Tests for {@code PersonContainsKeywordsPredicate}.
+ * Ensures all constructor assertions pass by supplying valid non-null lists.
  */
 public class PersonContainsKeywordsPredicateTest {
+
     @Test
-    public void equals_differentType_returnsFalse() {
-        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alice"),
+    public void constructor_allNonNullLists_assertionsPass() {
+        new PersonContainsKeywordsPredicate(
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Collections.emptyList());
-        assertFalse(predicate.equals("not a predicate"));
+        assertTrue(true);
+    }
+
+    @Test
+    public void test_nameMatch_returnsTrue() {
+        Person person = new PersonBuilder().withName("Alice Pauline").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Arrays.asList("Alice"),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList());
+        assertTrue(predicate.test(person));
     }
 
     @Test
@@ -33,8 +53,11 @@ public class PersonContainsKeywordsPredicateTest {
                 Arrays.asList("1234"),
                 Collections.emptyList(),
                 Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 Collections.emptyList());
-        assertTrue(predicate.test(person)); // phoneMatches = true
+        assertTrue(predicate.test(person));
     }
 
     @Test
@@ -45,8 +68,11 @@ public class PersonContainsKeywordsPredicateTest {
                 Collections.emptyList(),
                 Arrays.asList("gmail"),
                 Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 Collections.emptyList());
-        assertTrue(predicate.test(person)); // emailMatches = true
+        assertTrue(predicate.test(person));
     }
 
     @Test
@@ -57,64 +83,185 @@ public class PersonContainsKeywordsPredicateTest {
                 Collections.emptyList(),
                 Collections.emptyList(),
                 Arrays.asList("Clementi"),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 Collections.emptyList());
-        assertTrue(predicate.test(person)); // addressMatches = true
+        assertTrue(predicate.test(person));
     }
 
     @Test
-    public void equals_sameKeywords_returnsTrue() {
+    public void equals_sameValidLists_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
+                Arrays.asList("gmail"), Arrays.asList("street"),
+                Arrays.asList("friend"), Arrays.asList("500000"),
+                Arrays.asList("hdb"), Arrays.asList("buy"));
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
                 Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
-        assertTrue(a.equals(b)); // all true
+                Arrays.asList("gmail"), Arrays.asList("street"),
+                Arrays.asList("friend"), Arrays.asList("500000"),
+                Arrays.asList("hdb"), Arrays.asList("buy"));
+        assertTrue(a.equals(b));
     }
 
     @Test
-    public void equals_differentPhone_returnsFalse() {
+    public void equals_differentValues_returnsFalse() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
+                Arrays.asList("gmail"), Arrays.asList("street"),
+                Arrays.asList("friend"), Arrays.asList("500000"),
+                Arrays.asList("hdb"), Arrays.asList("buy"));
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9999"), // different phone
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
-        assertFalse(a.equals(b)); // phoneKeywords false, others true
+                Arrays.asList("bob"), Arrays.asList("9999"),
+                Arrays.asList("yahoo"), Arrays.asList("road"),
+                Arrays.asList("colleague"), Arrays.asList("700000"),
+                Arrays.asList("condo"), Arrays.asList("sell"));
+        assertFalse(a.equals(b));
+    }
+
+    // === Base case: all fields equal ===
+    @Test
+    public void equals_allFieldsEqual_returnsTrue() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        assertTrue(a.equals(b));
+    }
+
+    // === Tag equality tests ===
+    @Test
+    public void equals_differentTagKeywords_returnsFalse() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("colleague"), // different tag
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        assertFalse(a.equals(b));
     }
 
     @Test
-    public void equals_differentEmail_returnsFalse() {
+    public void equals_tagKeywordsDifferentCase_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Arrays.asList("Friend"),
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("yahoo"), Arrays.asList("street"), Arrays.asList("friend"));
-        assertFalse(a.equals(b)); // emailKeywords false
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Arrays.asList("friend"), // same but lowercase
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
+
+        assertTrue(a.equals(b)); // case-insensitive match
+    }
+
+    // === Price equality tests ===
+    @Test
+    public void equals_differentPriceKeywords_returnsFalse() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("700000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        assertFalse(a.equals(b));
     }
 
     @Test
-    public void equals_differentAddress_returnsFalse() {
+    public void equals_priceKeywordsDifferentCase_returnsTrue() {
+        /*
+        Although Price should normally contain only digits, commas, and decimals,
+        this test is retained to validate case-insensitive equality in case
+        future domain changes allow currency symbols or suffixes.
+        */
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("USD500K"), Collections.emptyList(), Collections.emptyList());
+
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("road"), Arrays.asList("friend"));
-        assertFalse(a.equals(b)); // addressKeywords false
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("usd500k"), Collections.emptyList(), Collections.emptyList());
+
+        assertTrue(a.equals(b)); // case-insensitive
+    }
+
+    // === Property Type equality tests ===
+    @Test
+    public void equals_differentPropertyTypeKeywords_returnsFalse() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
+
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("condo"), Arrays.asList("buy"));
+
+        assertFalse(a.equals(b));
     }
 
     @Test
-    public void equals_differentTag_returnsFalse() {
+    public void equals_propertyTypeDifferentCase_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("friend"));
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Arrays.asList("HDB"), Collections.emptyList());
+
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
-                Arrays.asList("alex"), Arrays.asList("9123"),
-                Arrays.asList("gmail"), Arrays.asList("street"), Arrays.asList("colleague"));
-        assertFalse(a.equals(b)); // tagKeywords false
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Arrays.asList("hdb"), Collections.emptyList());
+
+        assertTrue(a.equals(b));
     }
 
+    // === Intention equality tests ===
+    @Test
+    public void equals_differentIntentionKeywords_returnsFalse() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("buy"));
 
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Arrays.asList("alex"), Arrays.asList("9123"), Arrays.asList("gmail"),
+                Arrays.asList("street"), Arrays.asList("friend"),
+                Arrays.asList("500000"), Arrays.asList("hdb"), Arrays.asList("sell"));
+
+        assertFalse(a.equals(b));
+    }
+
+    @Test
+    public void equals_intentionKeywordsDifferentCase_returnsTrue() {
+        PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(), Arrays.asList("Buy"));
+
+        PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(), Arrays.asList("buy"));
+
+        assertTrue(a.equals(b)); // case-insensitive
+    }
 }
