@@ -1,32 +1,36 @@
 .background {
-    -fx-background-color: derive(#1d1d1d, 20%);
-    background-color: #383838; /* Used in the default.html file */
+    -fx-background-color: #000000 !important;
+    background-color: #000000; /* Used in the default.html file */
 }
 
 .label {
-    -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
-    -fx-text-fill: #555555;
+    -fx-font-size: 18pt;
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
 
 .label-bright {
     -fx-font-size: 11pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-opacity: 1;
 }
 
 .label-header {
     -fx-font-size: 32pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-opacity: 1;
 }
 
 .text-field {
     -fx-font-size: 12pt;
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
 }
 
 .tab-pane {
@@ -66,7 +70,8 @@
 
 .table-view .column-header .label {
     -fx-font-size: 20pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
     -fx-text-fill: white;
     -fx-alignment: center-left;
     -fx-opacity: 1;
@@ -77,20 +82,20 @@
 }
 
 .split-pane:horizontal .split-pane-divider {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #000000;
     -fx-border-color: transparent transparent transparent #4d4d4d;
 }
 
 .split-pane {
     -fx-border-radius: 1;
     -fx-border-width: 1;
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #000000;
 }
 
 .list-view {
     -fx-background-insets: 0;
     -fx-padding: 0;
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #000000;
 }
 
 .list-cell {
@@ -112,7 +117,7 @@
 }
 
 .list-cell:filled:selected #cardPane {
-    -fx-border-color: #3e7b91;
+    -fx-border-color: rgba(133, 30, 145, 0.5);
     -fx-border-width: 1;
 }
 
@@ -121,36 +126,49 @@
 }
 
 .cell_big_label {
-    -fx-font-family: "Segoe UI Semibold";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
     -fx-font-size: 16px;
     -fx-text-fill: #010504;
 }
 
 .cell_small_label {
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
     -fx-font-size: 13px;
     -fx-text-fill: #010504;
 }
 
 .stack-pane {
-     -fx-background-color: derive(#1d1d1d, 20%);
+     -fx-background-color: #000000;
+     -fx-background-radius: 8 !important;
+     -fx-border-radius: 8 !important;
 }
 
 .pane-with-border {
-     -fx-background-color: derive(#1d1d1d, 20%);
-     -fx-border-color: derive(#1d1d1d, 10%);
-     -fx-border-top-width: 1px;
+     -fx-background-color: #000000;
+     -fx-border-color: derive(#1d1d1d, 5%);
+     -fx-border-width: 1;
 }
 
 .status-bar {
-    -fx-background-color: derive(#1d1d1d, 30%);
+    -fx-background-color: #000000;
+    -fx-padding: 0 8 0 8;
+    -fx-min-height: 22px;
 }
 
-.result-display {
-    -fx-background-color: transparent;
-    -fx-font-family: "Segoe UI Light";
+.result-display,
+.result-display .content,
+.result-display .scroll-pane,
+.result-display .scroll-pane .viewport {
+    -fx-background-color: #000000 !important;
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: 300;
     -fx-font-size: 13pt;
     -fx-text-fill: white;
+    -fx-background-radius: 8 !important;
+    -fx-border-radius: 8 !important;
+    -fx-background-insets: 0;
 }
 
 .result-display .label {
@@ -158,15 +176,17 @@
 }
 
 .status-bar .label {
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: normal;
+    -fx-font-size: 13px;
     -fx-text-fill: white;
-    -fx-padding: 4px;
-    -fx-pref-height: 30px;
+    -fx-padding: 2px 0 2px 0;
+    -fx-pref-height: 20px;
 }
 
 .status-bar-with-border {
     -fx-background-color: derive(#1d1d1d, 30%);
-    -fx-border-color: derive(#1d1d1d, 25%);
+    -fx-border-color: black;
     -fx-border-width: 1px;
 }
 
@@ -193,18 +213,28 @@
 }
 
 .menu-bar {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #000000;
 }
 
 .menu-bar .label {
     -fx-font-size: 14pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: 300;
     -fx-text-fill: white;
     -fx-opacity: 0.9;
 }
 
 .menu .left-container {
     -fx-background-color: black;
+}
+
+/* Menu hover styling */
+.menu:hover {
+    -fx-background-color: rgba(133, 30, 145, 0.5);
+}
+
+.menu-item:hover {
+    -fx-background-color: rgba(133, 30, 145, 0.5);
 }
 
 /*
@@ -218,7 +248,7 @@
     -fx-border-width: 2;
     -fx-background-radius: 0;
     -fx-background-color: #1d1d1d;
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-family: "Roboto", Helvetica, Arial, sans-serif;
     -fx-font-size: 11pt;
     -fx-text-fill: #d8d8d8;
     -fx-background-insets: 0 0 0 0, 0, 1, 2;
@@ -282,7 +312,7 @@
 }
 
 .scroll-bar {
-    -fx-background-color: derive(#1d1d1d, 20%);
+    -fx-background-color: #000000;
 }
 
 .scroll-bar .thumb {
@@ -320,21 +350,19 @@
 #commandTextField {
     -fx-background-color: transparent #383838 transparent #383838;
     -fx-background-insets: 0;
-    -fx-border-color: #383838 #383838 #ffffff #383838;
+    -fx-border-color: #383838 #383838 #383838 #383838;
     -fx-border-insets: 0;
     -fx-border-width: 1;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Roboto Condensed", sans-serif;
+    -fx-font-weight: 300;
     -fx-font-size: 13pt;
     -fx-text-fill: white;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
 }
 
 #filterField, #personListPanel, #personWebpage {
     -fx-effect: innershadow(gaussian, black, 10, 0, 0, 0);
-}
-
-#resultDisplay .content {
-    -fx-background-color: transparent, #383838, transparent, #383838;
-    -fx-background-radius: 0;
 }
 
 #tags {
