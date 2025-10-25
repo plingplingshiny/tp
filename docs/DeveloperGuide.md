@@ -252,9 +252,49 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 _{more aspects and alternatives to be added}_
 
-### \[Proposed\] Data archiving
+### \[Proposed\] Find by Area Feature (Postal Code Prefix)
 
-_{Explain here how the data archiving feature will be implemented}_
+#### Proposed Implementation
+
+The proposed feature extends the existing `find` command to allow users to search for persons by postal code prefix using the pc/ prefix.
+The implementation adds a new `PostalCode` field to the `Person` class, representing Singapore’s 6-digit postal code.
+For example, the command `find pc/64` will list all persons whose postal code begins with “64”.
+
+Internally, the feature flows through the following components:
+
+1. `LogicManager` receives the command text and delegates parsing to `AddressBookParser`.
+
+2. `AddressBookParser` uses `FindCommandParser`, which tokenizes input arguments and constructs a `PersonContainsKeywordsPredicate` for the postal code prefix.
+
+3. `FindCommand` is created with the predicate and returned to `LogicManager`.
+
+4. `LogicManager` executes the command with the `Model`, which updates the filtered person list by testing each person with the predicate.
+
+5. A `CommandResult` is created and returned to `LogicManager`.
+
+
+This flow is illustrated in the sequence diagram below:
+
+<puml src="diagrams/FindByPostalCodeSequenceDiagram-Logic.puml" alt="FindByPostalCodeSequenceDiagram-Logic" />
+
+<box type="info" seamless>
+
+**Note:** The lifeline for `FindCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</box>
+
+#### Design considerations:
+
+**Aspect: How area filtering works:**
+
+* **Alternative 1 (current choice):** Filter by prefix matching (e.g. first 2 digits of the postal code).
+* Pros: Simple to implement and directly maps to Singapore postal district prefixes. 
+* Cons: May be less precise for smaller subzones.
+
+* **Alternative 2:** Use an external postal code–to–region lookup table.
+* Pros: Enables filtering by named region (e.g. “Bedok”). 
+* Cons: Requires maintaining additional data and mappings.
+
+_{more aspects and alternatives to be added}_
 
 
 --------------------------------------------------------------------------------------------------------------------
