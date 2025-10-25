@@ -5,7 +5,7 @@ skinparam ArrowFontStyle plain
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
-participant ":FindCommandParser" as FindCommandParser LOGIC_COLOR
+participant "fcp:FindCommandParser" as FindCommandParser LOGIC_COLOR
 participant "f:FindCommand" as FindCommand LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
 end box
@@ -21,9 +21,13 @@ LogicManager -> AddressBookParser : parseCommand("find pc/...")
 activate AddressBookParser
 
 create FindCommandParser
-AddressBookParser -> FindCommandParser : parse(args)
+AddressBookParser -> FindCommandParser : new FindCommandParser()
 activate FindCommandParser
+FindCommandParser --> AddressBookParser
+deactivate FindCommandParser
 
+AddressBookParser -> FindCommandParser : fcp.parse(args)
+activate FindCommandParser
 create Predicate
 FindCommandParser -> Predicate : new PersonContainsKeywordsPredicate(postalCodePrefixes)
 Predicate --> FindCommandParser : predicate

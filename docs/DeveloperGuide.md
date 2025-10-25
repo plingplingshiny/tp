@@ -277,6 +277,11 @@ This flow is illustrated in the sequence diagram below:
 
 <puml src="diagrams/FindByPostalCodeSequenceDiagram-Logic.puml" alt="FindByPostalCodeSequenceDiagram-Logic" />
 
+<box type="info" seamless>
+
+**Note:** The lifeline for `FindCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
+</box>
+
 #### Design considerations:
 
 **Aspect: How area filtering works:**
