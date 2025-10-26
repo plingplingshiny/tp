@@ -131,7 +131,7 @@ The `Model` component,
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** In this model, the AddressBook manages a single list of Person objects through a UniquePersonList. Each Person stores their own attributes (such as name, phone, email, address, price, property type, and intention).<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -258,12 +258,12 @@ _{more aspects and alternatives to be added}_
 **Target user profile**:
 
 * real estate agents who manage a large number of client contacts
-* frequently need to search or filter clients by specific details (e.g., name, phone, tags)
+* frequently need to search or filter clients by specific details (e.g., name, phone)
 * prefers typing to mouse interactions
 
 **Value proposition**:
 
-* allows efficient searching and filtering of clients by any field (name, phone, email, address, tags)
+* allows efficient searching and filtering of clients by any field (name, phone, email, address)
 * enables quick addition, editing, and deletion of client contact details
 
 
@@ -278,7 +278,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | real estate agent | view a list of all clients          | get an overview of my client database                           |
 | `* * *`  | real estate agent | find a client by any field          | locate a client even if I only recall part of their details     |
 | `* *`    | real estate agent | sort clients alphabetically by name | locate a client more easily                                     |
-| `* *`    | real estate agent | filter contacts by tags             | group and manage contacts based on relationship type or purpose |
+| `* *`    | real estate agent | filter contacts by intention        | group and manage contacts based on relationship type or purpose |
 
 *{More to be added}*
 
@@ -438,7 +438,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **JavaFx**: A Java library for building GUI applications
 * **FXMl**: An XML-based language for defining the layout of JavaFx GUIs
 * **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
-* **Tag**: A short label (e.g., friend, colleague) that can be attached to a contact for categorization.
 * **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
 * **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
 * **Duplicate entry**: A contact record that has the same name, phone number, email, and address as an existing record.
