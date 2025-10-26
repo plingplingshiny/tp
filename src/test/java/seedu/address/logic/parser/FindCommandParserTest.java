@@ -1,5 +1,7 @@
 package seedu.address.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -172,5 +174,55 @@ public class FindCommandParserTest {
         FindCommand expectedFindCommand = new FindCommand(predicate);
         assertParseSuccess(parser, " n/Alice p/9123 e/gmail a/street t/friend pr/500000 pt/HDB i/Buy",
                 expectedFindCommand);
+    }
+
+    @Test
+    public void validatePriceKeyword_validSinglePrice_returnsNull() {
+        assertNull(FindCommandParser.validatePriceKeyword("2000"));
+        assertNull(FindCommandParser.validatePriceKeyword("1,000"));
+        assertNull(FindCommandParser.validatePriceKeyword("2000.00"));
+    }
+
+    @Test
+    public void validatePriceKeyword_validRange_returnsNull() {
+        assertNull(FindCommandParser.validatePriceKeyword("2000-3000"));
+        assertNull(FindCommandParser.validatePriceKeyword("1,000 - 2,000"));
+        assertNull(FindCommandParser.validatePriceKeyword("1000.5 - 2000.75"));
+    }
+
+    @Test
+    public void validatePriceKeyword_lowerExceedsUpper_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("3000-2000");
+        assertEquals("Invalid price range: lower bound cannot exceed upper bound (3000-2000).", msg);
+    }
+
+    @Test
+    public void validatePriceKeyword_missingUpperBound_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("2000-");
+        assertEquals("Invalid price range: missing upper bound (2000-).", msg);
+    }
+
+    @Test
+    public void validatePriceKeyword_missingLowerBound_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("-3000");
+        assertEquals("Invalid price range: missing lower bound (-3000).", msg);
+    }
+
+    @Test
+    public void validatePriceKeyword_tooManyDashes_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("2000--3000");
+        assertEquals("Invalid price range: too many '-' characters (2000--3000).", msg);
+    }
+
+    @Test
+    public void validatePriceKeyword_nonNumericRange_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("abc-3000");
+        assertEquals("Invalid price range: non-numeric value detected (abc-3000).", msg);
+    }
+
+    @Test
+    public void validatePriceKeyword_nonNumericSinglePrice_returnsMessage() {
+        String msg = FindCommandParser.validatePriceKeyword("abc");
+        assertEquals("Invalid price: must be a numeric value (abc).", msg);
     }
 }

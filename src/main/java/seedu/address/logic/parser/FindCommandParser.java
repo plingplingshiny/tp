@@ -30,6 +30,8 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         assert args != null : "Input arguments should not be null.";
 
+        args = args.replaceAll("(pr/\\s*)(\\d+(?:,\\d+)*(?:\\.\\d+)?)\\s*-\\s*(\\d+(?:,\\d+)*(?:\\.\\d+)?)", "pr/$2-$3");
+
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
                 PREFIX_TAG, PREFIX_PRICE, PREFIX_PROPERTY_TYPE, PREFIX_INTENTION);
@@ -51,6 +53,13 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> priceKeywords = splitNormalizeDedup(rawPrices);
         List<String> propertyTypeKeywords = splitNormalizeDedup(rawPropertyTypes);
         List<String> intentionKeywords = splitNormalizeDedup(rawIntentions);
+
+        for (String keyword : priceKeywords) {
+            String errorMessage = validatePriceKeyword(keyword);
+            if (errorMessage != null) {
+                throw new ParseException(errorMessage);
+            }
+        }
 
         if (nameKeywords.isEmpty() && phoneKeywords.isEmpty() && emailKeywords.isEmpty()
                 && addressKeywords.isEmpty() && tagKeywords.isEmpty()
@@ -80,4 +89,61 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
         return new ArrayList<>(out);
     }
+
+    /**
+     * Validates a price keyword and returns an error message if invalid, or {@code null} if valid.
+     * Handles both single numeric prices (e.g. "2000") and ranges (e.g. "2000-3000").
+     */
+    static String validatePriceKeyword(String keyword) {
+        String cleaned = keyword.replaceAll("\\s+", "");
+
+        // --- Handle range inputs ---
+        if (cleaned.contains("-")) {
+            // too many dashes (e.g. 2000--3000)
+            if (cleaned.indexOf('-') != cleaned.lastIndexOf('-')) {
+                return "Invalid price range: too many '-' characters (" + keyword + ").";
+            }
+
+            // preserve empty trailing parts
+            String[] parts = cleaned.split("-", -1);
+            if (parts.length != 2) {
+                return "Invalid price range format (" + keyword + ").";
+            }
+
+            String lowerPart = parts[0].replaceAll(",", "");
+            String upperPart = parts[1].replaceAll(",", "");
+
+            if (lowerPart.isEmpty()) {
+                return "Invalid price range: missing lower bound (" + keyword + ").";
+            }
+            if (upperPart.isEmpty()) {
+                return "Invalid price range: missing upper bound (" + keyword + ").";
+            }
+
+            try {
+                double lower = Double.parseDouble(lowerPart);
+                double upper = Double.parseDouble(upperPart);
+                if (lower > upper) {
+                    return "Invalid price range: lower bound cannot exceed upper bound (" + keyword + ").";
+                }
+            } catch (NumberFormatException e) {
+                return "Invalid price range: non-numeric value detected (" + keyword + ").";
+            }
+
+            return null; // valid range
+        }
+
+        // --- Handle single price inputs ---
+        String numeric = cleaned.replaceAll(",", "");
+        try {
+            Double.parseDouble(numeric);
+        } catch (NumberFormatException e) {
+            return "Invalid price: must be a numeric value (" + keyword + ").";
+        }
+
+        return null; // valid single price
+    }
+
+
+
 }

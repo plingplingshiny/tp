@@ -75,8 +75,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                         .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
 
         boolean priceMatches = priceKeywords.stream()
-                .anyMatch(k -> normalizePrice(person.getPrice().value)
-                        .equals(normalizePrice(k)));
+                .anyMatch(k -> priceMatchesKeyword(person.getPrice().value, k));
 
         boolean propertyTypeMatches = propertyTypeKeywords.stream()
                 .anyMatch(k -> person.getPropertyType().value.toLowerCase().contains(k.toLowerCase()));
@@ -146,5 +145,39 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         }
     }
 
+    /**
+     * Returns true if the given price value matches the keyword exactly or falls within a range.
+     * <p>
+     * Examples:
+     * <ul>
+     *   <li>{@code priceMatchesKeyword("1000.00", "1000")} → true (exact match)</li>
+     *   <li>{@code priceMatchesKeyword("1100", "1000-1200")} → true (within range)</li>
+     *   <li>{@code priceMatchesKeyword("999", "1000-1200")} → false (below range)</li>
+     * </ul>
+     * Range comparisons are inclusive and whitespace-tolerant (e.g. "1000 - 1200" is valid).
+     * Invalid keywords (non-numeric) return false.
+     */
+    private boolean priceMatchesKeyword(String priceValue, String keyword) {
+        String normalizedKeyword = keyword.replaceAll("\\s+", ""); // remove spaces
+        String normalizedPrice = normalizePrice(priceValue);
 
+        try {
+            double personPrice = Double.parseDouble(normalizedPrice);
+
+            if (normalizedKeyword.contains("-")) {
+                String[] parts = normalizedKeyword.split("-");
+                if (parts.length == 2) {
+                    double lower = Double.parseDouble(normalizePrice(parts[0]));
+                    double upper = Double.parseDouble(normalizePrice(parts[1]));
+                    return personPrice >= lower && personPrice <= upper;
+                }
+            }
+
+            double keywordPrice = Double.parseDouble(normalizePrice(normalizedKeyword));
+            return Double.compare(personPrice, keywordPrice) == 0;
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }
