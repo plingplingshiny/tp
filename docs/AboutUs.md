@@ -19,7 +19,8 @@ You can reach us at the email `casey.low[at]u.nus.edu`
 [[github](https://github.com/kin-chong)]
 [[portfolio](team/kin-chong.md)]
 
-* Role: Project Advisor
+* Role: Team Lead & Developer
+* Responsibilities: `find` command
 
 ### Aiden Ma JiaYi
 
@@ -28,8 +29,8 @@ You can reach us at the email `casey.low[at]u.nus.edu`
 [[github](http://github.com/mjykxz17)]
 [[portfolio](team/Aiden.md)]
 
-* Role: Team Lead
-* Responsibilities: UI
+* Role: Developer
+* Responsibilities: `delete` command and Intention
 
 ### Ng Meng Jie
 
@@ -38,7 +39,7 @@ You can reach us at the email `casey.low[at]u.nus.edu`
 [[github](http://github.com/pokedot)] [[portfolio](team/pokedot.md)]
 
 * Role: Developer
-* Responsibilities: Data
+* Responsibilities: `add` command and UI
 
 ### Ho Pei Ling
 
@@ -47,4 +48,4 @@ You can reach us at the email `casey.low[at]u.nus.edu`
 [[github](http://github.com/plingplingshiny)]
 
 * Role: Developer
-* Responsibilities: Dev Ops + Threading
+* Responsibilities: `find` command, Property type and Price
