@@ -5,7 +5,7 @@
 
 ### Project: PropertyPal
 
-PropertyPal is a desktop application that helps real estate agents manage their client information efficiently. 
+PropertyPal is a desktop application that helps real estate agents manage their client information efficiently.
 It was developed as part of the team project for the National University of Singapore CS2103 course. The user interacts with it using a CLI, and it has a GUI created with JavaFX.
 
 Given below are my contributions to the project:
