@@ -76,7 +76,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
 
         boolean priceMatches = priceKeywords.stream()
                 .anyMatch(k -> normalizePrice(person.getPrice().value)
-                        .equalsIgnoreCase(normalizePrice(k)));
+                        .equals(normalizePrice(k)));
 
         boolean propertyTypeMatches = propertyTypeKeywords.stream()
                 .anyMatch(k -> person.getPropertyType().value.toLowerCase().contains(k.toLowerCase()));
@@ -123,7 +123,13 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     }
 
     private String normalizePrice(String s) {
-        return s.replaceAll("[^\\d.]", ""); // removes everything except digits and decimal points
+        try {
+            double value = Double.parseDouble(s.replaceAll(",", ""));
+            return String.valueOf(value);
+        } catch (NumberFormatException e) {
+            return s;
+        }
     }
+
 
 }
