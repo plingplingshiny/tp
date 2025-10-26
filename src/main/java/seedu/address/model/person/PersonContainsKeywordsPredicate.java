@@ -8,16 +8,17 @@ import java.util.stream.Collectors;
  * Tests whether a {@link Person} satisfies at least one of the following conditions:
  * <ul>
  *   <li>The person's {@code Name}, {@code Phone}, {@code Email}, {@code Address}, {@code Tag},
- *       {@code Price}, {@code PropertyType}, or {@code Intention}
+ *       {@code PropertyType}, or {@code Intention}
  *       contains any of the given keywords (case-insensitive).</li>
+ *   <li>The person's {@code Price} matches any of the given keywords exactly.</li>
  * </ul>
  * <p>
  * This predicate implements <b>OR semantics</b>: a {@code Person} matches if any of their fields
  * contain at least one of the specified keywords.
  * </p>
  * <p>
- * Matching is case-insensitive and substring-based — e.g., the keyword {@code "ali"} will match
- * {@code "Alice"} or {@code "Salisbury"}.
+ * Matching for most fields is case-insensitive and substring-based — e.g., the keyword {@code "ali"} will match
+ * {@code "Alice"} or {@code "Salisbury"}. Price matching is exact.
  * </p>
  */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
@@ -74,7 +75,8 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                         .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
 
         boolean priceMatches = priceKeywords.stream()
-                .anyMatch(k -> person.getPrice().value.contains(k));
+                .anyMatch(k -> normalizePrice(person.getPrice().value)
+                        .equalsIgnoreCase(normalizePrice(k)));
 
         boolean propertyTypeMatches = propertyTypeKeywords.stream()
                 .anyMatch(k -> person.getPropertyType().value.toLowerCase().contains(k.toLowerCase()));
@@ -100,7 +102,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && equalIgnoreCase(emailKeywords, o.emailKeywords)
                 && equalIgnoreCase(addressKeywords, o.addressKeywords)
                 && equalIgnoreCase(tagKeywords, o.tagKeywords)
-                && equalIgnoreCase(priceKeywords, o.priceKeywords)
+                && equalNormalizedPrices(priceKeywords, o.priceKeywords)
                 && equalIgnoreCase(propertyTypeKeywords, o.propertyTypeKeywords)
                 && equalIgnoreCase(intentionKeywords, o.intentionKeywords);
     }
@@ -109,4 +111,19 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         return a.stream().map(String::toLowerCase).collect(Collectors.toSet())
                 .equals(b.stream().map(String::toLowerCase).collect(Collectors.toSet()));
     }
+
+    private boolean equalNormalizedPrices(List<String> a, List<String> b) {
+        return a.stream()
+                .map(this::normalizePrice)
+                .collect(Collectors.toSet())
+                .equals(b.stream()
+                        .map(this::normalizePrice)
+                        .collect(Collectors.toSet())
+                );
+    }
+
+    private String normalizePrice(String s) {
+        return s.replaceAll("[^\\d.]", ""); // removes everything except digits and decimal points
+    }
+
 }
