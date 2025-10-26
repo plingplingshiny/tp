@@ -30,7 +30,8 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         assert args != null : "Input arguments should not be null.";
 
-        args = args.replaceAll("(pr/\\s*)(\\d+(?:,\\d+)*(?:\\.\\d+)?)\\s*-\\s*(\\d+(?:,\\d+)*(?:\\.\\d+)?)", "pr/$2-$3");
+        args = args.replaceAll(
+                "(pr/\\s*)(\\d+(?:,\\d+)*(?:\\.\\d+)?)\\s*-\\s*(\\d+(?:,\\d+)*(?:\\.\\d+)?)", "pr/$2-$3");
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
