@@ -259,4 +259,15 @@ public class PersonContainsKeywordsPredicateTest {
 
         assertTrue(a.equals(b)); // case-insensitive
     }
+
+    @Test
+    public void test_priceMatch_returnsTrue() {
+        Person person = new PersonBuilder().withPrice("1000.00").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("1000"), // keyword that should match
+                Collections.emptyList(), Collections.emptyList());
+        assertTrue(predicate.test(person));
+    }
 }
