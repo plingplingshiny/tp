@@ -184,23 +184,18 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void equals_priceKeywordsDifferentCase_returnsTrue() {
-        /*
-        Although Price should normally contain only digits, commas, and decimals,
-        this test is retained to validate case-insensitive equality in case
-        future domain changes allow currency symbols or suffixes.
-        */
+    public void equals_priceKeywordsDifferentFormatting_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList("USD500K"), Collections.emptyList(), Collections.emptyList());
+                Arrays.asList("1000.00"), Collections.emptyList(), Collections.emptyList());
 
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList("usd500k"), Collections.emptyList(), Collections.emptyList());
+                Arrays.asList("1,000"), Collections.emptyList(), Collections.emptyList());
 
-        assertTrue(a.equals(b)); // case-insensitive
+        assertTrue(a.equals(b)); // same numeric value
     }
 
     // === Property Type equality tests ===

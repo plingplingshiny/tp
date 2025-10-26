@@ -107,11 +107,22 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && equalIgnoreCase(intentionKeywords, o.intentionKeywords);
     }
 
+    /**
+     * Returns true if both lists contain the same set of strings, ignoring case differences.
+     * <p>
+     * Comparison is case-insensitive and order-independent — duplicates are disregarded.
+     */
     private boolean equalIgnoreCase(List<String> a, List<String> b) {
         return a.stream().map(String::toLowerCase).collect(Collectors.toSet())
                 .equals(b.stream().map(String::toLowerCase).collect(Collectors.toSet()));
     }
 
+    /**
+     * Returns true if both price keyword lists represent the same numeric values after normalization.
+     * <p>
+     * Normalization removes formatting differences such as commas or trailing decimals
+     * (e.g. "1,000" and "1000.00" are treated as equal).
+     */
     private boolean equalNormalizedPrices(List<String> a, List<String> b) {
         return a.stream()
                 .map(this::normalizePrice)
@@ -122,6 +133,10 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 );
     }
 
+    /**
+     * Converts a price string to a canonical numeric form (e.g. "1,000.00" → "1000").
+     * Ensures equivalent numeric values match even if formatted differently.
+     */
     private String normalizePrice(String s) {
         try {
             double value = Double.parseDouble(s.replaceAll(",", ""));
