@@ -144,7 +144,7 @@ Examples:
 * `find e/gmail` — finds persons whose email contains “gmail”.
 * `find a/Clementi` — finds persons whose address contains “Clementi”.
 * `find t/friend` — finds persons with a tag containing “friend”.
-* `find n/Alex p/9123 t/friend` — finds persons whose name, phone, or tag match any of the given keywords.
+* `find n/Alex p/9927` — finds persons whose name, phone, or tag match any of the given keywords.
   ![result for 'find n/alex p/9927'](images/findAlex9927Result.png)
 
 
