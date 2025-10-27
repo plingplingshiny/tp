@@ -134,6 +134,10 @@ Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…�
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+<br><br>
+* Finding by Price:
+  * finding with an exact value (e.g. `pr/2000`) will return contacts who match that exact value.
+  * finding with a range of values (e.g. `pr/2000-3000`) will return contacts who fall within the range of (inclusive) values specified.
 
 Examples:
 * `find n/Alex` — finds persons whose name contains “alex”.
