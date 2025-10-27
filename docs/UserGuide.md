@@ -130,14 +130,14 @@ Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…�
 * Keywords are case-insensitive and may contain multiple words separated by spaces.
 * **Price field matches the exact value.**  e.g. `find pr/36` will not list a property with price 3600
 * Parameters can appear in any order.
-* The search is case-insensitive. e.g `hans` will match `Hans` except for the price field.
+* Apart from the price field, the search is case-insensitive. e.g `hans` will match `Hans` except for the price field.
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 <br><br>
 * Finding by Price:
   * finding with an exact value (e.g. `pr/2000`) will return contacts who match that exact value.
-  * finding with a range of values (e.g. `pr/2000-3000`) will return contacts who fall within the range of (inclusive) values specified.
+  * finding with a range of values (e.g. `pr/2000-3000`) will return contacts who fall within the range of values specified (inclusive).
 
 Examples:
 * `find n/Alex` — finds persons whose name contains “alex”.
