@@ -36,12 +36,6 @@ public class AddCommandParser implements Parser<AddCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddCommand parse(String args) throws ParseException {
-        // Enforce intention appears first in the arguments
-        String trimmed = args.trim();
-        if (!trimmed.startsWith(PREFIX_INTENTION.getPrefix())) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-        }
-
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_INTENTION, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_ADDRESS, PREFIX_PROPERTY_TYPE, PREFIX_PRICE, PREFIX_TAG);

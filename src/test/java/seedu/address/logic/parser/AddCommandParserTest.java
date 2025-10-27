@@ -96,7 +96,7 @@ public class AddCommandParserTest {
                 + PROPERTY_TYPE_DESC_BOB + PRICE_DESC_BOB + TAG_DESC_FRIEND;
         String validExpectedPersonString = INTENTION_DESC_SELL + base;
 
-        // multiple names (intention must be first)
+        // multiple names
         assertParseFailure(
                 parser,
                 INTENTION_DESC_SELL + NAME_DESC_AMY + base,
@@ -158,32 +158,6 @@ public class AddCommandParserTest {
                         + ADDRESS_DESC_AMY + TAG_DESC_FRIEND,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE)
         );
-
-        // invalid value followed by valid value
-
-        // invalid name
-        assertParseFailure(parser, INVALID_NAME_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // invalid email
-        assertParseFailure(parser, INVALID_EMAIL_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // invalid phone
-        assertParseFailure(parser, INVALID_PHONE_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // invalid address
-        assertParseFailure(parser, INVALID_ADDRESS_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // invalid property type
-        assertParseFailure(parser, INVALID_PROPERTY_TYPE_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-
-        // invalid price
-        assertParseFailure(parser, INVALID_PRICE_DESC + validExpectedPersonString,
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 
     @Test
