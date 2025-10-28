@@ -131,7 +131,7 @@ The `Model` component,
 
 <box type="info" seamless>
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+**Note:** In this model, the AddressBook manages a single list of Person objects through a UniquePersonList. Each Person stores their own attributes (such as name, phone, email, address, price, property type, and intention).<br>
 
 <puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
 
@@ -158,6 +158,55 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### `OR` search in `find` command
+
+#### Implementation
+
+The find command supports searching across multiple fields (e.g., name, phone, email, address, price, etc.) using `OR` semantics. 
+This behaviour is implemented in the `PersonContainsKeywordsPredicate` class, which defines how each `Person` is tested against the given search keywords.
+<br>
+<br>
+When the user enters a `find` command such as:
+```
+find n/Alice e/gmail
+```
+the system constructs a `PersonContainsKeywordsPredicate` containing separate lists of keywords for each prefix (`n/` → name, `e/` → email).
+The predicate then evaluates to `true` if any of the person’s fields contain any of the corresponding keywords.
+This is done through a series of `anyMatch` calls and a final ``||`` chain:
+```java
+return nameMatches || phoneMatches || emailMatches || addressMatches || tagMatches
+        || priceMatches || propertyTypeMatches || intentionMatches;
+```
+#### Rationale for `OR` search
+1. Intuitive user experience
+    1. Users typically expect inclusive search results and typing multiple keywords should broaden the search, not restrict it.
+    2. For example, searching `find n/Alice e/gmail` should return both:
+        1. Alice Tan (name contains "Alice")
+        2. Bob Lee (email contains "gmail")
+2. Consistency with common search mode
+    1. Search behaviour in file explorers, contact apps, and web engines generally follows `OR` semantics.
+       Matching this mental model makes the feature easier to use and reduces confusion.
+3. Flexibility in partial recall
+    1. Users may not remember exact details (e.g., only the email domain or property type).
+       `OR` semantics let them find relevant entries even when they recall only part of the information.
+4. Performance and maintainability
+   1. The predicate short-circuits on the first match, improving performance.
+      The modular field checks also make it straightforward to add or remove searchable fields in the future.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Documentation, logging, testing, configuration, dev-ops**
+
+* [Documentation guide](Documentation.md)
+* [Testing guide](Testing.md)
+* [Logging guide](Logging.md)
+* [Configuration guide](Configuration.md)
+* [DevOps guide](DevOps.md)
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Proposed future features**
 
 ### \[Proposed\] Undo/redo feature
 
@@ -242,13 +291,13 @@ The following activity diagram summarizes what happens when a user executes a ne
 **Aspect: How undo & redo executes:**
 
 * **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+    * Pros: Easy to implement.
+    * Cons: May have performance issues in terms of memory usage.
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+    * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+    * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
 
@@ -287,25 +336,14 @@ This flow is illustrated in the sequence diagram below:
 **Aspect: How area filtering works:**
 
 * **Alternative 1 (current choice):** Filter by prefix matching (e.g. first 2 digits of the postal code).
-* Pros: Simple to implement and directly maps to Singapore postal district prefixes. 
+* Pros: Simple to implement and directly maps to Singapore postal district prefixes.
 * Cons: May be less precise for smaller subzones.
 
 * **Alternative 2:** Use an external postal code–to–region lookup table.
-* Pros: Enables filtering by named region (e.g. “Bedok”). 
+* Pros: Enables filtering by named region (e.g. “Bedok”).
 * Cons: Requires maintaining additional data and mappings.
 
 _{more aspects and alternatives to be added}_
-
-
---------------------------------------------------------------------------------------------------------------------
-
-## **Documentation, logging, testing, configuration, dev-ops**
-
-* [Documentation guide](Documentation.md)
-* [Testing guide](Testing.md)
-* [Logging guide](Logging.md)
-* [Configuration guide](Configuration.md)
-* [DevOps guide](DevOps.md)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -316,12 +354,12 @@ _{more aspects and alternatives to be added}_
 **Target user profile**:
 
 * real estate agents who manage a large number of client contacts
-* frequently need to search or filter clients by specific details (e.g., name, phone, tags)
+* frequently need to search or filter clients by specific details (e.g., name, phone)
 * prefers typing to mouse interactions
 
 **Value proposition**:
 
-* allows efficient searching and filtering of clients by any field (name, phone, email, address, tags)
+* allows efficient searching and filtering of clients by any field (name, phone, email, address)
 * enables quick addition, editing, and deletion of client contact details
 
 
@@ -336,7 +374,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | real estate agent | view a list of all clients          | get an overview of my client database                           |
 | `* * *`  | real estate agent | find a client by any field          | locate a client even if I only recall part of their details     |
 | `* *`    | real estate agent | sort clients alphabetically by name | locate a client more easily                                     |
-| `* *`    | real estate agent | filter contacts by tags             | group and manage contacts based on relationship type or purpose |
+| `* *`    | real estate agent | filter contacts by intention        | group and manage contacts based on relationship type or purpose |
 
 *{More to be added}*
 
@@ -496,7 +534,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **JavaFx**: A Java library for building GUI applications
 * **FXMl**: An XML-based language for defining the layout of JavaFx GUIs
 * **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
-* **Tag**: A short label (e.g., friend, colleague) that can be attached to a contact for categorization.
 * **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
 * **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
 * **Duplicate entry**: A contact record that has the same name, phone number, email, and address as an existing record.
