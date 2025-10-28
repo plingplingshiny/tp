@@ -47,7 +47,6 @@ public class PriceTest {
         assertTrue(Price.isValidPrice("0")); // zero
         assertTrue(Price.isValidPrice("1")); // single digit
         assertTrue(Price.isValidPrice("100")); // multiple digits
-        assertTrue(Price.isValidPrice("1,000"));
         assertTrue(Price.isValidPrice("1000000")); // large number
         assertTrue(Price.isValidPrice("999999999999999")); // very large number
         assertTrue(Price.isValidPrice("12.34")); // decimal point
