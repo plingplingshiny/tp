@@ -17,13 +17,13 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Adds a person to the address book.
+ * Adds a person to PropertyPal.
  */
 public class AddCommand extends Command {
 
     public static final String COMMAND_WORD = "add";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to PropertyPal. "
             + "Parameters: "
             + PREFIX_INTENTION + "INTENTION(sell|rent) "
             + PREFIX_NAME + "NAME "
@@ -46,13 +46,13 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_NAME = "New person added: %1$s \n"
-        + "WARNING: A person with the same name already exists in the address book";
+        + "WARNING: A person with the same name already exists in PropertyPal";
     public static final String MESSAGE_DUPLICATE_ADDRESS = "New person added: %1$s \n"
-            + "WARNING: A person with the same address already exists in the address book";
+            + "WARNING: A person with the same address already exists in PropertyPal";
     public static final String MESSAGE_DUPLICATE_NAME_AND_ADDRESS = "New person added: %1$s \n"
             + "WARNING: A person with the same name and a person with the same address"
-            + "already exists in the address book";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
+            + "already exists in PropertyPal";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in PropertyPal";
 
     private final Person toAdd;
 
