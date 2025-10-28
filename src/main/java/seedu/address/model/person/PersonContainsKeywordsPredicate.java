@@ -8,16 +8,17 @@ import java.util.stream.Collectors;
  * Tests whether a {@link Person} satisfies at least one of the following conditions:
  * <ul>
  *   <li>The person's {@code Name}, {@code Phone}, {@code Email}, {@code Address}, {@code Tag},
- *       {@code Price}, {@code PropertyType}, or {@code Intention}
+ *       {@code PropertyType}, or {@code Intention}
  *       contains any of the given keywords (case-insensitive).</li>
+ *   <li>The person's {@code Price} matches any of the given keywords exactly.</li>
  * </ul>
  * <p>
  * This predicate implements <b>OR semantics</b>: a {@code Person} matches if any of their fields
  * contain at least one of the specified keywords.
  * </p>
  * <p>
- * Matching is case-insensitive and substring-based — e.g., the keyword {@code "ali"} will match
- * {@code "Alice"} or {@code "Salisbury"}.
+ * Matching for most fields is case-insensitive and substring-based — e.g., the keyword {@code "ali"} will match
+ * {@code "Alice"} or {@code "Salisbury"}. Price matching is exact.
  * </p>
  */
 public class PersonContainsKeywordsPredicate implements Predicate<Person> {
@@ -74,7 +75,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                         .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
 
         boolean priceMatches = priceKeywords.stream()
-                .anyMatch(k -> person.getPrice().value.contains(k));
+                .anyMatch(k -> priceMatchesKeyword(person.getPrice().value, k));
 
         boolean propertyTypeMatches = propertyTypeKeywords.stream()
                 .anyMatch(k -> person.getPropertyType().value.toLowerCase().contains(k.toLowerCase()));
@@ -100,13 +101,83 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && equalIgnoreCase(emailKeywords, o.emailKeywords)
                 && equalIgnoreCase(addressKeywords, o.addressKeywords)
                 && equalIgnoreCase(tagKeywords, o.tagKeywords)
-                && equalIgnoreCase(priceKeywords, o.priceKeywords)
+                && equalNormalizedPrices(priceKeywords, o.priceKeywords)
                 && equalIgnoreCase(propertyTypeKeywords, o.propertyTypeKeywords)
                 && equalIgnoreCase(intentionKeywords, o.intentionKeywords);
     }
 
+    /**
+     * Returns true if both lists contain the same set of strings, ignoring case differences.
+     * <p>
+     * Comparison is case-insensitive and order-independent — duplicates are disregarded.
+     */
     private boolean equalIgnoreCase(List<String> a, List<String> b) {
         return a.stream().map(String::toLowerCase).collect(Collectors.toSet())
                 .equals(b.stream().map(String::toLowerCase).collect(Collectors.toSet()));
+    }
+
+    /**
+     * Returns true if both price keyword lists represent the same numeric values after normalization.
+     * <p>
+     * Normalization removes formatting differences such as commas or trailing decimals
+     * (e.g. "1,000" and "1000.00" are treated as equal).
+     */
+    private boolean equalNormalizedPrices(List<String> a, List<String> b) {
+        return a.stream()
+                .map(this::normalizePrice)
+                .collect(Collectors.toSet())
+                .equals(b.stream()
+                        .map(this::normalizePrice)
+                        .collect(Collectors.toSet())
+                );
+    }
+
+    /**
+     * Converts a price string to a canonical numeric form (e.g. "1,000.00" → "1000").
+     * Ensures equivalent numeric values match even if formatted differently.
+     */
+    private String normalizePrice(String s) {
+        try {
+            double value = Double.parseDouble(s.replaceAll(",", ""));
+            return String.valueOf(value);
+        } catch (NumberFormatException e) {
+            return s;
+        }
+    }
+
+    /**
+     * Returns true if the given price value matches the keyword exactly or falls within a range.
+     * <p>
+     * Examples:
+     * <ul>
+     *   <li>{@code priceMatchesKeyword("1000.00", "1000")} → true (exact match)</li>
+     *   <li>{@code priceMatchesKeyword("1100", "1000-1200")} → true (within range)</li>
+     *   <li>{@code priceMatchesKeyword("999", "1000-1200")} → false (below range)</li>
+     * </ul>
+     * Range comparisons are inclusive and whitespace-tolerant (e.g. "1000 - 1200" is valid).
+     * Invalid keywords (non-numeric) return false.
+     */
+    private boolean priceMatchesKeyword(String priceValue, String keyword) {
+        String normalizedKeyword = keyword.replaceAll("\\s+", ""); // remove spaces
+        String normalizedPrice = normalizePrice(priceValue);
+
+        try {
+            double personPrice = Double.parseDouble(normalizedPrice);
+
+            if (normalizedKeyword.contains("-")) {
+                String[] parts = normalizedKeyword.split("-");
+                if (parts.length == 2) {
+                    double lower = Double.parseDouble(normalizePrice(parts[0]));
+                    double upper = Double.parseDouble(normalizePrice(parts[1]));
+                    return personPrice >= lower && personPrice <= upper;
+                }
+            }
+
+            double keywordPrice = Double.parseDouble(normalizePrice(normalizedKeyword));
+            return Double.compare(personPrice, keywordPrice) == 0;
+
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

@@ -184,23 +184,18 @@ public class PersonContainsKeywordsPredicateTest {
     }
 
     @Test
-    public void equals_priceKeywordsDifferentCase_returnsTrue() {
-        /*
-        Although Price should normally contain only digits, commas, and decimals,
-        this test is retained to validate case-insensitive equality in case
-        future domain changes allow currency symbols or suffixes.
-        */
+    public void equals_priceKeywordsDifferentFormatting_returnsTrue() {
         PersonContainsKeywordsPredicate a = new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList("USD500K"), Collections.emptyList(), Collections.emptyList());
+                Arrays.asList("1000.00"), Collections.emptyList(), Collections.emptyList());
 
         PersonContainsKeywordsPredicate b = new PersonContainsKeywordsPredicate(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
                 Collections.emptyList(), Collections.emptyList(),
-                Arrays.asList("usd500k"), Collections.emptyList(), Collections.emptyList());
+                Arrays.asList("1,000"), Collections.emptyList(), Collections.emptyList());
 
-        assertTrue(a.equals(b)); // case-insensitive
+        assertTrue(a.equals(b)); // same numeric value
     }
 
     // === Property Type equality tests ===
@@ -263,5 +258,94 @@ public class PersonContainsKeywordsPredicateTest {
                 Collections.emptyList(), Collections.emptyList(), Arrays.asList("buy"));
 
         assertTrue(a.equals(b)); // case-insensitive
+    }
+
+    @Test
+    public void test_priceMatch_returnsTrue() {
+        Person person = new PersonBuilder().withPrice("1000.00").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("1000"), // keyword that should match
+                Collections.emptyList(), Collections.emptyList());
+        assertTrue(predicate.test(person));
+    }
+
+    @Test
+    public void test_priceWithinRange_returnsTrue() {
+        Person person = new PersonBuilder().withPrice("2500").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("2000-3000"), // price range keyword
+                Collections.emptyList(), Collections.emptyList());
+        assertTrue(predicate.test(person)); // 2500 is within 2000–3000
+    }
+
+    @Test
+    public void test_priceOutsideRange_returnsFalse() {
+        Person person = new PersonBuilder().withPrice("1500").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("2000-3000"), // 1500 below lower bound
+                Collections.emptyList(), Collections.emptyList());
+        assertFalse(predicate.test(person));
+    }
+
+    @Test
+    public void test_priceOnBoundary_returnsTrue() {
+        Person person = new PersonBuilder().withPrice("2000").build();
+        PersonContainsKeywordsPredicate predicateLower = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("2000-3000"),
+                Collections.emptyList(), Collections.emptyList());
+        assertTrue(predicateLower.test(person)); // 2000 == lower bound
+
+        person = new PersonBuilder().withPrice("3000").build();
+        assertTrue(predicateLower.test(person)); // 3000 == upper bound
+    }
+
+    @Test
+    public void test_priceMalformedRange_returnsFalse() {
+        // malformed ranges like "2000-" or "-3000" should not crash and should not match
+        Person person = new PersonBuilder().withPrice("2000").build();
+
+        PersonContainsKeywordsPredicate predicateMissingUpper = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("2000-"),
+                Collections.emptyList(), Collections.emptyList());
+        assertFalse(predicateMissingUpper.test(person));
+
+        PersonContainsKeywordsPredicate predicateMissingLower = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("-3000"),
+                Collections.emptyList(), Collections.emptyList());
+        assertFalse(predicateMissingLower.test(person));
+    }
+
+    @Test
+    public void test_priceRangeNonNumeric_returnsFalse() {
+        Person person = new PersonBuilder().withPrice("2000").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("abc-def"), // non-numeric
+                Collections.emptyList(), Collections.emptyList());
+        assertFalse(predicate.test(person));
+    }
+
+    @Test
+    public void test_priceExactMatchFormattingVariants_returnsTrue() {
+        Person person = new PersonBuilder().withPrice("1,000.00").build();
+        PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                Collections.emptyList(), Collections.emptyList(),
+                Arrays.asList("1000", "1,000.00", "1000.0"),
+                Collections.emptyList(), Collections.emptyList());
+        assertTrue(predicate.test(person)); // normalization should handle commas/decimals
     }
 }
