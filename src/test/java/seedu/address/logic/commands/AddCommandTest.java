@@ -69,6 +69,21 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_duplicateAddress_addSuccessful() throws Exception {
+        Person validPerson = new PersonBuilder().build();
+        Person sameAddressPerson = new PersonBuilder().withPhone("91246521").withName("Kea O'Hara")
+                .withPropertyType("hdb 3 room").withPrice("400000").build();
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+
+        new AddCommand(validPerson).execute(modelStub);
+        CommandResult commandResult = new AddCommand(sameAddressPerson).execute(modelStub);
+
+        assertEquals(String.format(AddCommand.MESSAGE_DUPLICATE_ADDRESS, Messages.format(sameAddressPerson)),
+                commandResult.getFeedbackToUser());
+        assertEquals(Arrays.asList(validPerson, sameAddressPerson), modelStub.personsAdded);
+    }
+
+    @Test
     public void equals() {
         Person alice = new PersonBuilder().withName("Alice").build();
         Person bob = new PersonBuilder().withName("Bob").build();
@@ -149,6 +164,11 @@ public class AddCommandTest {
         }
 
         @Override
+        public boolean hasAddress(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
         public boolean hasName(Person person) {
             throw new AssertionError("This method should not be called.");
         }
@@ -207,6 +227,12 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+
+        @Override
+        public boolean hasAddress(Person person) {
+            requireNonNull(person);
+            return personsAdded.stream().anyMatch(person::isSameAddress);
+        }
 
         @Override
         public boolean hasName(Person person) {
