@@ -175,7 +175,7 @@ the system constructs a `PersonContainsKeywordsPredicate` containing separate li
 The predicate then evaluates to `true` if any of the person’s fields contain any of the corresponding keywords.
 This is done through a series of `anyMatch` calls and a final ``||`` chain:
 ```java
-return nameMatches || phoneMatches || emailMatches || addressMatches || tagMatches
+return nameMatches || phoneMatches || emailMatches || addressMatches
         || priceMatches || propertyTypeMatches || intentionMatches;
 ```
 #### Rationale for `OR` search
