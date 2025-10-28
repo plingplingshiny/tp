@@ -37,6 +37,14 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Returns true if the list contains a person with the same address as the given argument.
+     */
+    public boolean hasAddress(Person toCheck) {
+        requireNonNull(toCheck);
+        return internalList.stream().anyMatch(toCheck::isSameAddress);
+    }
+
+    /**
      * Returns true if the list contains a person with the same name as the given argument.
      */
     public boolean hasName(Person toCheck) {

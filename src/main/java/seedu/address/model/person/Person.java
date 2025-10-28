@@ -106,6 +106,21 @@ public class Person {
     }
 
     /**
+     * Returns true if both persons have the same address.
+     */
+    public boolean isSameAddress(Person otherPerson) {
+        if (otherPerson == this) {
+            return true;
+        }
+
+        if (otherPerson == null) {
+            return false;
+        }
+
+        return address.equals(otherPerson.address);
+    }
+
+    /**
      * Returns true if both persons have the same name.
      * This defines a weaker notion of equality between two persons.
      */
