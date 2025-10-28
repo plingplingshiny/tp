@@ -542,7 +542,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
 * **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
 * **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
-* **Duplicate entry**: A contact record that has the same intent, name, phone, email, address, property type, and price as another existing record.
+* **Duplicate entry**: A contact record that has the same intention, name, phone, email, address, property type, and price as another existing record.
 
 --------------------------------------------------------------------------------------------------------------------
 
