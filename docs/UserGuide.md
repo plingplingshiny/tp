@@ -55,7 +55,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * Items in square brackets are optional.<br>
   e.g `n/NAME [e/EMAIL]` can be used as `n/John Doe e/johndoe@example.com` or as `n/John Doe`.
 
-* Items with `…`​ after them can be used multiple times including zero times.<br>
+* Items in square brackets with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[pt/PROPERTY_TYPE]…​` can be used as ` ` (i.e. 0 times), `pt/condo`, `pt/condo pt/hdb` etc.
 
 * Parameters can be in any order.<br>
@@ -64,14 +64,14 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
-* The `find` command now supports prefix-based searches (`n/`, `p/`, `e/`, `a/`, `t/`, `i/`, `pt/`, `pr/`) instead of plain keywords.
+* The `find` command now supports prefix-based searches (`n/`, `p/`, `e/`, `a/`, `i/`, `pt/`, `pr/`) instead of plain keywords.
   Prefixes specify which fields to search in. For example, `find n/Alex e/gmail` searches by name and email.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
 * The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions, either selling or renting. This helps in categorizing clients based on their property-related goals.
-  * **Accepted values:** `sell` or `rent` (lowercase only); other values, abbreviations, or synonyms are not accepted.
+  * **Accepted values:** `sell` or `rent` (not case-sensitive); other values, abbreviations, or synonyms are not accepted.
 
 ### Viewing help : `help`
 
@@ -86,16 +86,11 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE [t/TAG]…​`
-
-<box type="tip" seamless>
-
-**Tip:** A person can have any number of tags (including 0)
-</box>
+Format: `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE​`
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison pt/prison cell pr/0 p/1234567 t/criminal`
+* `add i/rent n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/4700`
+* `add i/sell n/Betsy Crowe e/betsycrowe@example.com a/Caldecott Road #12-34 pt/Condominium pr/120000.50 p/1234567`
 
 ### Listing all persons : `list`
 
@@ -121,7 +116,7 @@ Examples:
 ### Locating persons by prefix: `find`
 
 Finds persons whose name, phone, email, address, intention, property type, price, or tags contain any of the given keywords.
-The search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`) with the exception of the price field.
+Apart from the price field, the search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
 Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE]`
 
@@ -130,7 +125,6 @@ Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…�
 * Keywords are case-insensitive and may contain multiple words separated by spaces.
 * **Price field matches the exact value.**  e.g. `find pr/36` will not list a property with price 3600
 * Parameters can appear in any order.
-* Apart from the price field, the search is case-insensitive. e.g `hans` will match `Hans` except for the price field.
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
 * Persons matching at least one keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
@@ -152,7 +146,7 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX` or `delete n/NAME [n/NAME]... [confirm/yes]`
+Format: `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`
 
 * Deletes a single person at the specified `INDEX`, OR one or more persons by exact `NAME`(s). Do not mix index and names in the same command.
 * The index refers to the index number shown in the displayed person list. The index must be a positive integer: 1, 2, 3, …
@@ -219,9 +213,9 @@ _Details coming soon ..._
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE [t/TAG]…​` <br> e.g., `add i/sell n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 pt/HDB 3 room flat pr/470000 t/friend t/colleague`
+**Add**    | `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE​` <br> e.g., `add i/sell n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 pt/HDB 3 room flat pr/470000`
 **Clear**  | `clear`
-**Delete** | `delete INDEX` or `delete n/NAME [n/NAME]... [confirm/yes]`<br> e.g., `delete 3` or `delete n/John Doe n/Jane Smith confirm/yes`
+**Delete** | `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`<br> e.g., `delete 3` or `delete n/John Doe n/Jane Smith confirm/yes`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [pt/PROPERTY_TYPE] [pr/PRICE]`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE]`<br> e.g., `find n/James p/9876 e/gmail a/Clementi`
 **List**   | `list`
