@@ -31,7 +31,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
     * `list` : Lists all contacts.
 
-    * `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to the Address Book, with the intent to sell his property.
+    * `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to PropertyPal, with the intent to sell his property.
 
     * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -84,7 +84,10 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to PropertyPal.
+
+* A warning will be displayed if there already exists an entry with the same name and/or address in PropertyPal. However, it will still be accepted if at least 1 field is different from the existing entry.
+* An entry with identical values for every field is considered a duplicate and will not be accepted by PropertyPal.
 
 Format: `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE​`
 
@@ -94,7 +97,7 @@ Examples:
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book in alphabetical order.
+Shows a list of all persons in PropertyPal in alphabetical order.
 
 For persons with duplicate fields, they will be sorted alphabetically or lexicographically based on phone number, address and email respectively.
 
@@ -102,7 +105,7 @@ Format: `list`
 
 ### Editing a person : `edit`
 
-Edits an existing person in the address book.
+Edits an existing person in PropertyPal.
 
 Format: `edit INDEX [i/INTENTION] [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [pt/PROPERTY_TYPE] [pr/PRICE]`
 
@@ -144,7 +147,7 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified person from PropertyPal.
 
 Format: `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`
 
@@ -156,7 +159,7 @@ Format: `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`
 * Confirmation is not accepted for deletion by index (i.e. `confirm/...` is invalid with `delete INDEX`).
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
+* `list` followed by `delete 2` deletes the 2nd person in PropertyPal.
 * `find n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * `delete n/John Doe` deletes the person named John Doe.
 * `delete n/John Doe n/Jane Smith` shows a confirmation message listing both persons; re-run with `confirm/yes` to proceed.
@@ -164,7 +167,7 @@ Examples:
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries from PropertyPal.
 
 Format: `clear`
 
