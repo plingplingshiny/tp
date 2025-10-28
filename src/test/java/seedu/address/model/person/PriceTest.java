@@ -35,16 +35,26 @@ public class PriceTest {
         assertFalse(Price.isValidPrice("-100")); // negative number
         assertFalse(Price.isValidPrice("+100")); // plus sign
         assertFalse(Price.isValidPrice("100 dollars")); // with text
+        assertFalse(Price.isValidPrice("0001")); // leading zeros
+        assertFalse(Price.isValidPrice("01.23"));
+        assertFalse(Price.isValidPrice("1,00,000")); // wrong commas
+        assertFalse(Price.isValidPrice("1,000,00"));
+        assertFalse(Price.isValidPrice("1.000.567")); // too many decimal points
+        assertFalse(Price.isValidPrice("1 000")); // invalid chars
+        assertFalse(Price.isValidPrice("$1,000"));
 
         // valid prices
         assertTrue(Price.isValidPrice("0")); // zero
         assertTrue(Price.isValidPrice("1")); // single digit
         assertTrue(Price.isValidPrice("100")); // multiple digits
+        assertTrue(Price.isValidPrice("1,000"));
         assertTrue(Price.isValidPrice("1000000")); // large number
-        assertTrue(Price.isValidPrice("0001")); // leading zeros
         assertTrue(Price.isValidPrice("999999999999999")); // very large number
         assertTrue(Price.isValidPrice("12.34")); // decimal point
         assertTrue(Price.isValidPrice("1,000")); // comma separator
+        assertTrue(Price.isValidPrice("12,345,678"));
+        assertTrue(Price.isValidPrice("1,000.50")); // comma separator and decimal point
+        assertTrue(Price.isValidPrice("999,999.99"));
     }
 
     @Test
@@ -75,7 +85,6 @@ public class PriceTest {
     public void hashCode_test() {
         Price price1 = new Price("1000000");
         Price price2 = new Price("1000000");
-        Price price3 = new Price("500000");
 
         // same value -> same hashcode
         assertEquals(price1.hashCode(), price2.hashCode());
