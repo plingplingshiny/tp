@@ -49,6 +49,9 @@ public class AddCommand extends Command {
         + "WARNING: A person with the same name already exists in the address book";
     public static final String MESSAGE_DUPLICATE_ADDRESS = "New person added: %1$s \n"
             + "WARNING: A person with the same address already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_NAME_AND_ADDRESS = "New person added: %1$s \n"
+            + "WARNING: A person with the same name and a person with the same address"
+            + "already exists in the address book";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
 
     private final Person toAdd;
@@ -69,7 +72,10 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        if (model.hasName(toAdd)) {
+        if (model.hasName(toAdd) && model.hasAddress(toAdd)) {
+            model.addPerson(toAdd);
+            return new CommandResult(String.format(MESSAGE_DUPLICATE_NAME_AND_ADDRESS, Messages.format(toAdd)));
+        } else if (model.hasName(toAdd)) {
             model.addPerson(toAdd);
             return new CommandResult(String.format(MESSAGE_DUPLICATE_NAME, Messages.format(toAdd)));
         } else if (model.hasAddress(toAdd)) {
