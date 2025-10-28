@@ -31,7 +31,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
     * `list` : Lists all contacts.
 
-    * `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to PropertyPal, with the intent to sell his property.
+    * `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to PropertyPal, with the intention to sell his property.
 
     * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -118,12 +118,13 @@ Examples:
 
 ### Locating persons by prefix: `find`
 
-Finds persons whose name, phone, email, address, intention, property type, price, or tags contain any of the given keywords.
+Finds persons whose name, phone, email, address, intention, property type, or price contain any of the given keywords.
 Apart from the price field, the search is case-insensitive and uses substring matching (e.g. `ali` matches `Alice`).
 
 Format: `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE]`
 
 * At least one prefix must be provided.
+* You may include multiple prefixes in the same command — results are combined using OR semantics (a person matches if any field matches).
 * You may include multiple prefixes in the same command — results are combined using OR semantics (a person matches if any field matches).
 * Keywords are case-insensitive and may contain multiple words separated by spaces.
 * **Price field matches the exact value.**  e.g. `find pr/36` will not list a property with price 3600
