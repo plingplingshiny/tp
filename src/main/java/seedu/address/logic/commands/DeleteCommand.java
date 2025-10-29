@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -15,10 +14,7 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 
-/**
- * Deletes a person identified using it's displayed index or name from the
- * address book.
- */
+/** Deletes a person identified by index or name. */
 public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
@@ -48,9 +44,7 @@ public class DeleteCommand extends Command {
     private final List<Name> targetNames;
     private final boolean isConfirmed;
 
-    /**
-     * Creates a DeleteCommand to delete the person at the specified index.
-     */
+    /** Creates a DeleteCommand to delete the person at the specified index. */
     public DeleteCommand(Index targetIndex) {
         this.targetType = TargetType.INDEX;
         this.targetIndex = targetIndex;
@@ -59,10 +53,7 @@ public class DeleteCommand extends Command {
         this.isConfirmed = false;
     }
 
-    /**
-     * Creates a DeleteCommand to delete the person with the specified name.
-     * This constructor is now also used for confirmation flow when multiple persons with the same name are found.
-     */
+    /** Creates a DeleteCommand to delete the person with the specified name. */
     public DeleteCommand(Name targetName, boolean isConfirmed) {
         this.targetType = TargetType.NAME;
         this.targetIndex = null;
@@ -71,17 +62,11 @@ public class DeleteCommand extends Command {
         this.isConfirmed = isConfirmed;
     }
 
-    /**
-     * Convenience constructor for delete-by-name without explicit confirmation flag.
-     */
     public DeleteCommand(Name targetName) {
         this(targetName, false);
     }
 
-    /**
-     * Creates a DeleteCommand to delete multiple persons with the specified
-     * names.
-     */
+    /** Creates a DeleteCommand to delete multiple persons with the specified names. */
     public DeleteCommand(List<Name> targetNames, boolean isConfirmed) {
         this.targetType = TargetType.MULTIPLE_NAMES;
         this.targetIndex = null;
@@ -117,13 +102,11 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeDeleteByName(Model model) throws CommandException {
-        // Search within the currently filtered list to match test expectations
         List<Person> personsMatchingName = model.getFilteredPersonList().stream()
                 .filter(person -> person.getName().equals(targetName))
                 .collect(Collectors.toList());
 
         if (personsMatchingName.isEmpty()) {
-            // Tests expect the generic invalid index message when a name is not found
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
@@ -131,7 +114,7 @@ public class DeleteCommand extends Command {
             Person personToDelete = personsMatchingName.get(0);
             model.deletePerson(personToDelete);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
-        } else { // Multiple persons with the same name found or confirmation flow
+        } else {
             CommandResult confirmationResult = checkConfirmationRequired(personsMatchingName);
             if (confirmationResult != null) {
                 return confirmationResult;
@@ -161,7 +144,7 @@ public class DeleteCommand extends Command {
                 if (p.getName().equals(name) && !personsToDelete.contains(p)) {
                     personsToDelete.add(p);
                     found = true;
-                    break; // only delete the first matching person per input name
+                    break;
                 }
             }
             if (!found) {
@@ -173,10 +156,8 @@ public class DeleteCommand extends Command {
             String notFoundNamesStr = notFoundNames.stream()
                     .map(Name::toString)
                     .collect(Collectors.joining(", "));
-            // Tests expect an exception if any provided names are not found
             throw new CommandException("The following persons were not found: " + notFoundNamesStr);
         }
-
 
         return personsToDelete;
     }
@@ -217,7 +198,6 @@ public class DeleteCommand extends Command {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof DeleteCommand)) {
             return false;
         }
@@ -241,7 +221,7 @@ public class DeleteCommand extends Command {
         case NAME:
             return targetName != null
                     ? targetName.hashCode()
-                    : Boolean.hashCode(isConfirmed); // Handle null targetName
+                    : Boolean.hashCode(isConfirmed);
         case MULTIPLE_NAMES:
             return targetNames.hashCode() + Boolean.hashCode(isConfirmed);
         default:

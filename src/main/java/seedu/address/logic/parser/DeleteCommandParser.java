@@ -12,18 +12,9 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Name;
 
-/**
- * Parses input arguments and creates a new DeleteCommand object
- */
+/** Parses input arguments and creates a DeleteCommand. */
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments in the context of the
-     * DeleteCommand and returns a DeleteCommand object for execution.
-     *
-     * @throws ParseException if the user input does not conform the expected
-     *     format
-     */
     @Override
     public DeleteCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_CONFIRM);
@@ -48,8 +39,6 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         boolean isConfirmed = parseConfirmation(hasConfirmation, argMultimap);
 
         if (names.size() == 1) {
-            // Single name with confirmation should still create the single-name delete command
-            // Tests expect confirmation to be ignored for single-name deletes
             return new DeleteCommand(names.get(0));
         } else {
             return new DeleteCommand(names, isConfirmed);
