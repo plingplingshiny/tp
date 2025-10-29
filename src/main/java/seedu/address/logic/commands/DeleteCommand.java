@@ -123,10 +123,15 @@ public class DeleteCommand extends Command {
                 duplicateMessage = "\nNote: Multiple entries found for '" + targetName.fullName
                         + "' — all matching entries will be deleted.";
             }
-            CommandResult confirmationResult = checkConfirmationRequired(personsMatchingName, new ArrayList<>(), duplicateMessage, null);
-            if (confirmationResult != null) {
-                return confirmationResult;
-            }
+            CommandResult confirmationResult = checkConfirmationRequired(
+                    personsMatchingName,
+                    new ArrayList<>(),
+                    duplicateMessage,
+                    null
+            );
+             if (confirmationResult != null) {
+                 return confirmationResult;
+             }
             deletePersons(model, personsMatchingName);
             return createSuccessMessage(personsMatchingName, new ArrayList<>());
         }
@@ -173,11 +178,15 @@ public class DeleteCommand extends Command {
                 .mapToObj(i -> (i + 1) + ". " + distinctTargetNames.get(i).fullName)
                 .collect(Collectors.joining("\n"));
 
-        CommandResult confirmationResult = checkConfirmationRequired(personsToDelete, notFoundNames,
-                duplicateNotes.toString(), personsNamesFromInput);
-        if (confirmationResult != null) {
-            return confirmationResult;
-        }
+        CommandResult confirmationResult = checkConfirmationRequired(
+                personsToDelete,
+                notFoundNames,
+                duplicateNotes.toString(),
+                personsNamesFromInput
+        );
+         if (confirmationResult != null) {
+             return confirmationResult;
+         }
 
         deletePersons(model, personsToDelete);
         return createSuccessMessage(personsToDelete, notFoundNames);
@@ -213,11 +222,13 @@ public class DeleteCommand extends Command {
             // set pending confirmation so user can simply type 'yes' or 'no'
             ConfirmationManager.setPending(personsToDelete, notFoundNames);
             // Return only the confirmation warning (tests expect no extra prompt text appended)
-            return new CommandResult(String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                    displayCount, personsFormatted) + notFoundMessage + duplicateMessage);
-        }
-        return null;
-    }
+            return new CommandResult(
+                    String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE, displayCount, personsFormatted)
+                            + notFoundMessage
+                            + duplicateMessage);
+         }
+         return null;
+     }
 
     private void deletePersons(Model model, List<Person> personsToDelete) {
         for (Person person : personsToDelete) {
