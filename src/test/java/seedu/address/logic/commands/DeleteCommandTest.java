@@ -128,8 +128,8 @@ public class DeleteCommandTest {
         // Add a duplicate person to the model
         Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
-                personToDuplicate.getEmail(), personToDuplicate.getAddress(),
-                personToDuplicate.getPropertyType(), personToDuplicate.getPrice(), personToDuplicate.getTags());
+                personToDuplicate.getEmail(), personToDuplicate.getAddress(), personToDuplicate.getPropertyType(),
+                personToDuplicate.getPrice(), personToDuplicate.getTags(), personToDuplicate.getIntention());
         model.addPerson(duplicatePerson);
 
         List<Person> personsToDelete = model.getFilteredPersonList().stream()
@@ -155,8 +155,8 @@ public class DeleteCommandTest {
         // Add a duplicate person to the model
         Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
-                personToDuplicate.getEmail(), personToDuplicate.getAddress(),
-                personToDuplicate.getPropertyType(), personToDuplicate.getPrice(), personToDuplicate.getTags());
+                personToDuplicate.getEmail(), personToDuplicate.getAddress(), personToDuplicate.getPropertyType(),
+                personToDuplicate.getPrice(), personToDuplicate.getTags(), personToDuplicate.getIntention());
         model.addPerson(duplicatePerson);
 
         List<Person> personsToDelete = model.getFilteredPersonList().stream()
