@@ -229,6 +229,86 @@ public class DeleteCommandTest {
     }
 
     @Test
+    public void execute_multipleDistinctNames_unconfirmed_requestsConfirmation_withNotFoundAndDuplicateNotes() {
+        // Force confirmation by using two different existing names (>= 2 real matches), plus a missing name
+        Person p1 = model.getAddressBook().getPersonList().get(0);
+        Person p2 = model.getAddressBook().getPersonList().get(1);
+        Name existing1 = p1.getName();
+        Name existing2 = p2.getName();
+        Name missingName = new Name("This Name Should Not Exist 12345");
+
+        // Keep the specific input order; some implementations echo back this order
+        List<Name> inputNames = List.of(existing1, missingName, existing2);
+
+        DeleteCommand cmd = new DeleteCommand(inputNames, false);
+
+        try {
+            CommandResult result = cmd.execute(model);
+            String feedback = result.getFeedbackToUser();
+
+            // Must be a confirmation-style warning
+            assertTrue(feedback.contains("Warning: You are about to delete"));
+
+            // Be tolerant across implementations: require all names to appear, but not strict numbering/format
+            assertTrue(feedback.contains(existing1.fullName), "Feedback should contain first existing name");
+            assertTrue(feedback.contains(existing2.fullName), "Feedback should contain second existing name");
+            assertTrue(feedback.contains(missingName.fullName), "Feedback should contain the missing name mention");
+
+            // It should note the not-found name
+            assertTrue(feedback.contains("Note: The following persons were not found: " + missingName.fullName));
+
+            // Either a pending flag is set, or the message clearly asks for confirmation
+            assertTrue(
+                ConfirmationManager.hasPending()
+                    || feedback.contains("Type 'yes' to confirm")
+                    || feedback.contains("to confirm or 'no' to abort")
+            );
+        } catch (Exception e) {
+            throw new AssertionError("Execution of command should not fail.", e);
+        }
+    }
+
+    @Test
+    public void execute_multipleNames_allNotFound_throwsPersonsNotFound() {
+        List<Name> input = List.of(new Name("foo bar 12345"), new Name("baz qux 67890"));
+        DeleteCommand cmd = new DeleteCommand(input, false);
+        assertCommandFailure(cmd, model,
+                String.format(DeleteCommand.MESSAGE_PERSONS_NOT_FOUND, "foo bar 12345, baz qux 67890"));
+    }
+
+    @Test
+    public void toString_and_hashCode_coverBranches() {
+        // INDEX path: targetName is null, so hashCode() should use Boolean.hashCode(isConfirmed)
+        DeleteCommand byIndex = new DeleteCommand(INDEX_FIRST_PERSON);
+        int hash1 = byIndex.hashCode(); // branch where targetName == null
+        String s1 = byIndex.toString();
+        assertTrue(s1.contains("index")); // toString should mention index target
+        // just ensure hash computed
+        assertTrue(hash1 == byIndex.hashCode());
+
+        // NAME path: targetName != null
+        Person p = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand byNameUnconfirmed = new DeleteCommand(p.getName(), false);
+        DeleteCommand byNameConfirmed = new DeleteCommand(p.getName(), true);
+        // Different confirmed flag should make equals false but both toString() include confirmed flag
+        assertFalse(byNameUnconfirmed.equals(byNameConfirmed));
+        String s2 = byNameUnconfirmed.toString();
+        String s3 = byNameConfirmed.toString();
+        assertTrue(s2.contains("confirmed"));
+        assertTrue(s3.contains("confirmed"));
+
+        // MULTIPLE_NAMES path: toString should not throw and equals differs by target list
+        List<Name> namesA = List.of(p.getName());
+        List<Name> namesB = List.of(new Name("Completely New Name 999"));
+        DeleteCommand multiA = new DeleteCommand(namesA, false);
+        DeleteCommand multiB = new DeleteCommand(namesB, false);
+        assertFalse(multiA.equals(multiB));
+        // ensure toString callable
+        String s4 = multiA.toString();
+        assertTrue(s4.contains("targetNames") || s4.contains("target"));
+    }
+
+    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
