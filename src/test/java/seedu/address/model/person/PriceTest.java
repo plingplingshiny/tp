@@ -42,18 +42,22 @@ public class PriceTest {
         assertFalse(Price.isValidPrice("1.000.567")); // too many decimal points
         assertFalse(Price.isValidPrice("1 000")); // invalid chars
         assertFalse(Price.isValidPrice("$1,000"));
+        assertFalse(Price.isValidPrice("12345678901234")); // too many digits
+        assertFalse(Price.isValidPrice("99,999,999,999,999"));
+        assertFalse(Price.isValidPrice("999,999,999,999.99"));
 
         // valid prices
         assertTrue(Price.isValidPrice("0")); // zero
         assertTrue(Price.isValidPrice("1")); // single digit
         assertTrue(Price.isValidPrice("100")); // multiple digits
-        assertTrue(Price.isValidPrice("1000000")); // large number
-        assertTrue(Price.isValidPrice("999999999999999")); // very large number
         assertTrue(Price.isValidPrice("12.34")); // decimal point
         assertTrue(Price.isValidPrice("1,000")); // comma separator
         assertTrue(Price.isValidPrice("12,345,678"));
         assertTrue(Price.isValidPrice("1,000.50")); // comma separator and decimal point
         assertTrue(Price.isValidPrice("999,999.99"));
+        assertTrue(Price.isValidPrice("99,999,999,999.99")); // 13 digits
+        assertTrue(Price.isValidPrice("1234567890123")); //
+        assertTrue(Price.isValidPrice("9,999,999,999,999"));
     }
 
     @Test
@@ -98,17 +102,5 @@ public class PriceTest {
     public void toString_test() {
         Price price = new Price("850000");
         assertEquals("850000", price.toString());
-    }
-
-    @Test
-    public void edgeCases() {
-        // Test with maximum integer string length
-        Price longPrice = new Price("12345678901234567890");
-        assertEquals("12345678901234567890", longPrice.toString());
-
-        // Test zero price
-        Price zeroPrice = new Price("0");
-        assertEquals("0", zeroPrice.toString());
-        assertTrue(zeroPrice.isValidPrice("0"));
     }
 }
