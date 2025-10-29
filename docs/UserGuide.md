@@ -24,6 +24,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar PropertyPal.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data by default.<br>
+   Note that you may click and drag the columns around to reorder them.<br>
    ![Ui](images/Ui.png)
 
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
