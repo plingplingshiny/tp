@@ -71,8 +71,8 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
-* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions, either selling or renting. This helps in categorizing clients based on their property-related goals.
-  * **Accepted values:** `sell` or `rent` (not case-sensitive); other values, abbreviations, or synonyms are not accepted.
+* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions: selling or renting. This helps in categorizing clients based on their property-related goals.
+  * **Accepted values:** `sell` or `rent` (case-insensitive). Inputs are accepted in any case and will be normalized to lowercase internally (e.g., `Sell`, `SELL`, and `sell` are all valid and stored as `sell`). Other values, abbreviations, or synonyms are not accepted.
 
 ### Viewing help : `help`
 
