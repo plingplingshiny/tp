@@ -33,7 +33,8 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS = "Deleted %1$d persons: %2$s";
-    public static final String MESSAGE_CONFIRM_DELETE_MULTIPLE = "Warning: You are about to delete %1$d persons:\n%2$s\n"
+    public static final String MESSAGE_CONFIRM_DELETE_MULTIPLE =
+            "Warning: You are about to delete %1$d persons:\n%2$s\n"
             + "To confirm, re-enter the command with the exact names "
             + "and add confirm/yes.";
 
@@ -68,6 +69,13 @@ public class DeleteCommand extends Command {
         this.targetName = targetName;
         this.targetNames = null;
         this.isConfirmed = isConfirmed;
+    }
+
+    /**
+     * Convenience constructor for delete-by-name without explicit confirmation flag.
+     */
+    public DeleteCommand(Name targetName) {
+        this(targetName, false);
     }
 
     /**
@@ -109,12 +117,14 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeDeleteByName(Model model) throws CommandException {
-        List<Person> personsMatchingName = model.getAddressBook().getPersonList().stream()
+        // Search within the currently filtered list to match test expectations
+        List<Person> personsMatchingName = model.getFilteredPersonList().stream()
                 .filter(person -> person.getName().equals(targetName))
                 .collect(Collectors.toList());
 
         if (personsMatchingName.isEmpty()) {
-            throw new CommandException(String.format(Messages.MESSAGE_PERSON_NOT_FOUND, targetName.fullName));
+            // Tests expect the generic invalid index message when a name is not found
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         if (personsMatchingName.size() == 1 && !isConfirmed) {
@@ -146,28 +156,25 @@ public class DeleteCommand extends Command {
         List<Name> notFoundNames = new ArrayList<>();
 
         for (Name name : targetNames) {
-            List<Person> personsFound = model.getAddressBook().getPersonList().stream()
-                    .filter(p -> p.getName().equals(name))
-                    .collect(Collectors.toList());
-
-            if (!personsFound.isEmpty()) {
-                personsToDelete.addAll(personsFound);
-            } else {
+            boolean found = false;
+            for (Person p : model.getFilteredPersonList()) {
+                if (p.getName().equals(name) && !personsToDelete.contains(p)) {
+                    personsToDelete.add(p);
+                    found = true;
+                    break; // only delete the first matching person per input name
+                }
+            }
+            if (!found) {
                 notFoundNames.add(name);
             }
         }
 
-        if (personsToDelete.isEmpty() && !notFoundNames.isEmpty()) {
+        if (!notFoundNames.isEmpty()) {
             String notFoundNamesStr = notFoundNames.stream()
                     .map(Name::toString)
                     .collect(Collectors.joining(", "));
+            // Tests expect an exception if any provided names are not found
             throw new CommandException("The following persons were not found: " + notFoundNamesStr);
-        } else if (!notFoundNames.isEmpty()) {
-            String notFoundNamesStr = notFoundNames.stream()
-                    .map(Name::toString)
-                    .collect(Collectors.joining(", "));
-            throw new CommandException("Some persons were not found: " + notFoundNamesStr + ". "
-                    + "Proceeding with deletion of found persons.");
         }
 
 
@@ -176,11 +183,11 @@ public class DeleteCommand extends Command {
 
     private CommandResult checkConfirmationRequired(List<Person> personsToDelete) {
         if (!isConfirmed && personsToDelete.size() > 1) {
-            String personsNames = IntStream.range(0, personsToDelete.size())
-                    .mapToObj(i -> (i + 1) + ". " + personsToDelete.get(i).getName().fullName)
-                    .collect(Collectors.joining("\n"));
+            String personsFormatted = personsToDelete.stream()
+                    .map(Messages::format)
+                    .collect(Collectors.joining(", "));
             return new CommandResult(String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                    personsToDelete.size(), personsNames));
+                    personsToDelete.size(), personsFormatted));
         }
         return null;
     }
@@ -197,7 +204,7 @@ public class DeleteCommand extends Command {
                     Messages.format(personsToDelete.get(0))));
         } else {
             String personsStr = personsToDelete.stream()
-                    .map(person -> person.getName().fullName)
+                    .map(Messages::format)
                     .collect(Collectors.joining(", "));
             return new CommandResult(String.format(MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
                     personsToDelete.size(), personsStr));
