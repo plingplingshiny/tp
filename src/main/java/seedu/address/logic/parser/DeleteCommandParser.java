@@ -48,7 +48,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         boolean isConfirmed = parseConfirmation(hasConfirmation, argMultimap);
 
         if (names.size() == 1) {
-            return new DeleteCommand(names.get(0));
+            return new DeleteCommand(names.get(0), isConfirmed);
         } else {
             return new DeleteCommand(names, isConfirmed);
         }
@@ -76,7 +76,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         if ("yes".equals(confirmValue)) {
             return true;
         } else if (!confirmValue.isEmpty()) {
-            throw new ParseException("Confirmation value must be 'yes' or leave it empty");
+            throw new ParseException("Confirmation value must be 'yes'");
         }
         return false;
     }
