@@ -20,7 +20,6 @@ import seedu.address.model.person.Name;
  * ParserUtil, and therefore should be covered by the ParserUtilTest.
  */
 public class DeleteCommandParserTest {
-
     private final DeleteCommandParser parser = new DeleteCommandParser();
 
     @Test
