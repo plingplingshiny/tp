@@ -28,20 +28,13 @@ public class ListCommandTest {
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
-        int expectedCount = model.getFilteredPersonList().size();
-        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS, expectedCount);
-        assertCommandSuccess(new ListCommand(), model, expectedMessage, expectedModel);
+        assertCommandSuccess(new ListCommand(), model, ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
     public void execute_listIsFiltered_showsEverything() {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
-        ListCommand listCommand = new ListCommand();
-        expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        expectedModel.sortFilteredPersonListByName();
-        int expectedSize = expectedModel.getFilteredPersonList().size();
-        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS, expectedSize);
-        CommandTestUtil.assertCommandSuccess(listCommand, model, expectedMessage, expectedModel);
+        assertCommandSuccess(new ListCommand(), model, ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
 
     @Test
@@ -49,9 +42,6 @@ public class ListCommandTest {
         ListCommand listCommand = new ListCommand();
         expectedModel.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         expectedModel.sortFilteredPersonListByName();
-        int expectedSize = expectedModel.getFilteredPersonList().size();
-        String expectedMessage = String.format(ListCommand.MESSAGE_SUCCESS, expectedSize);
-        CommandTestUtil.assertCommandSuccess(listCommand, expectedModel, expectedMessage, expectedModel);
+        assertCommandSuccess(listCommand, model, ListCommand.MESSAGE_SUCCESS, expectedModel);
     }
-
 }
