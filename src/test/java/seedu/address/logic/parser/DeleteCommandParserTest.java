@@ -21,7 +21,7 @@ import seedu.address.model.person.Name;
  */
 public class DeleteCommandParserTest {
 
-    private DeleteCommandParser parser = new DeleteCommandParser();
+    private final DeleteCommandParser parser = new DeleteCommandParser();
 
     @Test
     public void parse_validArgs_returnsDeleteCommand() {
@@ -70,7 +70,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_invalidConfirmationValue_throwsParseException() {
         assertParseFailure(parser, " n/Alice n/Bob confirm/maybe",
-                "Confirmation value must be 'yes', 'no' or empty.");
+                "Confirmation value must be 'yes', 'no', 'y', 'n', or empty.");
     }
 
     @Test
