@@ -47,6 +47,8 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_NAME = "New person added: %1$s \n"
         + "WARNING: A person with the same name already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_ADDRESS = "New person added: %1$s \n"
+            + "WARNING: A person with the same address already exists in the address book";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
 
     private final Person toAdd;
@@ -70,6 +72,9 @@ public class AddCommand extends Command {
         if (model.hasName(toAdd)) {
             model.addPerson(toAdd);
             return new CommandResult(String.format(MESSAGE_DUPLICATE_NAME, Messages.format(toAdd)));
+        } else if (model.hasAddress(toAdd)) {
+            model.addPerson(toAdd);
+            return new CommandResult(String.format(MESSAGE_DUPLICATE_ADDRESS, Messages.format(toAdd)));
         } else {
             model.addPerson(toAdd);
             return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
