@@ -13,6 +13,8 @@ import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -87,7 +89,22 @@ public class DeleteCommandTest {
     @Test
     public void execute_validName_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName());
+        DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getName(), false);
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_validNameCaseInsensitive_success() {
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Name nameWithDifferentCase = new Name(personToDelete.getName().fullName.toLowerCase());
+        DeleteCommand deleteCommand = new DeleteCommand(nameWithDifferentCase, false);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(personToDelete));
@@ -101,16 +118,71 @@ public class DeleteCommandTest {
     @Test
     public void execute_invalidName_throwsCommandException() {
         Name invalidName = new Name("Nonexistent Person");
-        DeleteCommand deleteCommand = new DeleteCommand(invalidName);
+        DeleteCommand deleteCommand = new DeleteCommand(invalidName, false);
 
-        assertCommandFailure(deleteCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        assertCommandFailure(deleteCommand, model, String.format(Messages.MESSAGE_PERSON_NOT_FOUND, invalidName.fullName));
+    }
+
+    @Test
+    public void execute_multiplePersonsWithSameNameUnconfirmed_requestsConfirmation() {
+        // Add a duplicate person to the model
+        Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
+                personToDuplicate.getEmail(), personToDuplicate.getAddress(),
+                personToDuplicate.getPropertyType(), personToDuplicate.getPrice(), personToDuplicate.getTags());
+        model.addPerson(duplicatePerson);
+
+        List<Person> personsToDelete = model.getFilteredPersonList().stream()
+                .filter(p -> p.getName().equals(personToDuplicate.getName()))
+                .collect(Collectors.toList());
+
+        DeleteCommand deleteCommand = new DeleteCommand(personToDuplicate.getName(), false);
+
+        String personsNames = IntStream.range(0, personsToDelete.size())
+                .mapToObj(i -> (i + 1) + ". " + personsToDelete.get(i).getName().fullName)
+                .collect(Collectors.joining("\n"));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_CONFIRM_DELETE_MULTIPLE,
+                personsToDelete.size(), personsNames);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multiplePersonsWithSameNameConfirmed_success() {
+        // Add a duplicate person to the model
+        Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
+                personToDuplicate.getEmail(), personToDuplicate.getAddress(),
+                personToDuplicate.getPropertyType(), personToDuplicate.getPrice(), personToDuplicate.getTags());
+        model.addPerson(duplicatePerson);
+
+        List<Person> personsToDelete = model.getFilteredPersonList().stream()
+                .filter(p -> p.getName().equals(personToDuplicate.getName()))
+                .collect(Collectors.toList());
+
+        DeleteCommand deleteCommand = new DeleteCommand(personToDuplicate.getName(), true);
+
+        String deletedPersonsNames = personsToDelete.stream()
+                .map(p -> p.getName().fullName)
+                .collect(Collectors.joining(", "));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
+                personsToDelete.size(), deletedPersonsNames);
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        personsToDelete.forEach(expectedModel::deletePerson);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
-        DeleteCommand deleteByNameCommand = new DeleteCommand(new Name("Alice Pauline"));
+        DeleteCommand deleteByNameCommand = new DeleteCommand(new Name("Alice Pauline"), false);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
@@ -136,7 +208,7 @@ public class DeleteCommandTest {
     public void hashCodeMethod() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
-        DeleteCommand deleteByNameCommand = new DeleteCommand(new Name("Alice Pauline"));
+        DeleteCommand deleteByNameCommand = new DeleteCommand(new Name("Alice Pauline"), false);
 
         // same values -> same hashcode
         assertEquals(deleteFirstCommand.hashCode(), deleteFirstCommandCopy.hashCode());
@@ -190,7 +262,7 @@ public class DeleteCommandTest {
         DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true); // confirmed
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
-                2, Messages.format(firstPerson) + ", " + Messages.format(secondPerson));
+                2, firstPerson.getName().fullName + ", " + secondPerson.getName().fullName);
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(firstPerson);
@@ -206,9 +278,12 @@ public class DeleteCommandTest {
         List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), secondPerson.getName());
         DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false); // not confirmed
 
+        String personsNames = IntStream.range(0, namesToDelete.size())
+                .mapToObj(i -> (i + 1) + ". " + namesToDelete.get(i).fullName)
+                .collect(Collectors.joining("\n"));
+
         String expectedMessage = String.format(DeleteCommand.MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                2,
-                Messages.format(firstPerson) + ", " + Messages.format(secondPerson));
+                2, personsNames);
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
@@ -240,7 +315,7 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
-
+	
     @Test
     public void equals_multipleNames() {
         Person firstPerson = model.getFilteredPersonList().get(0);
