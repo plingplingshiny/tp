@@ -85,7 +85,8 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
     }
 
     // CHANGED: take ArgumentMultimap and read the preamble for the index
-    private DeleteCommand parseDeleteByIndex(ArgumentMultimap argMultimap, boolean hasConfirmation) throws ParseException {
+    private DeleteCommand parseDeleteByIndex(ArgumentMultimap argMultimap, boolean hasConfirmation)
+            throws ParseException {
         if (hasConfirmation) {
             throw new ParseException("Confirmation is not required for deletion by index");
         }
