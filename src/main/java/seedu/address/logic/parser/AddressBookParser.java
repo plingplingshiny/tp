@@ -12,12 +12,12 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.ConfirmCommand;
+import seedu.address.logic.commands.ConfirmationManager;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
-import seedu.address.logic.commands.ConfirmationManager;
 import seedu.address.logic.commands.InvalidConfirmationCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -33,6 +33,10 @@ public class AddressBookParser {
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
 
+    /**
+     * Creates a new AddressBookParser. Clears any stale pending confirmations so parsing
+     * starts with a clean state.
+     */
     public AddressBookParser() {
         // Ensure no stale pending confirmations remain when a parser is created (helps tests be independent)
         ConfirmationManager.clearPending();
