@@ -50,7 +50,7 @@ public class AddCommand extends Command {
     public static final String MESSAGE_DUPLICATE_ADDRESS = "New person added: %1$s \n"
             + "WARNING: A person with the same address already exists in PropertyPal";
     public static final String MESSAGE_DUPLICATE_NAME_AND_ADDRESS = "New person added: %1$s \n"
-            + "WARNING: A person with the same name and a person with the same address"
+            + "WARNING: A person with the same name and a person with the same address "
             + "already exists in PropertyPal";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in PropertyPal";
 
