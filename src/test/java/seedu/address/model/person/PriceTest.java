@@ -42,6 +42,7 @@ public class PriceTest {
         assertFalse(Price.isValidPrice("1.000.567")); // too many decimal points
         assertFalse(Price.isValidPrice("1 000")); // invalid chars
         assertFalse(Price.isValidPrice("$1,000"));
+        assertFalse(Price.isValidPrice("12.345")); // too many digits after decimal point
 
         // valid prices
         assertTrue(Price.isValidPrice("0")); // zero
@@ -50,6 +51,7 @@ public class PriceTest {
         assertTrue(Price.isValidPrice("1000000")); // large number
         assertTrue(Price.isValidPrice("999999999999999")); // very large number
         assertTrue(Price.isValidPrice("12.34")); // decimal point
+        assertTrue(Price.isValidPrice("12.5"));
         assertTrue(Price.isValidPrice("1,000")); // comma separator
         assertTrue(Price.isValidPrice("12,345,678"));
         assertTrue(Price.isValidPrice("1,000.50")); // comma separator and decimal point
