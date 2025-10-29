@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -11,8 +10,6 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -146,8 +143,7 @@ public class DeleteCommandTest {
                 .collect(Collectors.joining("\n"));
 
         // expected core confirmation message (the runtime may append duplicate notes)
-        String expectedCore = String.format(DeleteCommand.MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                actualPersonsToDelete.size(), personsNames);
+        // (kept inline previously; not needed as a separate variable)
 
         // runtime appends a duplicate-note when multiple entries are found for the queried name
         String duplicateNote = "\nNote: Multiple entries found for '" + personToDuplicate.getName().fullName
@@ -161,9 +157,8 @@ public class DeleteCommandTest {
             String feedback = result.getFeedbackToUser();
             assertTrue(feedback.contains("Warning: You are about to delete"));
             assertTrue(feedback.contains(personsNames));
-            if (!duplicateNote.isEmpty()) {
-                assertTrue(feedback.contains(duplicateNote.trim()));
-            }
+            // duplicateNote is a non-empty literal; assert presence directly
+            assertTrue(feedback.contains(duplicateNote.trim()));
             // model should not have been modified yet
             assertEquals(expectedModel, model);
             // pending confirmation should be set
@@ -238,19 +233,19 @@ public class DeleteCommandTest {
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
 
         // same object -> returns true
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
+        assertEquals(deleteFirstCommand, deleteFirstCommand);
 
         // same values -> returns true
-        assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
+        assertEquals(deleteFirstCommand, deleteFirstCommandCopy);
 
         // different types -> returns false
-        assertFalse(deleteFirstCommand.equals(1));
+        assertNotEquals(1, deleteFirstCommand);
 
         // null -> returns false
-        assertFalse(deleteFirstCommand.equals(null));
+        assertNotEquals(null, deleteFirstCommand);
 
         // different person -> returns false
-        assertFalse(deleteFirstCommand.equals(deleteSecondCommand));
+        assertNotEquals(deleteFirstCommand, deleteSecondCommand);
     }
 
     /**
