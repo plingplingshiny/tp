@@ -117,7 +117,13 @@ public class DeleteCommand extends Command {
             model.deletePerson(personToDelete);
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         } else {
-            CommandResult confirmationResult = checkConfirmationRequired(personsMatchingName, new ArrayList<>());
+            // build duplicate warning if multiple matches found for this name
+            String duplicateMessage = "";
+            if (personsMatchingName.size() > 1) {
+                duplicateMessage = "\nNote: Multiple entries found for '" + targetName.fullName
+                        + "' — all matching entries will be deleted.";
+            }
+            CommandResult confirmationResult = checkConfirmationRequired(personsMatchingName, new ArrayList<>(), duplicateMessage, null);
             if (confirmationResult != null) {
                 return confirmationResult;
             }
@@ -132,19 +138,28 @@ public class DeleteCommand extends Command {
         // preserve duplicates in targetNames so repeated names can map to multiple matching persons
         List<Name> distinctTargetNames = new ArrayList<>(targetNames);
 
+        StringBuilder duplicateNotes = new StringBuilder();
+
         for (Name name : distinctTargetNames) {
-            boolean found = false;
             String targetLowerName = name.fullName.toLowerCase();
-            for (Person p : model.getAddressBook().getPersonList()) {
-                String pNameLower = p.getName().fullName.toLowerCase();
-                if (pNameLower.equals(targetLowerName) && !personsToDelete.contains(p)) {
-                    personsToDelete.add(p);
-                    found = true;
-                    break; // only take the first matching person per input name
-                }
-            }
-            if (!found) {
+            List<Person> matchesForName = model.getAddressBook().getPersonList().stream()
+                    .filter(p -> p.getName().fullName.toLowerCase().equals(targetLowerName))
+                    .collect(Collectors.toList());
+
+            if (matchesForName.isEmpty()) {
                 notFoundNames.add(name);
+            } else {
+                // add all matches for this name (avoid duplicates)
+                for (Person p : matchesForName) {
+                    if (!personsToDelete.contains(p)) {
+                        personsToDelete.add(p);
+                    }
+                }
+                if (matchesForName.size() > 1) {
+                    duplicateNotes.append("\nNote: Multiple entries found for '")
+                            .append(name.fullName)
+                            .append("' — all matching entries will be deleted.");
+                }
             }
         }
 
@@ -153,7 +168,13 @@ public class DeleteCommand extends Command {
                     notFoundNames.stream().map(n -> n.fullName).collect(Collectors.joining(", "))));
         }
 
-        CommandResult confirmationResult = checkConfirmationRequired(personsToDelete, notFoundNames);
+        // build an ordered list from the input names for display in confirmation
+        String personsNamesFromInput = IntStream.range(0, distinctTargetNames.size())
+                .mapToObj(i -> (i + 1) + ". " + distinctTargetNames.get(i).fullName)
+                .collect(Collectors.joining("\n"));
+
+        CommandResult confirmationResult = checkConfirmationRequired(personsToDelete, notFoundNames,
+                duplicateNotes.toString(), personsNamesFromInput);
         if (confirmationResult != null) {
             return confirmationResult;
         }
@@ -162,11 +183,26 @@ public class DeleteCommand extends Command {
         return createSuccessMessage(personsToDelete, notFoundNames);
     }
 
-    private CommandResult checkConfirmationRequired(List<Person> personsToDelete, List<Name> notFoundNames) {
+    private CommandResult checkConfirmationRequired(List<Person> personsToDelete, List<Name> notFoundNames,
+            String duplicateMessage, String personsListOverride) {
         if (!isConfirmed && personsToDelete.size() > 1) {
-            String personsFormatted = IntStream.range(0, personsToDelete.size())
-                    .mapToObj(i -> (i + 1) + ". " + personsToDelete.get(i).getName().fullName)
-                    .collect(Collectors.joining("\n"));
+            String personsFormatted;
+            if (personsListOverride != null && !personsListOverride.isEmpty()) {
+                // use the provided override (typically the input names order)
+                personsFormatted = personsListOverride;
+            } else {
+                personsFormatted = IntStream.range(0, personsToDelete.size())
+                        .mapToObj(i -> (i + 1) + ". " + personsToDelete.get(i).getName().fullName)
+                        .collect(Collectors.joining("\n"));
+            }
+
+            // determine the count to display: if override was provided, use its line count
+            int displayCount;
+            if (personsListOverride != null && !personsListOverride.isEmpty()) {
+                displayCount = (int) personsListOverride.lines().count();
+            } else {
+                displayCount = personsToDelete.size();
+            }
 
             String notFoundMessage = "";
             if (!notFoundNames.isEmpty()) {
@@ -178,7 +214,7 @@ public class DeleteCommand extends Command {
             ConfirmationManager.setPending(personsToDelete, notFoundNames);
             // Return only the confirmation warning (tests expect no extra prompt text appended)
             return new CommandResult(String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE,
-                    personsToDelete.size(), personsFormatted) + notFoundMessage);
+                    displayCount, personsFormatted) + notFoundMessage + duplicateMessage);
         }
         return null;
     }

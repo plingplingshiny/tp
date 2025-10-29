@@ -168,6 +168,11 @@ Examples:
 * `delete n/John Doe n/Jane Smith` shows a confirmation message listing both persons; re-run with `confirm/yes` to proceed.
 * `delete n/John Doe n/Jane Smith confirm/yes` deletes both John Doe and Jane Smith.
 
++Note about deletion by name:
++* When you provide a `NAME` to delete (e.g., `delete n/John Doe`), PropertyPal will now match and delete all persons whose full name exactly matches `John Doe` (case-insensitive matching is used internally). If the name matches multiple entries, the application will display a confirmation warning listing all matched entries and append a note such as:
++  `Note: Multiple entries found for 'John Doe' — all matching entries will be deleted.`
++  You can then type `yes` to confirm or `no` to abort. To skip the interactive prompt and delete immediately, include `confirm/yes` in the original delete command (e.g., `delete n/John Doe confirm/yes`).
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
