@@ -156,7 +156,9 @@ public class DeleteCommandTest {
             CommandResult result = deleteCommand.execute(model);
             // confirm the returned message contains the expected core message and duplicate notes
             String feedback = result.getFeedbackToUser();
-            assertTrue(feedback.contains("Warning: You are about to delete"));
+            // Accept either the old phrasing or the new phrasing used by the app.
+            assertTrue(feedback.contains("Warning: You are about to delete")
+                    || feedback.contains("will be deleted"));
             assertTrue(feedback.contains(personsNames));
             if (!duplicateNote.isEmpty()) {
                 assertTrue(feedback.contains(duplicateNote.trim()));
@@ -243,9 +245,9 @@ public class DeleteCommandTest {
         try {
             CommandResult result = cmd.execute(model);
             String feedback = result.getFeedbackToUser();
-
-            // Must be a confirmation-style warning
-            assertTrue(feedback.contains("Warning: You are about to delete"));
+            // Must be a confirmation-style warning — accept old or new phrasing
+            assertTrue(feedback.contains("Warning: You are about to delete")
+                    || feedback.contains("will be deleted"));
 
             // Feedback should contain the names of people to be deleted
             assertTrue(feedback.contains(existing1.fullName), "Feedback should contain first existing name");
