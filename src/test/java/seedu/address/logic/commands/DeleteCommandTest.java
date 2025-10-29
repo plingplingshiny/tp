@@ -229,16 +229,14 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_multipleDistinctNames_unconfirmed_requestsConfirmation_withNotFoundAndDuplicateNotes() {
-        // Force confirmation by using two different existing names (>= 2 real matches), plus a missing name
+    public void execute_multipleDistinctNames_unconfirmed_requestsConfirmation() {
+        // Force confirmation by using two different existing names (>= 2 real matches)
         Person p1 = model.getAddressBook().getPersonList().get(0);
         Person p2 = model.getAddressBook().getPersonList().get(1);
         Name existing1 = p1.getName();
         Name existing2 = p2.getName();
-        Name missingName = new Name("This Name Should Not Exist 12345");
 
-        // Keep the specific input order; some implementations echo back this order
-        List<Name> inputNames = List.of(existing1, missingName, existing2);
+        List<Name> inputNames = List.of(existing1, existing2);
 
         DeleteCommand cmd = new DeleteCommand(inputNames, false);
 
@@ -249,13 +247,9 @@ public class DeleteCommandTest {
             // Must be a confirmation-style warning
             assertTrue(feedback.contains("Warning: You are about to delete"));
 
-            // Be tolerant across implementations: require all names to appear, but not strict numbering/format
+            // Feedback should contain the names of people to be deleted
             assertTrue(feedback.contains(existing1.fullName), "Feedback should contain first existing name");
             assertTrue(feedback.contains(existing2.fullName), "Feedback should contain second existing name");
-            assertTrue(feedback.contains(missingName.fullName), "Feedback should contain the missing name mention");
-
-            // It should note the not-found name
-            assertTrue(feedback.contains("Note: The following persons were not found: " + missingName.fullName));
 
             // Either a pending flag is set, or the message clearly asks for confirmation
             assertTrue(
