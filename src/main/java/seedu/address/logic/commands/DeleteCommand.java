@@ -104,12 +104,13 @@ public class DeleteCommand extends Command {
     }
 
     private CommandResult executeDeleteByName(Model model) throws CommandException {
-        List<Person> personsMatchingName = model.getFilteredPersonList().stream()
-                .filter(person -> person.getName().equals(targetName))
+        String targetLower = targetName.fullName.toLowerCase();
+        List<Person> personsMatchingName = model.getAddressBook().getPersonList().stream()
+                .filter(person -> person.getName().fullName.toLowerCase().equals(targetLower))
                 .collect(Collectors.toList());
 
         if (personsMatchingName.isEmpty()) {
-            throw new CommandException(String.format(MESSAGE_PERSONS_NOT_FOUND, targetName.fullName));
+            throw new CommandException(String.format(Messages.MESSAGE_PERSON_NOT_FOUND, targetName.fullName));
         }
 
         if (personsMatchingName.size() == 1 && !isConfirmed) {
@@ -132,14 +133,18 @@ public class DeleteCommand extends Command {
         List<Name> distinctTargetNames = targetNames.stream().distinct().collect(Collectors.toList());
 
         for (Name name : distinctTargetNames) {
-            List<Person> personsFound = model.getFilteredPersonList().stream()
-                    .filter(p -> p.getName().equals(name))
-                    .collect(Collectors.toList());
-
-            if (personsFound.isEmpty()) {
+            boolean found = false;
+            String targetLowerName = name.fullName.toLowerCase();
+            for (Person p : model.getAddressBook().getPersonList()) {
+                String pNameLower = p.getName().fullName.toLowerCase();
+                if (pNameLower.equals(targetLowerName) && !personsToDelete.contains(p)) {
+                    personsToDelete.add(p);
+                    found = true;
+                    break; // only take the first matching person per input name
+                }
+            }
+            if (!found) {
                 notFoundNames.add(name);
-            } else {
-                personsToDelete.addAll(personsFound);
             }
         }
 

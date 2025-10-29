@@ -103,7 +103,7 @@ public class DeleteCommandTest {
     @Test
     public void execute_validNameCaseInsensitive_success() {
         Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Name nameWithDifferentCase = new Name(personToDelete.getName().fullName.toLowerCase());
+        Name nameWithDifferentCase = new Name(personToDelete.getName().fullName.toUpperCase());
         DeleteCommand deleteCommand = new DeleteCommand(nameWithDifferentCase, false);
 
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
@@ -120,22 +120,19 @@ public class DeleteCommandTest {
         Name invalidName = new Name("Nonexistent Person");
         DeleteCommand deleteCommand = new DeleteCommand(invalidName, false);
 
-        assertCommandFailure(deleteCommand, model, String.format(Messages.MESSAGE_PERSON_NOT_FOUND, invalidName.fullName));
+        assertCommandFailure(deleteCommand, model,
+                String.format(Messages.MESSAGE_PERSON_NOT_FOUND, invalidName.fullName));
     }
 
     @Test
     public void execute_multiplePersonsWithSameNameUnconfirmed_requestsConfirmation() {
-        // Add a duplicate person to the model
-        Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
-                personToDuplicate.getEmail(), personToDuplicate.getAddress(), personToDuplicate.getPropertyType(),
-                personToDuplicate.getPrice(), personToDuplicate.getTags(), personToDuplicate.getIntention());
-        model.addPerson(duplicatePerson);
-
-        List<Person> personsToDelete = model.getFilteredPersonList().stream()
-                .filter(p -> p.getName().equals(personToDuplicate.getName()))
+        // Use two existing persons with the same name from the address book (e.g., ALICE and PAULINE)
+        List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
                 .collect(Collectors.toList());
 
+        Person personToDuplicate = personsWithSameName.get(0);
+        List<Person> personsToDelete = personsWithSameName;
         DeleteCommand deleteCommand = new DeleteCommand(personToDuplicate.getName(), false);
 
         String personsNames = IntStream.range(0, personsToDelete.size())
@@ -152,17 +149,13 @@ public class DeleteCommandTest {
 
     @Test
     public void execute_multiplePersonsWithSameNameConfirmed_success() {
-        // Add a duplicate person to the model
-        Person personToDuplicate = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Person duplicatePerson = new Person(personToDuplicate.getName(), personToDuplicate.getPhone(),
-                personToDuplicate.getEmail(), personToDuplicate.getAddress(), personToDuplicate.getPropertyType(),
-                personToDuplicate.getPrice(), personToDuplicate.getTags(), personToDuplicate.getIntention());
-        model.addPerson(duplicatePerson);
-
-        List<Person> personsToDelete = model.getFilteredPersonList().stream()
-                .filter(p -> p.getName().equals(personToDuplicate.getName()))
+        // Use two existing persons with the same name from the address book (e.g., ALICE and PAULINE)
+        List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
                 .collect(Collectors.toList());
 
+        Person personToDuplicate = personsWithSameName.get(0);
+        List<Person> personsToDelete = personsWithSameName;
         DeleteCommand deleteCommand = new DeleteCommand(personToDuplicate.getName(), true);
 
         String deletedPersonsNames = personsToDelete.stream()
@@ -297,7 +290,8 @@ public class DeleteCommandTest {
         List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), invalidName);
         DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true); // confirmed
 
-        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(firstPerson))
+        String expectedMessage = String.format(
+                DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(firstPerson))
                 + "\nNote: The following persons were not found: " + invalidName.toString();
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
