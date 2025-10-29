@@ -175,7 +175,7 @@ the system constructs a `PersonContainsKeywordsPredicate` containing separate li
 The predicate then evaluates to `true` if any of the person’s fields contain any of the corresponding keywords.
 This is done through a series of `anyMatch` calls and a final ``||`` chain:
 ```java
-return nameMatches || phoneMatches || emailMatches || addressMatches || tagMatches
+return nameMatches || phoneMatches || emailMatches || addressMatches
         || priceMatches || propertyTypeMatches || intentionMatches;
 ```
 #### Rationale for `OR` search
@@ -369,7 +369,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​           | I want to …​                        | So that I can…​                                                 |
 |----------|-------------------|-------------------------------------|-----------------------------------------------------------------|
-| `* * *`  | real estate agent | add a new client’s contact details  | manage potential buyers and sellers                             |
+| `* * *`  | real estate agent | add a new client’s contact details  | manage potential sellers                                        |
 | `* * *`  | real estate agent | delete a client's contact           | remove entries that I no longer need                            |
 | `* * *`  | real estate agent | view a list of all clients          | get an overview of my client database                           |
 | `* * *`  | real estate agent | find a client by any field          | locate a client even if I only recall part of their details     |
@@ -385,7 +385,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case 1: Add a client contact**
 
 **Guarantees:**
-* Client details are saved if all fields are valid and unique.
+* Client details are saved if all fields are valid and at least 1 field is unique.
 * No duplicates will be created.
 
 **MSS**
@@ -410,6 +410,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * 1b. Duplicate client detected
 
     * 1b1. PropertyPal displays a message indicating client already exists.
+
+      Use case ends.
+
+* 1c. Duplicate name or address detected, but at least 1 other detail is unique
+
+    * 1c1. PropertyPal adds the new client and displays a success message, with a warning that a contact with the same name or address is detected.
 
       Use case ends.
 
@@ -536,7 +542,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
 * **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
 * **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
-* **Duplicate entry**: A contact record that has the same name, phone number, email, and address as an existing record.
+* **Duplicate entry**: A contact record that has the same intention, name, phone, email, address, property type, and price as another existing record.
 
 --------------------------------------------------------------------------------------------------------------------
 
