@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
@@ -30,7 +31,7 @@ import seedu.address.model.person.Person;
  */
 public class DeleteCommandTest {
 
-    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
@@ -127,7 +128,7 @@ public class DeleteCommandTest {
         // Use two existing persons with the same name from the address book (e.g., ALICE and PAULINE)
         List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         Person personToDuplicate = personsWithSameName.get(0);
         // build delete command using the name (not the full person list)
@@ -136,7 +137,7 @@ public class DeleteCommandTest {
         // compute actual persons that will be deleted (all matches for the provided name)
         List<Person> actualPersonsToDelete = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(personToDuplicate.getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         String personsNames = IntStream.range(0, actualPersonsToDelete.size())
                 .mapToObj(i -> (i + 1) + ". " + actualPersonsToDelete.get(i).getName().fullName)
@@ -173,7 +174,7 @@ public class DeleteCommandTest {
         // Use two existing persons with the same name from the address book (e.g., ALICE and PAULINE)
         List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         Person personToDelete = personsWithSameName.get(0);
         // build delete command using the name (not the full person list)
@@ -182,7 +183,7 @@ public class DeleteCommandTest {
         // compute actual persons that will be deleted (all matches for the provided name)
         List<Person> actualPersonsToDelete = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(personToDelete.getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         String deletedPersonsNames = actualPersonsToDelete.stream()
                 .map(p -> p.getName().fullName)
@@ -202,7 +203,7 @@ public class DeleteCommandTest {
         // Use two existing persons with the same name from the address book (e.g., ALICE and PAULINE)
         List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         Person personToDelete = personsWithSameName.get(0);
         // build delete command using the name (not the full person list)
@@ -211,7 +212,7 @@ public class DeleteCommandTest {
         // compute actual persons that will be deleted (all matches for the provided name)
         List<Person> actualPersonsToDelete = model.getAddressBook().getPersonList().stream()
                 .filter(p -> p.getName().equals(personToDelete.getName()))
-                .collect(Collectors.toList());
+                .toList();
 
         String deletedPersonsNames = actualPersonsToDelete.stream()
                 .map(p -> p.getName().fullName)
@@ -233,7 +234,7 @@ public class DeleteCommandTest {
         DeleteCommand deleteFirstCommandCopy = new DeleteCommand(INDEX_FIRST_PERSON);
 
         // same object -> returns true
-        assertEquals(deleteFirstCommand, deleteFirstCommand);
+        assertSame(deleteFirstCommand, deleteFirstCommand);
 
         // same values -> returns true
         assertEquals(deleteFirstCommand, deleteFirstCommandCopy);
