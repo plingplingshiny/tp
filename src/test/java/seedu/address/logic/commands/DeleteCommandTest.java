@@ -368,6 +368,78 @@ public class DeleteCommandTest {
         assertFalse(deleteCommand1.equals(1));
     }
 
+    @Test
+    public void confirm_yes_confirmsAndDeletes() throws Exception {
+        // prepare a deletion that requires confirmation (two persons with same name)
+        List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
+                .collect(Collectors.toList());
+
+        // ensure we have at least 2
+        assertTrue(personsWithSameName.size() >= 2);
+
+        DeleteCommand deleteCommand = new DeleteCommand(personsWithSameName.stream()
+                .map(Person::getName).collect(Collectors.toList()), false);
+
+        CommandResult deleteResult = deleteCommand.execute(model);
+        // should set pending confirmation
+        assertTrue(ConfirmationManager.hasPending());
+
+        // now confirm
+        ConfirmCommand confirm = new ConfirmCommand(true);
+        CommandResult confirmResult = confirm.execute(model);
+
+        // verify deletion happened
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
+                personsWithSameName.size(), personsWithSameName.stream().map(p -> p.getName().fullName).collect(Collectors.joining(", ")));
+
+        assertEquals(expectedMessage, confirmResult.getFeedbackToUser());
+        // pending cleared
+        assertFalse(ConfirmationManager.hasPending());
+    }
+
+    @Test
+    public void confirm_no_abortsAndKeepsPersons() throws Exception {
+        List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
+                .collect(Collectors.toList());
+
+        assertTrue(personsWithSameName.size() >= 2);
+
+        DeleteCommand deleteCommand = new DeleteCommand(personsWithSameName.stream()
+                .map(Person::getName).collect(Collectors.toList()), false);
+
+        deleteCommand.execute(model);
+        assertTrue(ConfirmationManager.hasPending());
+
+        ConfirmCommand confirmNo = new ConfirmCommand(false);
+        CommandResult result = confirmNo.execute(model);
+
+        assertEquals(ConfirmCommand.MESSAGE_ABORTED, result.getFeedbackToUser());
+        assertFalse(ConfirmationManager.hasPending());
+    }
+
+    @Test
+    public void confirm_invalid_showsInvalidMessageAndKeepsPending() throws Exception {
+        List<Person> personsWithSameName = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getName().equals(model.getAddressBook().getPersonList().get(1).getName()))
+                .collect(Collectors.toList());
+
+        assertTrue(personsWithSameName.size() >= 2);
+
+        DeleteCommand deleteCommand = new DeleteCommand(personsWithSameName.stream()
+                .map(Person::getName).collect(Collectors.toList()), false);
+
+        deleteCommand.execute(model);
+        assertTrue(ConfirmationManager.hasPending());
+
+        InvalidConfirmationCommand invalid = new InvalidConfirmationCommand();
+        CommandResult result = invalid.execute(model);
+
+        assertEquals(ConfirmCommand.MESSAGE_INVALID, result.getFeedbackToUser());
+        assertTrue(ConfirmationManager.hasPending());
+    }
+
     /**
      * Updates {@code model}'s filtered list to show no one.
      */

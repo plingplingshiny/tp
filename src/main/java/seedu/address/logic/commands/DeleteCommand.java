@@ -31,9 +31,7 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS = "Deleted %1$d persons: %2$s";
     public static final String MESSAGE_CONFIRM_DELETE_MULTIPLE =
-            "Warning: You are about to delete %1$d persons:\n%2$s\n"
-            + "To confirm, re-enter the command with the exact names "
-            + "and add confirm/yes.";
+            "Warning: You are about to delete %1$d persons:\n%2$s\n";
     public static final String MESSAGE_PERSONS_NOT_FOUND = "The following persons were not found: %1$s";
 
     private enum TargetType {
@@ -130,7 +128,8 @@ public class DeleteCommand extends Command {
     private CommandResult executeDeleteMultipleNames(Model model) throws CommandException {
         List<Person> personsToDelete = new ArrayList<>();
         List<Name> notFoundNames = new ArrayList<>();
-        List<Name> distinctTargetNames = targetNames.stream().distinct().collect(Collectors.toList());
+        // preserve duplicates in targetNames so repeated names can map to multiple matching persons
+        List<Name> distinctTargetNames = new ArrayList<>(targetNames);
 
         for (Name name : distinctTargetNames) {
             boolean found = false;
@@ -173,6 +172,10 @@ public class DeleteCommand extends Command {
                 notFoundMessage = "\nNote: The following persons were not found: "
                         + notFoundNames.stream().map(n -> n.fullName).collect(Collectors.joining(", "));
             }
+
+            // set pending confirmation so user can simply type 'yes' or 'no'
+            ConfirmationManager.setPending(personsToDelete, notFoundNames);
+            // Return only the confirmation warning (tests expect no extra prompt text appended)
             return new CommandResult(String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE,
                     personsToDelete.size(), personsFormatted) + notFoundMessage);
         }

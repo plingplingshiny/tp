@@ -30,7 +30,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_validNameArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, " n/Alice Pauline", new DeleteCommand(new Name("Alice Pauline")));
+        assertParseSuccess(parser, " n/Alice Pauline", new DeleteCommand(new Name("Alice Pauline"), false));
     }
 
     @Test
@@ -63,15 +63,14 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_singleNameWithValidConfirmation_returnsSingleDeleteCommand() {
-        // Single name with confirmation should still create single name delete command
         assertParseSuccess(parser, " n/Alice Pauline confirm/yes",
-                new DeleteCommand(new Name("Alice Pauline")));
+                new DeleteCommand(new Name("Alice Pauline"), true));
     }
 
     @Test
     public void parse_invalidConfirmationValue_throwsParseException() {
-        assertParseFailure(parser, " n/Alice n/Bob confirm/no",
-                "Confirmation value must be 'yes' or leave it empty");
+        assertParseFailure(parser, " n/Alice n/Bob confirm/maybe",
+                "Confirmation value must be 'yes', 'no' or empty.");
     }
 
     @Test
