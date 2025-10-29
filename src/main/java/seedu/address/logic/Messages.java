@@ -47,9 +47,7 @@ public class Messages {
                 .append("; Property Type: ")
                 .append(person.getPropertyType())
                 .append("; Price: ")
-                .append(person.getPrice())
-                .append("; Tags: ");
-        person.getTags().forEach(builder::append);
+                .append(person.getPrice());
         return builder.toString();
     }
 

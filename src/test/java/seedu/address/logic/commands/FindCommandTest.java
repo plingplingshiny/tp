@@ -39,13 +39,11 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Collections.emptyList(),
                         Collections.emptyList());
 
         PersonContainsKeywordsPredicate secondPredicate =
                 new PersonContainsKeywordsPredicate(
                         Collections.singletonList("second"),
-                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
@@ -84,7 +82,6 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -103,7 +100,6 @@ public class FindCommandTest {
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
-                        Collections.emptyList(),
                         Collections.emptyList());
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -112,30 +108,10 @@ public class FindCommandTest {
     }
 
     @Test
-    public void execute_tagKeyword_personsFoundByTag() {
-        // Assuming some TypicalPersons have tags like "friends" or "colleagues"
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 4);
-        PersonContainsKeywordsPredicate predicate =
-                new PersonContainsKeywordsPredicate(
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        Collections.singletonList("friends"),
-                        Collections.emptyList(),
-                        Collections.emptyList(),
-                        Collections.emptyList());
-        FindCommand command = new FindCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-    }
-
-    @Test
     public void toStringMethod() {
         PersonContainsKeywordsPredicate predicate =
                 new PersonContainsKeywordsPredicate(
                         Arrays.asList("keyword"),
-                        Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),
                         Collections.emptyList(),

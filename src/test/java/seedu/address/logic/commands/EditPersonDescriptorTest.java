@@ -11,7 +11,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PRICE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PROPERTY_TYPE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 
 import org.junit.jupiter.api.Test;
 
@@ -61,10 +60,6 @@ public class EditPersonDescriptorTest {
         // different price -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withPrice(VALID_PRICE_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
-
-        // different tags -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_HUSBAND).build();
-        assertFalse(DESC_AMY.equals(editedAmy));
     }
 
     @Test
@@ -76,8 +71,7 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getEmail().orElse(null) + ", address="
                 + editPersonDescriptor.getAddress().orElse(null) + ", property type="
                 + editPersonDescriptor.getPropertyType().orElse(null) + ", price="
-                + editPersonDescriptor.getPrice().orElse(null) + ", tags="
-                + editPersonDescriptor.getTags().orElse(null) + ", intention="
+                + editPersonDescriptor.getPrice().orElse(null) + ", intention="
                 + editPersonDescriptor.getIntention().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }

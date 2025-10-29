@@ -11,7 +11,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PRICE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PROPERTY_TYPE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
@@ -24,12 +23,6 @@ import seedu.address.testutil.PersonBuilder;
 public class PersonTest {
 
     @Test
-    public void asObservableList_modifyList_throwsUnsupportedOperationException() {
-        Person person = new PersonBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> person.getTags().remove(0));
-    }
-
-    @Test
     public void isSameName() {
         // same object -> returns true
         assertTrue(ALICE.isSameName(ALICE));
@@ -40,7 +33,7 @@ public class PersonTest {
         // same name, all other attributes different -> returns true
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB).withPropertyType(VALID_PROPERTY_TYPE_BOB).withPrice(VALID_PRICE_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .build();
         assertTrue(ALICE.isSameName(editedAlice));
 
         // different name, all other attributes same -> returns false
@@ -68,7 +61,7 @@ public class PersonTest {
         // same name, all other attributes different -> returns false
         Person editedAlice = new PersonBuilder(ALICE).withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB)
                 .withAddress(VALID_ADDRESS_BOB).withPropertyType(VALID_PROPERTY_TYPE_BOB).withPrice(VALID_PRICE_BOB)
-                .withTags(VALID_TAG_HUSBAND).build();
+                .build();
         assertFalse(ALICE.isSamePerson(editedAlice));
 
         // different name, all other attributes same -> returns false
@@ -87,10 +80,6 @@ public class PersonTest {
         // same intention, all other attributes same -> returns true
         Person anotherAlice = new PersonBuilder(ALICE).withIntention("sell").build();
         assertTrue(ALICE.isSamePerson(anotherAlice));
-
-        // same name, same phone, same email, same address, same intention, different tags -> returns true
-        editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
 
         // different intention, all other attributes same -> returns false
         editedAlice = new PersonBuilder(ALICE).withIntention(VALID_INTENTION_RENT).build();
@@ -139,10 +128,6 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withPrice(VALID_PRICE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different tags -> returns false
-        editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
-        assertFalse(ALICE.equals(editedAlice));
-
         // different intention -> returns false
         editedAlice = new PersonBuilder(ALICE).withIntention(VALID_INTENTION_RENT).build();
         assertFalse(ALICE.equals(editedAlice));
@@ -162,7 +147,6 @@ public class PersonTest {
                 + ", address=" + ALICE.getAddress()
                 + ", property type=" + ALICE.getPropertyType()
                 + ", price=" + ALICE.getPrice()
-                + ", tags=" + ALICE.getTags()
                 + ", intention=" + ALICE.getIntention() + "}";
         assertEquals(expected, ALICE.toString());
     }
@@ -171,44 +155,39 @@ public class PersonTest {
     public void constructor_null_throwsNullPointerException() {
         // All fields null
         assertThrows(NullPointerException.class, () ->
-                new Person(null, null, null, null, null, null, null, null));
+                new Person(null, null, null, null, null, null, null));
 
         // Individual null fields, test each required field
         assertThrows(NullPointerException.class, () ->
                 new Person(null, ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), null, ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), null, ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getIntention()));
 
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), null,
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
+                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getIntention()));
 
         // Test the new fields specifically - propertyType
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        null, ALICE.getPrice(), ALICE.getTags(), ALICE.getIntention()));
+                        null, ALICE.getPrice(), ALICE.getIntention()));
 
         // Test the new fields specifically - price
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), null, ALICE.getTags(), ALICE.getIntention()));
-
-        // Tags null
-        assertThrows(NullPointerException.class, () ->
-                new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), null, ALICE.getIntention()));
+                        ALICE.getPropertyType(), null, ALICE.getIntention()));
 
         // Intention null
         assertThrows(NullPointerException.class, () ->
                 new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                        ALICE.getPropertyType(), ALICE.getPrice(), ALICE.getTags(), null));
+                        ALICE.getPropertyType(), ALICE.getPrice(), null));
     }
 
     @Test
@@ -254,28 +233,9 @@ public class PersonTest {
     }
 
     @Test
-    public void isSamePerson_sameFieldsExceptTags_returnsTrue() {
-        // Test that isSamePerson returns true when only tags are different
-        Person editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
-        assertTrue(ALICE.isSamePerson(editedAlice));
-    }
-
-    @Test
-    public void constructor_withoutIntention_defaultsToIntention() {
-        Person person = new Person(
-                ALICE.getName(),
-                ALICE.getPhone(),
-                ALICE.getEmail(),
-                ALICE.getAddress(),
-                ALICE.getTags()
-        );
-        assertEquals(new Intention("sell"), person.getIntention());
-    }
-
-    @Test
     public void constructorWithIntention() {
         Person person = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
-                ALICE.getTags(), new Intention("rent"));
+                new Intention("rent"));
 
         assertEquals(ALICE.getName(), person.getName());
         assertEquals(ALICE.getPhone(), person.getPhone());
@@ -283,7 +243,6 @@ public class PersonTest {
         assertEquals(ALICE.getAddress(), person.getAddress());
         assertEquals(new PropertyType("unspecified"), person.getPropertyType());
         assertEquals(new Price("0"), person.getPrice());
-        assertEquals(ALICE.getTags(), person.getTags());
         assertEquals(new Intention("rent"), person.getIntention());
     }
 }

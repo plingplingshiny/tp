@@ -27,7 +27,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> phoneKeywords;
     private final List<String> emailKeywords;
     private final List<String> addressKeywords;
-    private final List<String> tagKeywords;
     private final List<String> priceKeywords;
     private final List<String> propertyTypeKeywords;
     private final List<String> intentionKeywords;
@@ -39,7 +38,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                                            List<String> phoneKeywords,
                                            List<String> emailKeywords,
                                            List<String> addressKeywords,
-                                           List<String> tagKeywords,
                                            List<String> priceKeywords,
                                            List<String> propertyTypeKeywords,
                                            List<String> intentionKeywords) {
@@ -50,7 +48,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         this.phoneKeywords = phoneKeywords;
         this.emailKeywords = emailKeywords;
         this.addressKeywords = addressKeywords;
-        this.tagKeywords = tagKeywords;
         this.priceKeywords = priceKeywords;
         this.propertyTypeKeywords = propertyTypeKeywords;
         this.intentionKeywords = intentionKeywords;
@@ -70,10 +67,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         boolean addressMatches = addressKeywords.stream()
                 .anyMatch(k -> person.getAddress().value.toLowerCase().contains(k.toLowerCase()));
 
-        boolean tagMatches = tagKeywords.stream()
-                .anyMatch(k -> person.getTags().stream()
-                        .anyMatch(tag -> tag.tagName.toLowerCase().contains(k.toLowerCase())));
-
         boolean priceMatches = priceKeywords.stream()
                 .anyMatch(k -> priceMatchesKeyword(person.getPrice().value, k));
 
@@ -83,7 +76,7 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
         boolean intentionMatches = intentionKeywords.stream()
                 .anyMatch(k -> person.getIntention().intentionName.toLowerCase().contains(k.toLowerCase()));
 
-        return nameMatches || phoneMatches || emailMatches || addressMatches || tagMatches
+        return nameMatches || phoneMatches || emailMatches || addressMatches
                 || priceMatches || propertyTypeMatches || intentionMatches;
     }
 
@@ -100,7 +93,6 @@ public class PersonContainsKeywordsPredicate implements Predicate<Person> {
                 && equalIgnoreCase(phoneKeywords, o.phoneKeywords)
                 && equalIgnoreCase(emailKeywords, o.emailKeywords)
                 && equalIgnoreCase(addressKeywords, o.addressKeywords)
-                && equalIgnoreCase(tagKeywords, o.tagKeywords)
                 && equalNormalizedPrices(priceKeywords, o.priceKeywords)
                 && equalIgnoreCase(propertyTypeKeywords, o.propertyTypeKeywords)
                 && equalIgnoreCase(intentionKeywords, o.intentionKeywords);
