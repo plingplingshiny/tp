@@ -129,9 +129,9 @@ public class DeleteCommand extends Command {
                     duplicateMessage,
                     null
             );
-             if (confirmationResult != null) {
-                 return confirmationResult;
-             }
+            if (confirmationResult != null) {
+                return confirmationResult;
+            }
             deletePersons(model, personsMatchingName);
             return createSuccessMessage(personsMatchingName, new ArrayList<>());
         }
@@ -184,9 +184,9 @@ public class DeleteCommand extends Command {
                 duplicateNotes.toString(),
                 personsNamesFromInput
         );
-         if (confirmationResult != null) {
-             return confirmationResult;
-         }
+        if (confirmationResult != null) {
+            return confirmationResult;
+        }
 
         deletePersons(model, personsToDelete);
         return createSuccessMessage(personsToDelete, notFoundNames);
@@ -226,9 +226,9 @@ public class DeleteCommand extends Command {
                     String.format(MESSAGE_CONFIRM_DELETE_MULTIPLE, displayCount, personsFormatted)
                             + notFoundMessage
                             + duplicateMessage);
-         }
-         return null;
-     }
+        }
+        return null;
+    }
 
     private void deletePersons(Model model, List<Person> personsToDelete) {
         for (Person person : personsToDelete) {
