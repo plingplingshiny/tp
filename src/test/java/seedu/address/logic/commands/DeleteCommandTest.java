@@ -390,8 +390,12 @@ public class DeleteCommandTest {
         CommandResult confirmResult = confirm.execute(model);
 
         // verify deletion happened
+        String deletedPersonsNames = personsWithSameName.stream()
+                .map(p -> p.getName().fullName)
+                .collect(Collectors.joining(", "));
+
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS,
-                personsWithSameName.size(), personsWithSameName.stream().map(p -> p.getName().fullName).collect(Collectors.joining(", ")));
+                personsWithSameName.size(), deletedPersonsNames);
 
         assertEquals(expectedMessage, confirmResult.getFeedbackToUser());
         // pending cleared
