@@ -15,6 +15,9 @@ import seedu.address.model.person.Name;
 /** Parses input arguments and creates a DeleteCommand. */
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
+    public static final String MESSAGE_INVALID_CONFIRMATION =
+            "Confirmation value must be 'yes', 'no', 'y', 'n', or empty.";
+
     @Override
     public DeleteCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_CONFIRM);
@@ -77,7 +80,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         } else if ("no".equals(confirmValue) || "n".equals(confirmValue) || confirmValue.isEmpty()) {
             return false;
         } else {
-            throw new ParseException("Confirmation value must be 'yes', 'no', 'y', 'n', or empty.");
+            throw new ParseException(MESSAGE_INVALID_CONFIRMATION);
         }
     }
 
