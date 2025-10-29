@@ -16,7 +16,7 @@ public class Price {
     /*
      * Price must be a non-empty string of digits.
      */
-    public static final String VALIDATION_REGEX = "[0-9,]+(\\.[0-9]{1,2})?";
+    public static final String VALIDATION_REGEX = "^(0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(\\.\\d{1,2})?$";
 
     public final String value;
 
