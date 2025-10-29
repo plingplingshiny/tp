@@ -24,7 +24,7 @@ public class ConfirmationManagerTest {
     }
 
     @Test
-    public void setPending_and_clearPending_behaviour() {
+    public void setPendingClearPendingBehaviour() {
         Person p = new PersonBuilder().withName("Alice").build();
         Name notFound = new Name("Bob");
 
@@ -39,4 +39,3 @@ public class ConfirmationManagerTest {
         assertTrue(ConfirmationManager.getNotFoundNames().isEmpty());
     }
 }
-

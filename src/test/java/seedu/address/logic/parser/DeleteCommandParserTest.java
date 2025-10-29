@@ -38,12 +38,17 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_singleName_withConfirmationVariants() throws Exception {
-        assertEquals(new DeleteCommand(new Name("Alice"), true), addressParser.parseCommand("delete n/Alice confirm/yes"));
-        assertEquals(new DeleteCommand(new Name("Alice"), true), addressParser.parseCommand("delete n/Alice confirm/y"));
-        assertEquals(new DeleteCommand(new Name("Alice"), false), addressParser.parseCommand("delete n/Alice confirm/no"));
-        assertEquals(new DeleteCommand(new Name("Alice"), false), addressParser.parseCommand("delete n/Alice confirm/n"));
+        assertEquals(new DeleteCommand(new Name("Alice"), true),
+                addressParser.parseCommand("delete n/Alice confirm/yes"));
+        assertEquals(new DeleteCommand(new Name("Alice"), true),
+                addressParser.parseCommand("delete n/Alice confirm/y"));
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/no"));
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/n"));
         // empty confirm value treated as false
-        assertEquals(new DeleteCommand(new Name("Alice"), false), addressParser.parseCommand("delete n/Alice confirm/"));
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/"));
     }
 
     @Test

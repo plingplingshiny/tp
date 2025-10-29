@@ -23,7 +23,7 @@ public class DeleteCommandCoverageTest {
     private final Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
 
     @Test
-    public void hashCode_index_and_toString_indexPath() {
+    public void hashCodeIndexAndToStringIndexPath() {
         DeleteCommand byIndex = new DeleteCommand(Index.fromOneBased(1));
         int h1 = byIndex.hashCode();
         int h2 = byIndex.hashCode();
@@ -33,7 +33,7 @@ public class DeleteCommandCoverageTest {
     }
 
     @Test
-    public void hashCode_multipleNames_variants_and_confirmed_execute_includesNotFoundNote() throws Exception {
+    public void hashCodeMultipleNamesVariantsAndConfirmedExecuteIncludesNotFoundNote() throws Exception {
         // pick one existing name and one nonexistent
         Name existing = TypicalPersons.ALICE.getName();
         Name notFound = new Name("Nonexistent Person ZZ");
