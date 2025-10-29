@@ -9,13 +9,14 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class PropertyType {
 
-    public static final String MESSAGE_CONSTRAINTS = "Property type can take any values, and it should not be blank";
+    public static final String MESSAGE_CONSTRAINTS = "Property type can take any values (max 100 chars), "
+            + "and it should not be blank";
 
     /*
      * The first character of the property type must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "[^\\s].*";
+    public static final String VALIDATION_REGEX = "[^\\s].{0,99}";
 
     public final String value;
 

@@ -27,6 +27,8 @@ public class PropertyTypeTest {
         // invalid property types
         assertFalse(PropertyType.isValidPropertyType("")); // empty string
         assertFalse(PropertyType.isValidPropertyType(" ")); // spaces only
+        assertFalse(PropertyType.isValidPropertyType("Private Condominium (2-Bedroom, Freehold, near MRT) "
+                + "omhiuyigtfrdertgyhujikhjfreddrtctrdrdtrdtrdterjerekjrdtr")); // more than 100 char
 
         // valid property types
         assertTrue(PropertyType.isValidPropertyType("condominium"));

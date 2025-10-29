@@ -10,13 +10,14 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 public class Price {
 
-    public static final String MESSAGE_CONSTRAINTS = "Price should only contain digits, commas,"
+    public static final String MESSAGE_CONSTRAINTS = "Price should only contain digits (max 13 digits total), commas,"
             + "and an optional decimal point (up to 2 decimal places), and it should not be blank";
 
     /*
      * Price must be a non-empty string of digits.
      */
-    public static final String VALIDATION_REGEX = "^(0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(\\.\\d{1,2})?$";
+    public static final String VALIDATION_REGEX =
+            "^(?=(?:\\D*\\d\\D*){1,13}$)(0|[1-9]\\d{0,2}(?:,\\d{3})+|[1-9]\\d*)(\\.\\d{1,2})?$";
 
     public final String value;
 
