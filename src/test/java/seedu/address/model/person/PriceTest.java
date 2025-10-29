@@ -45,12 +45,14 @@ public class PriceTest {
         assertFalse(Price.isValidPrice("12345678901234")); // too many digits
         assertFalse(Price.isValidPrice("99,999,999,999,999"));
         assertFalse(Price.isValidPrice("999,999,999,999.99"));
+        assertFalse(Price.isValidPrice("12.345")); // too many digits after decimal point
 
         // valid prices
         assertTrue(Price.isValidPrice("0")); // zero
         assertTrue(Price.isValidPrice("1")); // single digit
         assertTrue(Price.isValidPrice("100")); // multiple digits
         assertTrue(Price.isValidPrice("12.34")); // decimal point
+        assertTrue(Price.isValidPrice("12.5"));
         assertTrue(Price.isValidPrice("1,000")); // comma separator
         assertTrue(Price.isValidPrice("12,345,678"));
         assertTrue(Price.isValidPrice("1,000.50")); // comma separator and decimal point
