@@ -158,7 +158,6 @@ Format: `delete INDEX` or `delete n/NAME [n/NAME]… [yes]`
 * For deletion by name, each `NAME` must match a contact’s full name exactly (case-sensitive). If multiple contacts share the same exact name, only the first match will be deleted; use index to disambiguate.
 * When deleting multiple persons by name, PropertyPal will first show a confirmation prompt listing the persons to be deleted; add `yes` to proceed.
 * Deleting multiple names is all‑or‑nothing: if any given name is not found, nobody is deleted and an error listing the missing names is shown.
-* Confirmation is not accepted for deletion by index (i.e. `confirm/...` is invalid with `delete INDEX`).
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in PropertyPal.
