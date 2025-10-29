@@ -31,7 +31,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
     * `list` : Lists all contacts.
 
-    * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to the Address Book.
+    * `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000` : Adds a contact named `John Doe` to the Address Book.
 
     * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -70,8 +70,8 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
-* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions, either selling or renting. This helps in categorizing clients based on their property-related goals.
-  * **Accepted values:** `sell` or `rent` (lowercase only); other values, abbreviations, or synonyms are not accepted.
+* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions: selling or renting. This helps in categorizing clients based on their property-related goals.
+  * **Accepted values:** `sell` or `rent` (case-insensitive). Inputs are accepted in any case and will be normalized to lowercase internally (e.g., `Sell`, `SELL`, and `sell` are all valid and stored as `sell`). Other values, abbreviations, or synonyms are not accepted.
 
 ### Viewing help : `help`
 
@@ -94,8 +94,8 @@ Format: `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYP
 </box>
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison pt/prison cell pr/0 p/1234567 t/criminal`
+* `add i/sell n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 pt/HDB 3 room flat pr/470000`
+* `add i/rent n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison pt/prison cell pr/0 p/1234567 t/criminal`
 
 ### Listing all persons : `list`
 
