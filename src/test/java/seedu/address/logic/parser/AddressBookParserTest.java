@@ -23,7 +23,7 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_add_returnsAddCommand() throws Exception {
+    public void parseCommandAddReturnsAddCommand() throws Exception {
         // use a minimal valid add command matching AddCommand.MESSAGE_USAGE
         String addArgs = "add i/sell n/John Doe p/98765432 e/johnd@example.com "
                 + "a/SomeAddress pt/hdb pr/450000";
@@ -31,12 +31,12 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_help_returnsHelp() throws Exception {
+    public void parseCommandHelpReturnsHelp() throws Exception {
         assertTrue(parser.parseCommand("help") instanceof HelpCommand);
     }
 
     @Test
-    public void parseCommand_delete_parsesToDelete() throws Exception {
+    public void parseCommandDeleteParsesToDelete() throws Exception {
         assertTrue(parser.parseCommand("delete 1") instanceof DeleteCommand);
     }
 

@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
-
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;

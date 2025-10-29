@@ -20,24 +20,24 @@ public class DeleteCommandParserTest {
     private final AddressBookParser addressParser = new AddressBookParser();
 
     @Test
-    public void parse_validIndex_returnsDeleteCommand() throws Exception {
+    public void parseValidIndexReturnsDeleteCommand() throws Exception {
         DeleteCommand cmd = (DeleteCommand) addressParser.parseCommand("delete 1");
         assertEquals(new DeleteCommand(Index.fromOneBased(1)), cmd);
     }
 
     @Test
-    public void parse_indexWithConfirmation_throwsParseException() {
+    public void parseIndexWithConfirmationThrowsParseException() {
         assertThrows(ParseException.class, () -> addressParser.parseCommand("delete 1 confirm/yes"));
     }
 
     @Test
-    public void parse_singleName_returnsDeleteByName() throws Exception {
+    public void parseSingleNameReturnsDeleteByName() throws Exception {
         DeleteCommand cmd = (DeleteCommand) addressParser.parseCommand("delete n/Alice");
         assertEquals(new DeleteCommand(new Name("Alice")), cmd);
     }
 
     @Test
-    public void parse_singleName_withConfirmationVariants() throws Exception {
+    public void parseSingleNameWithConfirmationVariants() throws Exception {
         assertEquals(new DeleteCommand(new Name("Alice"), true),
                 addressParser.parseCommand("delete n/Alice confirm/yes"));
         assertEquals(new DeleteCommand(new Name("Alice"), true),

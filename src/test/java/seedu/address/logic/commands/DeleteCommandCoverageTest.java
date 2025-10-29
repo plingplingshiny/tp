@@ -1,13 +1,17 @@
 package seedu.address.logic.commands;
 
+// Static imports
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+// Standard Java imports
 import java.util.Arrays;
 import java.util.List;
 
+// Third party imports
 import org.junit.jupiter.api.Test;
 
+// Project imports
 import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
