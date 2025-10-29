@@ -9,19 +9,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javafx.collections.ObservableList;
+
+import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
-import seedu.address.commons.core.GuiSettings;
-import java.nio.file.Path;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
@@ -42,23 +42,85 @@ public class ConfirmCommandTest {
         }
 
         // ---- Unused methods in these tests: throw to catch accidental use ----
-        @Override public ReadOnlyAddressBook getAddressBook() { throw new UnsupportedOperationException(); }
-        @Override public void setUserPrefs(ReadOnlyUserPrefs userPrefs) { throw new UnsupportedOperationException(); }
-        @Override public ReadOnlyUserPrefs getUserPrefs() { throw new UnsupportedOperationException(); }
-        @Override public GuiSettings getGuiSettings() { throw new UnsupportedOperationException(); }
-        @Override public void setGuiSettings(GuiSettings guiSettings) { throw new UnsupportedOperationException(); }
-        @Override public void addPerson(Person person) { throw new UnsupportedOperationException(); }
-        @Override public boolean hasPerson(Person person) { throw new UnsupportedOperationException(); }
-        @Override public void setAddressBook(ReadOnlyAddressBook newData) { throw new UnsupportedOperationException(); }
-        @Override public void setPerson(Person target, Person editedPerson) { throw new UnsupportedOperationException(); }
-        @Override public ObservableList<Person> getFilteredPersonList() { throw new UnsupportedOperationException(); }
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            throw new UnsupportedOperationException();
+        }
 
-        @Override public Path getAddressBookFilePath() { throw new UnsupportedOperationException(); }
-        @Override public void setAddressBookFilePath(Path addressBookFilePath) { throw new UnsupportedOperationException(); }
-        @Override public void sortFilteredPersonListByName() { throw new UnsupportedOperationException(); }
-        @Override public void updateFilteredPersonList(Predicate<Person> predicate) { throw new UnsupportedOperationException(); }
-        @Override public boolean hasName(Person person) { throw new UnsupportedOperationException(); }
-        @Override public boolean hasAddress(Person person) { throw new UnsupportedOperationException(); }
+        @Override
+        public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ReadOnlyUserPrefs getUserPrefs() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public GuiSettings getGuiSettings() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setGuiSettings(GuiSettings guiSettings) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void addPerson(Person person) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean hasPerson(Person person) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setAddressBook(ReadOnlyAddressBook newData) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Path getAddressBookFilePath() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void setAddressBookFilePath(Path addressBookFilePath) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void sortFilteredPersonListByName() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void updateFilteredPersonList(Predicate<Person> predicate) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean hasName(Person person) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean hasAddress(Person person) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @BeforeEach

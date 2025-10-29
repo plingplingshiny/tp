@@ -229,7 +229,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_multipleDistinctNames_unconfirmed_requestsConfirmation() {
+    public void execute_multipleDistinctNames_unconfirmed() {
         // Force confirmation by using two different existing names (>= 2 real matches)
         Person p1 = model.getAddressBook().getPersonList().get(0);
         Person p2 = model.getAddressBook().getPersonList().get(1);
@@ -263,7 +263,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_multipleNames_allNotFound_throwsPersonsNotFound() {
+    public void execute_multipleNames_allNotFound() {
         List<Name> input = List.of(new Name("foo bar 12345"), new Name("baz qux 67890"));
         DeleteCommand cmd = new DeleteCommand(input, false);
         assertCommandFailure(cmd, model,
@@ -271,7 +271,7 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void toString_and_hashCode_coverBranches() {
+    public void toString_hashCode_coverBranches() {
         // INDEX path: targetName is null, so hashCode() should use Boolean.hashCode(isConfirmed)
         DeleteCommand byIndex = new DeleteCommand(INDEX_FIRST_PERSON);
         int hash1 = byIndex.hashCode(); // branch where targetName == null
