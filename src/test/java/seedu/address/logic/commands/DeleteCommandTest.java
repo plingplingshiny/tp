@@ -291,14 +291,39 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_multipleNamesOneInvalid_throwsCommandException() {
+    public void execute_multipleNamesOneInvalid_success() {
         Person firstPerson = model.getFilteredPersonList().get(0);
         Name invalidName = new Name("Invalid Name");
         List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), invalidName);
         DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, true); // confirmed
 
-        String expectedMessage = "The following persons were not found: " + invalidName.toString();
-        assertCommandFailure(deleteCommand, model, expectedMessage);
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(firstPerson))
+                + "\nNote: The following persons were not found: " + invalidName.toString();
+
+        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.deletePerson(firstPerson);
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_multipleNamesOneInvalidUnconfirmed_requestsConfirmation() {
+        Person firstPerson = model.getFilteredPersonList().get(0);
+        Person secondPerson = model.getFilteredPersonList().get(1);
+        Name invalidName = new Name("Invalid Name");
+        List<Name> namesToDelete = Arrays.asList(firstPerson.getName(), secondPerson.getName(), invalidName);
+        DeleteCommand deleteCommand = new DeleteCommand(namesToDelete, false); // not confirmed
+
+        String personsNames = IntStream.range(0, 2)
+                .mapToObj(i -> (i + 1) + ". " + namesToDelete.get(i).fullName)
+                .collect(Collectors.joining("\n"));
+
+        String expectedMessage = String.format(DeleteCommand.MESSAGE_CONFIRM_DELETE_MULTIPLE, 2, personsNames)
+                + "\nNote: The following persons were not found: " + invalidName.toString();
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -315,7 +340,7 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
     }
-	
+
     @Test
     public void equals_multipleNames() {
         Person firstPerson = model.getFilteredPersonList().get(0);
