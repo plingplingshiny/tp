@@ -17,13 +17,10 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds persons by any combination of prefixes.\n"
             + "Parameters: [n/NAME_KEYWORDS] [p/PHONE_KEYWORDS] [e/EMAIL_KEYWORDS] [a/ADDRESS_KEYWORDS] "
-            + "[t/TAG_KEYWORDS] [pr/PRICE_KEYWORDS] [pt/PROPERTY_TYPE_KEYWORDS] [i/INTENTION_KEYWORDS]\n"
+            + "[pr/PRICE_KEYWORDS] [pt/PROPERTY_TYPE_KEYWORDS] [i/INTENTION_KEYWORDS]\n"
             + "At least one prefix is required. Keywords are case-insensitive.\n"
-            + "Examples:\n"
-            + "  find n/Alice p/9123\n"
-            + "  find e/example.com a/Street t/friend\n"
-            + "  find pr/500000 pt/HDB i/Sell\n";
-
+            + "Example:\n"
+            + "  find n/Alice p/9123\n";
 
     private final PersonContainsKeywordsPredicate predicate;
 

@@ -9,7 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PROPERTY_TYPE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;
@@ -41,8 +40,6 @@ public class CommandTestUtil {
     public static final String VALID_PROPERTY_TYPE_BOB = "hdb 4 room";
     public static final String VALID_PRICE_AMY = "390000";
     public static final String VALID_PRICE_BOB = "476000";
-    public static final String VALID_TAG_HUSBAND = "husband";
-    public static final String VALID_TAG_FRIEND = "friend";
     public static final String VALID_INTENTION_SELL = "sell";
     public static final String VALID_INTENTION_RENT = "rent";
 
@@ -58,8 +55,6 @@ public class CommandTestUtil {
     public static final String PROPERTY_TYPE_DESC_BOB = " " + PREFIX_PROPERTY_TYPE + VALID_PROPERTY_TYPE_BOB;
     public static final String PRICE_DESC_AMY = " " + PREFIX_PRICE + VALID_PRICE_AMY;
     public static final String PRICE_DESC_BOB = " " + PREFIX_PRICE + VALID_PRICE_BOB;
-    public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
-    public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
     public static final String INTENTION_DESC_SELL = " " + PREFIX_INTENTION + VALID_INTENTION_SELL;
     public static final String INTENTION_DESC_RENT = " " + PREFIX_INTENTION + VALID_INTENTION_RENT;
 
@@ -69,7 +64,6 @@ public class CommandTestUtil {
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_PROPERTY_TYPE_DESC = " " + PREFIX_PROPERTY_TYPE;
     public static final String INVALID_PRICE_DESC = " " + PREFIX_PRICE + "9qq"; // letters not allowed in price
-    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
     public static final String INVALID_INTENTION_DESC = " " + PREFIX_INTENTION + "buy"; // only sell|rent allowed
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
@@ -82,11 +76,11 @@ public class CommandTestUtil {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
                 .withPropertyType(VALID_PROPERTY_TYPE_AMY).withPrice(VALID_PRICE_AMY)
-                .withTags(VALID_TAG_FRIEND).build();
+                .build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withPropertyType(VALID_PROPERTY_TYPE_BOB).withPrice(VALID_PRICE_BOB)
-                .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+                .build();
     }
 
     /**
