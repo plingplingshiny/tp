@@ -31,7 +31,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_MULTIPLE_PERSONS_SUCCESS = "Deleted %1$d persons: %2$s";
     public static final String MESSAGE_CONFIRM_DELETE_MULTIPLE =
-            "Warning: You are about to delete %1$d persons:\n%2$s\n";
+            "Warning: You are about to delete %1$d persons:\n%2$s\n"
+            + "Type 'yes' to confirm or 'no' to abort.";
     public static final String MESSAGE_PERSONS_NOT_FOUND = "The following persons were not found: %1$s";
 
     private enum TargetType {
