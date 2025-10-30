@@ -24,7 +24,8 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar PropertyPal.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data by default.<br>
-* column widths are adjustable (to display truncated values)
+ * column widths are adjustable (to display truncated values)
+   Note that you may click and drag the columns around to reorder them.<br>
    ![Ui](images/Ui.png)
 
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
@@ -71,8 +72,8 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
   </box>
 
-* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions, either selling or renting. This helps in categorizing clients based on their property-related goals.
-  * **Accepted values:** `sell` or `rent` (not case-sensitive); other values, abbreviations, or synonyms are not accepted.
+* The `INTENTION` parameter in the `add` and `find` commands refers to the client's intention regarding property transactions: selling or renting. This helps in categorizing clients based on their property-related goals.
+  * **Accepted values:** `sell` or `rent` (case-insensitive). Inputs are accepted in any case and will be normalized to lowercase internally (e.g., `Sell`, `SELL`, and `sell` are all valid and stored as `sell`). Other values, abbreviations, or synonyms are not accepted.
 
 ### Viewing help : `help`
 
@@ -152,21 +153,25 @@ Examples:
 
 Deletes the specified person from PropertyPal.
 
-Format: `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`
+Format: `delete INDEX` or `delete n/NAME [n/NAME]… [yes]`
 
 * Deletes a single person at the specified `INDEX`, OR one or more persons by exact `NAME`(s). Do not mix index and names in the same command.
 * The index refers to the index number shown in the displayed person list. The index must be a positive integer: 1, 2, 3, …
 * For deletion by name, each `NAME` must match a contact’s full name exactly (case-sensitive). If multiple contacts share the same exact name, only the first match will be deleted; use index to disambiguate.
-* When deleting multiple persons by name, add `confirm/yes` to proceed. Without it, PropertyPal will first show a confirmation prompt listing the persons to be deleted.
+* When deleting multiple persons by name, PropertyPal will first show a confirmation prompt listing the persons to be deleted; add `yes` to proceed.
 * Deleting multiple names is all‑or‑nothing: if any given name is not found, nobody is deleted and an error listing the missing names is shown.
-* Confirmation is not accepted for deletion by index (i.e. `confirm/...` is invalid with `delete INDEX`).
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in PropertyPal.
 * `find n/Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * `delete n/John Doe` deletes the person named John Doe.
-* `delete n/John Doe n/Jane Smith` shows a confirmation message listing both persons; re-run with `confirm/yes` to proceed.
-* `delete n/John Doe n/Jane Smith confirm/yes` deletes both John Doe and Jane Smith.
+* `delete n/John Doe n/Jane Smith` shows a confirmation message listing both persons; re-run with `yes` to proceed.
+* `delete n/John Doe n/Jane Smith` followed by `yes` deletes both John Doe and Jane Smith.
+
++ Note about deletion by name:
+  + When you provide a `NAME` to delete (e.g., `delete n/John Doe`), PropertyPal will now match and delete all persons whose full name exactly matches `John Doe` (case-insensitive matching is used internally). If the name matches multiple entries, the application will display a confirmation warning listing all matched entries and append a note such as:
+    +  `Note: Multiple entries found for 'John Doe' — all matching entries will be deleted.`
+    +  You can then type `yes` to confirm or `no` to abort.
 
 ### Clearing all entries : `clear`
 
@@ -221,7 +226,7 @@ Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **Add**    | `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE​` <br> e.g., `add i/sell n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 pt/HDB 3 room flat pr/470000`
 **Clear**  | `clear`
-**Delete** | `delete INDEX` or `delete n/NAME [n/NAME]… [confirm/yes]`<br> e.g., `delete 3` or `delete n/John Doe n/Jane Smith confirm/yes`
+**Delete** | `delete INDEX` or `delete n/NAME [n/NAME]… [yes]`<br> e.g., `delete 3` or `delete n/John Doe n/Jane Smith` followed by `yes`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [pt/PROPERTY_TYPE] [pr/PRICE]`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find [i/INTENTION] [n/NAME]…​ [p/PHONE_NUMBER]…​ [e/EMAIL]…​ [a/ADDRESS]…​ [pt/PROPERTY_TYPE] [pr/PRICE]`<br> e.g., `find n/James p/9876 e/gmail a/Clementi`
 **List**   | `list`

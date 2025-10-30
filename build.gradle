@@ -40,6 +40,12 @@ task coverage(type: JacocoReport) {
     }
 }
 
+tasks.register('verifyAll') {
+    group = 'verification'  // shows up under "verification" in IntelliJ’s Gradle tool window
+    description = 'Runs tests and Checkstyle on both main and test sources.'
+    dependsOn 'checkstyleMain', 'checkstyleTest', 'test'
+}
+
 dependencies {
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'

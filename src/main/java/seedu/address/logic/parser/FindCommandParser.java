@@ -8,7 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PROPERTY_TYPE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -35,13 +34,12 @@ public class FindCommandParser implements Parser<FindCommand> {
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
                 PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_TAG, PREFIX_PRICE, PREFIX_PROPERTY_TYPE, PREFIX_INTENTION);
+                PREFIX_PRICE, PREFIX_PROPERTY_TYPE, PREFIX_INTENTION);
 
         List<String> rawNames = argMultimap.getAllValues(PREFIX_NAME);
         List<String> rawPhones = argMultimap.getAllValues(PREFIX_PHONE);
         List<String> rawEmails = argMultimap.getAllValues(PREFIX_EMAIL);
         List<String> rawAddresses = argMultimap.getAllValues(PREFIX_ADDRESS);
-        List<String> rawTags = argMultimap.getAllValues(PREFIX_TAG);
         List<String> rawPrices = argMultimap.getAllValues(PREFIX_PRICE);
         List<String> rawPropertyTypes = argMultimap.getAllValues(PREFIX_PROPERTY_TYPE);
         List<String> rawIntentions = argMultimap.getAllValues(PREFIX_INTENTION);
@@ -50,7 +48,6 @@ public class FindCommandParser implements Parser<FindCommand> {
         List<String> phoneKeywords = splitNormalizeDedup(rawPhones);
         List<String> emailKeywords = splitNormalizeDedup(rawEmails);
         List<String> addressKeywords = splitNormalizeDedup(rawAddresses);
-        List<String> tagKeywords = splitNormalizeDedup(rawTags);
         List<String> priceKeywords = splitNormalizeDedup(rawPrices);
         List<String> propertyTypeKeywords = splitNormalizeDedup(rawPropertyTypes);
         List<String> intentionKeywords = splitNormalizeDedup(rawIntentions);
@@ -63,14 +60,14 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         if (nameKeywords.isEmpty() && phoneKeywords.isEmpty() && emailKeywords.isEmpty()
-                && addressKeywords.isEmpty() && tagKeywords.isEmpty()
-                && priceKeywords.isEmpty() && propertyTypeKeywords.isEmpty() && intentionKeywords.isEmpty()) {
+                && addressKeywords.isEmpty() && priceKeywords.isEmpty()
+                && propertyTypeKeywords.isEmpty() && intentionKeywords.isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
         PersonContainsKeywordsPredicate predicate = new PersonContainsKeywordsPredicate(
                 nameKeywords, phoneKeywords, emailKeywords, addressKeywords,
-                tagKeywords, priceKeywords, propertyTypeKeywords, intentionKeywords);
+                priceKeywords, propertyTypeKeywords, intentionKeywords);
 
         return new FindCommand(predicate);
     }

@@ -8,15 +8,11 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PROPERTY_TYPE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
@@ -32,7 +28,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.PropertyType;
-import seedu.address.model.tag.Tag;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -51,8 +46,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_PROPERTY_TYPE + "PROPERTY TYPE]"
             + "[" + PREFIX_PRICE + "PRICE]"
-            + "[" + PREFIX_INTENTION + "INTENTION]"
-            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_INTENTION + "INTENTION]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -111,11 +105,10 @@ public class EditCommand extends Command {
         PropertyType updatedPropertyType = editPersonDescriptor.getPropertyType()
                 .orElse(personToEdit.getPropertyType());
         Price updatedPrice = editPersonDescriptor.getPrice().orElse(personToEdit.getPrice());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         Intention updatedIntention = editPersonDescriptor.getIntention().orElse(personToEdit.getIntention());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedPropertyType,
-                updatedPrice, updatedTags, updatedIntention);
+                updatedPrice, updatedIntention);
     }
 
     @Override
@@ -153,7 +146,6 @@ public class EditCommand extends Command {
         private Address address;
         private PropertyType propertyType;
         private Price price;
-        private Set<Tag> tags;
         private Intention intention;
 
         public EditPersonDescriptor() {}
@@ -169,7 +161,6 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setPropertyType(toCopy.propertyType);
             setPrice(toCopy.price);
-            setTags(toCopy.tags);
             setIntention(toCopy.intention);
         }
 
@@ -177,7 +168,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, propertyType, price, tags, intention);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, propertyType, price, intention);
         }
 
         public void setName(Name name) {
@@ -228,23 +219,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(price);
         }
 
-        /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
-         */
-        public void setTags(Set<Tag> tags) {
-            this.tags = (tags != null) ? new HashSet<>(tags) : null;
-        }
-
-        /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
-         */
-        public Optional<Set<Tag>> getTags() {
-            return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
-        }
-
         public void setIntention(Intention intention) {
             this.intention = intention;
         }
@@ -271,7 +245,6 @@ public class EditCommand extends Command {
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(propertyType, otherEditPersonDescriptor.propertyType)
                     && Objects.equals(price, otherEditPersonDescriptor.price)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags)
                     && Objects.equals(intention, otherEditPersonDescriptor.intention);
         }
 
@@ -284,7 +257,6 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("property type", propertyType)
                     .add("price", price)
-                    .add("tags", tags)
                     .add("intention", intention)
                     .toString();
         }

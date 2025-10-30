@@ -2,14 +2,10 @@ package seedu.address.model.person;
 
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.intention.Intention;
-import seedu.address.model.tag.Tag;
 
 /**
  * Represents a Person in the address book.
@@ -26,7 +22,6 @@ public class Person {
     private final Address address;
     private final PropertyType propertyType;
     private final Price price;
-    private final Set<Tag> tags = new HashSet<>();
     private final Intention intention;
 
 
@@ -34,15 +29,14 @@ public class Person {
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, PropertyType propertyType, Price price,
-                  Set<Tag> tags, Intention intention) {
-        requireAllNonNull(name, phone, email, address, propertyType, price, tags, intention);
+                  Intention intention) {
+        requireAllNonNull(name, phone, email, address, propertyType, price, intention);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.propertyType = propertyType;
         this.price = price;
-        this.tags.addAll(tags);
         this.intention = intention;
     }
 
@@ -50,22 +44,20 @@ public class Person {
      * Backward-compatible constructor defaulting propertyType to 'unspecified', price to '0',
      * and intention to 'sell'.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address) {
         this(name, phone, email, address,
                 new PropertyType("unspecified"),
                 new Price("0"),
-                tags,
                 new Intention("sell"));
     }
 
     /**
      * Backward-compatible constructor defaulting propertyType to 'unspecified' and price to '0'.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Intention intention) {
+    public Person(Name name, Phone phone, Email email, Address address, Intention intention) {
         this(name, phone, email, address,
                 new PropertyType("unspecified"),
                 new Price("0"),
-                tags,
                 intention);
     }
 
@@ -95,14 +87,6 @@ public class Person {
 
     public Intention getIntention() {
         return intention;
-    }
-
-    /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
-     * if modification is attempted.
-     */
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
     }
 
     /**
@@ -179,14 +163,13 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && propertyType.equals(otherPerson.propertyType)
                 && price.equals(otherPerson.price)
-                && tags.equals(otherPerson.tags)
                 && intention.equals(otherPerson.intention);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, propertyType, price, tags, intention);
+        return Objects.hash(name, phone, email, address, propertyType, price, intention);
     }
 
     @Override
@@ -198,7 +181,6 @@ public class Person {
                 .add("address", address)
                 .add("property type", propertyType)
                 .add("price", price)
-                .add("tags", tags)
                 .add("intention", intention)
                 .toString();
     }

@@ -12,18 +12,12 @@ import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Name;
 
-/**
- * Parses input arguments and creates a new DeleteCommand object
- */
+/** Parses input arguments and creates a DeleteCommand. */
 public class DeleteCommandParser implements Parser<DeleteCommand> {
 
-    /**
-     * Parses the given {@code String} of arguments in the context of the
-     * DeleteCommand and returns a DeleteCommand object for execution.
-     *
-     * @throws ParseException if the user input does not conform the expected
-     *     format
-     */
+    public static final String MESSAGE_INVALID_CONFIRMATION =
+            "Confirmation value must be 'yes', 'no', 'y', 'n', or empty.";
+
     @Override
     public DeleteCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_CONFIRM);
@@ -34,12 +28,13 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         if (!nameValues.isEmpty()) {
             return parseDeleteByNames(argMultimap, nameValues, hasConfirmation);
         } else {
-            return parseDeleteByIndex(args, hasConfirmation);
+            // CHANGED: pass argMultimap so we can read the preamble (index) safely
+            return parseDeleteByIndex(argMultimap, hasConfirmation);
         }
     }
 
     private DeleteCommand parseDeleteByNames(ArgumentMultimap argMultimap, List<String> nameValues,
-            boolean hasConfirmation) throws ParseException {
+                                             boolean hasConfirmation) throws ParseException {
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
@@ -48,7 +43,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         boolean isConfirmed = parseConfirmation(hasConfirmation, argMultimap);
 
         if (names.size() == 1) {
-            return new DeleteCommand(names.get(0));
+            return new DeleteCommand(names.get(0), isConfirmed);
         } else {
             return new DeleteCommand(names, isConfirmed);
         }
@@ -72,22 +67,33 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             return false;
         }
 
-        String confirmValue = argMultimap.getValue(PREFIX_CONFIRM).get().toLowerCase().trim();
-        if ("yes".equals(confirmValue)) {
-            return true;
-        } else if (!confirmValue.isEmpty()) {
-            throw new ParseException("Confirmation value must be 'yes' or leave it empty");
+        // NEW: reject multiple confirmation prefixes
+        List<String> confirms = argMultimap.getAllValues(PREFIX_CONFIRM);
+        if (confirms.size() > 1) {
+            throw new ParseException("Only one confirmation (c/) is allowed.");
         }
-        return false;
+
+        String confirmValue = confirms.get(0).toLowerCase().trim();
+        // NEW: accept short forms y/n as well
+        if ("yes".equals(confirmValue) || "y".equals(confirmValue)) {
+            return true;
+        } else if ("no".equals(confirmValue) || "n".equals(confirmValue) || confirmValue.isEmpty()) {
+            return false;
+        } else {
+            throw new ParseException(MESSAGE_INVALID_CONFIRMATION);
+        }
     }
 
-    private DeleteCommand parseDeleteByIndex(String args, boolean hasConfirmation) throws ParseException {
+    // CHANGED: take ArgumentMultimap and read the preamble for the index
+    private DeleteCommand parseDeleteByIndex(ArgumentMultimap argMultimap, boolean hasConfirmation)
+            throws ParseException {
         if (hasConfirmation) {
             throw new ParseException("Confirmation is not required for deletion by index");
         }
 
+        String preamble = argMultimap.getPreamble();
         try {
-            Index index = ParserUtil.parseIndex(args);
+            Index index = ParserUtil.parseIndex(preamble);
             return new DeleteCommand(index);
         } catch (ParseException pe) {
             throw new ParseException(

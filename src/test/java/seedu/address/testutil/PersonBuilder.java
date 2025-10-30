@@ -1,8 +1,5 @@
 package seedu.address.testutil;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import seedu.address.model.intention.Intention;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
@@ -11,8 +8,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.PropertyType;
-import seedu.address.model.tag.Tag;
-import seedu.address.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building Person objects.
@@ -33,7 +28,6 @@ public class PersonBuilder {
     private Address address;
     private PropertyType propertyType;
     private Price price;
-    private Set<Tag> tags;
     private Intention intention;
 
     /**
@@ -46,7 +40,6 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         propertyType = new PropertyType(DEFAULT_PROPERTY_TYPE);
         price = new Price(DEFAULT_PRICE);
-        tags = new HashSet<>();
         intention = new Intention(DEFAULT_INTENTION);
     }
 
@@ -60,7 +53,6 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         propertyType = personToCopy.getPropertyType();
         price = personToCopy.getPrice();
-        tags = new HashSet<>(personToCopy.getTags());
         intention = personToCopy.getIntention();
     }
 
@@ -69,14 +61,6 @@ public class PersonBuilder {
      */
     public PersonBuilder withName(String name) {
         this.name = new Name(name);
-        return this;
-    }
-
-    /**
-     * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code Person} that we are building.
-     */
-    public PersonBuilder withTags(String ... tags) {
-        this.tags = SampleDataUtil.getTagSet(tags);
         return this;
     }
 
@@ -129,7 +113,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, propertyType, price, tags, intention);
+        return new Person(name, phone, email, address, propertyType, price, intention);
     }
 
 }

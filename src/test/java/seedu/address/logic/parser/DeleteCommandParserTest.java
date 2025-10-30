@@ -1,95 +1,76 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Name;
 
 /**
- * As we are only doing white-box testing, our test cases do not cover path
- * variations outside of the DeleteCommand code. For example, inputs "1" and "1
- * abc" take the same path through the DeleteCommand, and therefore we test only
- * one of them. The path variation for those two cases occur inside the
- * ParserUtil, and therefore should be covered by the ParserUtilTest.
+ * Integration-style tests for delete parsing via AddressBookParser to exercise real tokenization.
  */
 public class DeleteCommandParserTest {
 
-    private DeleteCommandParser parser = new DeleteCommandParser();
+    private final AddressBookParser addressParser = new AddressBookParser();
 
     @Test
-    public void parse_validArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, "1", new DeleteCommand(INDEX_FIRST_PERSON));
+    public void parseValidIndexReturnsDeleteCommand() throws Exception {
+        DeleteCommand cmd = (DeleteCommand) addressParser.parseCommand("delete 1");
+        assertEquals(new DeleteCommand(Index.fromOneBased(1)), cmd);
     }
 
     @Test
-    public void parse_validNameArgs_returnsDeleteCommand() {
-        assertParseSuccess(parser, " n/Alice Pauline", new DeleteCommand(new Name("Alice Pauline")));
+    public void parseIndexWithConfirmationThrowsParseException() {
+        assertThrows(ParseException.class, () -> addressParser.parseCommand("delete 1 confirm/yes"));
     }
 
     @Test
-    public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, "a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    public void parseSingleNameReturnsDeleteByName() throws Exception {
+        DeleteCommand cmd = (DeleteCommand) addressParser.parseCommand("delete n/Alice");
+        assertEquals(new DeleteCommand(new Name("Alice")), cmd);
     }
 
     @Test
-    public void parse_invalidNameArgsWithPreamble_throwsParseException() {
-        assertParseFailure(parser, "extra n/Alice Pauline",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+    public void parseSingleNameWithConfirmationVariants() throws Exception {
+        assertEquals(new DeleteCommand(new Name("Alice"), true),
+                addressParser.parseCommand("delete n/Alice confirm/yes"));
+        assertEquals(new DeleteCommand(new Name("Alice"), true),
+                addressParser.parseCommand("delete n/Alice confirm/y"));
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/no"));
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/n"));
+        // empty confirm value treated as false
+        assertEquals(new DeleteCommand(new Name("Alice"), false),
+                addressParser.parseCommand("delete n/Alice confirm/"));
     }
 
     @Test
-    public void parse_multipleValidNames_returnsDeleteCommand() {
-        // Two names
-        assertParseSuccess(parser, " n/Alice Pauline n/Bob Charlie",
-                new DeleteCommand(Arrays.asList(new Name("Alice Pauline"), new Name("Bob Charlie")), false));
-
-        // Three names
-        assertParseSuccess(parser, " n/Alice n/Bob n/Charlie",
-                new DeleteCommand(Arrays.asList(new Name("Alice"), new Name("Bob"), new Name("Charlie")), false));
+    public void parse_multipleNames_returnsDeleteMultiple() throws Exception {
+        DeleteCommand cmd = (DeleteCommand) addressParser.parseCommand("delete n/Alice n/Benson");
+        List<Name> expectedNames = List.of(new Name("Alice"), new Name("Benson"));
+        assertEquals(new DeleteCommand(expectedNames, false), cmd);
     }
 
     @Test
-    public void parse_multipleValidNamesWithConfirmation_returnsDeleteCommand() {
-        assertParseSuccess(parser, " n/Alice Pauline n/Bob Charlie confirm/yes",
-                new DeleteCommand(Arrays.asList(new Name("Alice Pauline"), new Name("Bob Charlie")), true));
+    public void parse_multipleConfirmationPrefixes_throwsParseException() {
+        assertThrows(ParseException.class, () -> addressParser.parseCommand("delete n/Alice confirm/yes confirm/no"));
     }
 
     @Test
-    public void parse_singleNameWithValidConfirmation_returnsSingleDeleteCommand() {
-        // Single name with confirmation should still create single name delete command
-        assertParseSuccess(parser, " n/Alice Pauline confirm/yes",
-                new DeleteCommand(new Name("Alice Pauline")));
+    public void parse_invalidConfirmation_throwsParseException() {
+        assertThrows(ParseException.class, () -> addressParser.parseCommand("delete n/Alice confirm/maybe"));
     }
 
     @Test
-    public void parse_invalidConfirmationValue_throwsParseException() {
-        assertParseFailure(parser, " n/Alice n/Bob confirm/no",
-                "Confirmation value must be 'yes' or leave it empty");
-    }
-
-    @Test
-    public void parse_confirmationWithIndex_throwsParseException() {
-        assertParseFailure(parser, "1 confirm/yes",
-                "Confirmation is not required for deletion by index");
-    }
-
-    @Test
-    public void parse_emptyNameValue_throwsParseException() {
-        assertParseFailure(parser, " n/ n/Bob",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_duplicateNames_returnsDeleteCommand() {
-        // Should allow duplicate names in input - the command will handle deduplication if needed
-        assertParseSuccess(parser, " n/Alice n/Alice",
-                new DeleteCommand(Arrays.asList(new Name("Alice"), new Name("Alice")), false));
+    public void parse_invalidName_throwsParseException() {
+        // invalid name will be caught and wrapped as invalid command format
+        assertThrows(ParseException.class, () -> addressParser.parseCommand("delete n/12345"));
     }
 }

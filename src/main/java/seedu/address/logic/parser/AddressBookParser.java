@@ -11,11 +11,14 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
+import seedu.address.logic.commands.ConfirmCommand;
+import seedu.address.logic.commands.ConfirmationManager;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
+import seedu.address.logic.commands.InvalidConfirmationCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -29,6 +32,15 @@ public class AddressBookParser {
      */
     private static final Pattern BASIC_COMMAND_FORMAT = Pattern.compile("(?<commandWord>\\S+)(?<arguments>.*)");
     private static final Logger logger = LogsCenter.getLogger(AddressBookParser.class);
+
+    /**
+     * Creates a new AddressBookParser. Clears any stale pending confirmations so parsing
+     * starts with a clean state.
+     */
+    public AddressBookParser() {
+        // Ensure no stale pending confirmations remain when a parser is created (helps tests be independent)
+        ConfirmationManager.clearPending();
+    }
 
     /**
      * Parses user input into command for execution.
@@ -77,7 +89,21 @@ public class AddressBookParser {
         case HelpCommand.COMMAND_WORD:
             return new HelpCommand();
 
+        // allow simple confirmation responses: yes/no; if a single token that's not otherwise a command
+        // and a confirmation is pending, treat other tokens as invalid confirmation input.
+        case ConfirmCommand.COMMAND_WORD_YES:
+            return new ConfirmCommand(true);
+        case ConfirmCommand.COMMAND_WORD_NO:
+            return new ConfirmCommand(false);
         default:
+            // if the user typed a single token (no arguments) and confirmation is pending,
+            // treat it as an invalid confirmation input
+            boolean noArgs = arguments.trim().isEmpty();
+            if (noArgs && ConfirmationManager.hasPending()) {
+                return new InvalidConfirmationCommand();
+            }
+
+            // fallthrough to unknown command handling
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }

@@ -1,0 +1,23 @@
+coverage:
+  precision: 2
+  round: down
+  status:
+    project:
+      default:
+        branches:
+        - main
+        target: 75%
+
+ignore:
+  - "**/test/**"
+  - "**/build/**"
+  - "**/config/checkstyle/**"
+  - "**/data/**"
+  - "**/ui/**"
+  - "**/MainApp.java"
+  - "**/Main.java"
+
+comment:
+  layout: "header, diff"
+  behavior: default
+  require_changes: true

@@ -1,11 +1,5 @@
 package seedu.address.storage;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -18,7 +12,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Price;
 import seedu.address.model.person.PropertyType;
-import seedu.address.model.tag.Tag;
 
 /**
  * Jackson-friendly version of {@link Person}.
@@ -34,7 +27,6 @@ class JsonAdaptedPerson {
     private final String propertyType;
     private final String price;
     private final String intention;
-    private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -43,7 +35,6 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
                              @JsonProperty("email") String email, @JsonProperty("address") String address,
                              @JsonProperty("propertyType") String propertyType, @JsonProperty("price") String price,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("intention") String intention) {
         this.name = name;
         this.phone = phone;
@@ -51,9 +42,6 @@ class JsonAdaptedPerson {
         this.address = address;
         this.propertyType = propertyType;
         this.price = price;
-        if (tags != null) {
-            this.tags.addAll(tags);
-        }
         this.intention = intention; // may be null for legacy JSON
     }
 
@@ -61,16 +49,16 @@ class JsonAdaptedPerson {
      * Backward-compatible constructor for legacy JSON missing new fields.
      * Defaults: propertyType='unspecified', price='0', intention defaults in toModelType.
      */
-    public JsonAdaptedPerson(String name, String phone, String email, String address, List<JsonAdaptedTag> tags) {
-        this(name, phone, email, address, "unspecified", "0", tags, null);
+    public JsonAdaptedPerson(String name, String phone, String email, String address) {
+        this(name, phone, email, address, "unspecified", "0", null);
     }
 
     /**
      * Backward-compatible constructor for legacy JSON missing intention only.
      */
     public JsonAdaptedPerson(String name, String phone, String email, String address,
-                             String propertyType, String price, List<JsonAdaptedTag> tags) {
-        this(name, phone, email, address, propertyType, price, tags, null);
+                             String propertyType, String price) {
+        this(name, phone, email, address, propertyType, price, null);
     }
 
     /**
@@ -84,9 +72,6 @@ class JsonAdaptedPerson {
         propertyType = source.getPropertyType().value;
         price = source.getPrice().value;
         intention = source.getIntention().intentionName;
-        tags.addAll(source.getTags().stream()
-                .map(JsonAdaptedTag::new)
-                .collect(Collectors.toList()));
     }
 
     /**
@@ -95,11 +80,6 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
-        final List<Tag> personTags = new ArrayList<>();
-        for (JsonAdaptedTag tag : tags) {
-            personTags.add(tag.toModelType());
-        }
-
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
@@ -156,7 +136,6 @@ class JsonAdaptedPerson {
         }
         final Price modelPrice = new Price(price);
 
-        final Set<Tag> modelTags = new HashSet<>(personTags);
         return new Person(
                 modelName,
                 modelPhone,
@@ -164,7 +143,6 @@ class JsonAdaptedPerson {
                 modelAddress,
                 modelPropertyType,
                 modelPrice,
-                modelTags,
                 modelIntention
         );
     }
