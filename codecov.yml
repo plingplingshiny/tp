@@ -13,16 +13,9 @@ ignore:
   - "**/build/**"
   - "**/config/checkstyle/**"
   - "**/data/**"
-  - "**/ui/CommandBox.java"
-  - "**/ui/HelpWindow.java"
-  - "**/ui/MainWindow.java"
-  - "**/ui/ResultDisplay.java"
-  - "**/ui/StatusBarFooter.java"
-  - "**/ui/UiManager.java"
-  - "**/ui/UiPart.java"
+  - "**/ui/**"
   - "**/MainApp.java"
   - "**/Main.java"
-
 
 comment:
   layout: "header, diff"
