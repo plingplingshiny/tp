@@ -24,6 +24,7 @@ PropertyPal is a **desktop application** that helps **real estate agents** manag
 
 4. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar PropertyPal.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note that the app contains some sample data by default.<br>
+* column widths are adjustable (to display truncated values)
    ![Ui](images/Ui.png)
 
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
@@ -88,6 +89,7 @@ Adds a person to PropertyPal.
 
 * A warning will be displayed if there already exists an entry with the same name and/or address in PropertyPal. However, it will still be accepted if at least 1 field is different from the existing entry.
 * An entry with identical values for every field is considered a duplicate and will not be accepted by PropertyPal.
+* PropertyType and Price prefix values have a maximum character/digit limit of 100 and 13 respectively.
 
 Format: `add i/INTENTION n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS pt/PROPERTY_TYPE pr/PRICE​`
 
