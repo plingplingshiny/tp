@@ -306,7 +306,7 @@ _{more aspects and alternatives to be added}_
 #### Proposed Implementation
 
 The proposed feature extends the existing `find` command to allow users to search for persons by postal code prefix using the pc/ prefix.
-The implementation adds a new `PostalCode` field to the `Person` class, representing Singapore’s 6-digit postal code.
+The implementation adds a new `PostalCode` field to the `Person` class.
 For example, the command `find pc/64` will list all persons whose postal code begins with “64”.
 
 Internally, the feature flows through the following components:
@@ -335,12 +335,12 @@ This flow is illustrated in the sequence diagram below:
 
 **Aspect: How area filtering works:**
 
-* **Alternative 1 (current choice):** Filter by prefix matching (e.g. first 2 digits of the postal code).
-* Pros: Simple to implement and directly maps to Singapore postal district prefixes.
+* **Alternative 1 (current choice):** Filter by prefix matching (e.g. first 2 characters of the postal code).
+* Pros: Simple to implement and directly maps to postal district prefixes.
 * Cons: May be less precise for smaller subzones.
 
 * **Alternative 2:** Use an external postal code–to–region lookup table.
-* Pros: Enables filtering by named region (e.g. “Bedok”).
+* Pros: Enables filtering by named region.
 * Cons: Requires maintaining additional data and mappings.
 
 _{more aspects and alternatives to be added}_
@@ -532,17 +532,22 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Mainstream OS**: An operating system that is widely used, actively maintained, and has substantial market share and community support. These systems typically receive regular security updates and support running modern Java applications. (e.g. Windows, Linux, Unix, macOS)
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 * **Command**: A text instruction entered by the user (e.g., add, delete) to perform an action.
 * **CLI**: Command Line Interface
 * **GUI**: Graphical User Interface
 * **JavaFx**: A Java library for building GUI applications
-* **FXMl**: An XML-based language for defining the layout of JavaFx GUIs
-* **Argument/Parameter**: Extra information provided with a command (e.g., n/John Doe in add).
+* **FXML**: An XML-based language for defining the layout of JavaFx GUIs
+* **Argument/Parameter**: Extra information provided with a command (e.g., `n/John Doe` in add).
 * **Field**: A specific data component of a client record, such as “name”, “email”, or “phone number”.
 * **Prefix**: A short identifier (e.g., n/, p/, e/, a/) used to indicate the type of information in a command.
 * **Duplicate entry**: A contact record that has the same intention, name, phone, email, address, property type, and price as another existing record.
+* **Intention**: Refers to the client's property transaction goal (either `sell` or `rent`). This field helps categorize clients based on their property-related objectives.
+* **Property Type**: Describes the type of property a client is trying to sell/rent (e.g. hdb, condo etc.)
+* **UniquePersonList**: A custom list implementation used within the `Model` to store `Person` objects, ensuring all entries are unique based on defined criteria.
+* **VersionedAddressBook**: A proposed future extension of the `AddressBook` class that supports undo/redo functionality by maintaining a history of address book states.
+* **Postal Code**: A short series of letters and/or numbers assigned to a specific geographic area.
 
 --------------------------------------------------------------------------------------------------------------------
 
