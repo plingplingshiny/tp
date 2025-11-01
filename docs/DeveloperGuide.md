@@ -343,8 +343,6 @@ This flow is illustrated in the sequence diagram below:
 * Pros: Enables filtering by named region.
 * Cons: Requires maintaining additional data and mappings.
 
-_{more aspects and alternatives to be added}_
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Requirements**
@@ -466,7 +464,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  User enters list command.
-2.  PropertyPal displays a list of all clients in lexicographical order.
+2.  PropertyPal displays a list of all clients in lexicographical (alphabetical and numerical) order and a success message.
 
     Use case ends.
 
@@ -474,14 +472,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. No clients stored
 
-    * 1a1. PropertyPal displays an empty list.
+    * 1a1. PropertyPal displays an empty table and a success message.
 
       Use case ends.
 
 
 * 1b. Invalid input (e.g. typo)
 
-    * 1b1. PropertyPal displays an error message indicating unknown command.
+    * 1b1. PropertyPal displays an error message indicating that the command is not recognized.
 
       Use case ends.
 
@@ -570,7 +568,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes from step 2.
 
-*{More to be added}*
 
 ### Non-Functional Requirements
 
