@@ -466,7 +466,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 
 1.  User enters list command.
-2.  PropertyPal displays a list of all clients in the order they were added.
+2.  PropertyPal displays a list of all clients in lexicographical order.
 
     Use case ends.
 
@@ -474,14 +474,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 1a. No clients stored
 
-    * 1a1. PropertyPal displays a message indicating no clients saved.
+    * 1a1. PropertyPal displays an empty list.
 
       Use case ends.
 
 
-* 1b. Invalid input (e.g. extra parameters)
+* 1b. Invalid input (e.g. typo)
 
-    * 1b1. PropertyPal displays an error message indicating the correct format.
+    * 1b1. PropertyPal displays an error message indicating unknown command.
 
       Use case ends.
 
@@ -494,7 +494,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  User enters find command with prefix and keyword(s).
+1.  User enters find command with keyword(s).
 2.  PropertyPal displays a list of all matching clients in the order they were added.
 
     Use case ends.
@@ -516,6 +516,59 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 1b1. PropertyPal displays a message indicating no matching clients found.
 
       Use case ends.
+
+
+**Use Case 5: Edit a client contact**
+
+**Guarantees:**
+* The specified client's details are updated if all provided fields are valid.
+* No duplicate clients are created as a result of the edit operation.
+
+**MSS**
+
+1.  User requests to edit a specific client by index and provides one or more fields to update .
+2.  PropertyPal updates the client's details and displays a success message.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. Invalid index (e.g. -1 or index is larger than total number of clients)
+
+    * 1a1. PropertyPal displays an error message indicating invalid index.
+    * 1a2. User re-enters data.
+
+      Steps 1a1 - 1a2 are repeated until the input entered is valid.
+
+      Use case resumes from step 2.
+
+
+* 1b. No fields are provided for editing
+
+    * 1b1. PropertyPal displays an error message indicating that at least one field must be provided.
+    * 1b2. User re-enters data.
+
+      Steps 1b1 - 1b2 are repeated until the input entered is valid.
+
+      Use case resumes from step 2.
+
+* 1c. Edited details would create a duplicate client (all fields identical to an existing client)
+
+    * 1c1. PropertyPal displays an error message indicating that the client already exists.
+    * 1c2. User re-enters data.
+
+      Steps 1c1 - 1c2 are repeated until the input entered is valid.
+
+      Use case resumes from step 2.
+
+* 1d. Invalid input (e.g. missing index)
+
+    * 1d1. PropertyPal displays an error message indicating the correct format.
+    * 1d2. User re-enters data.
+
+      Steps 1d1 - 1d2 are repeated until the input entered is valid.
+
+      Use case resumes from step 2.
 
 *{More to be added}*
 
