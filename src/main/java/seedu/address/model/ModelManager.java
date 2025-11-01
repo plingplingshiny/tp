@@ -191,7 +191,7 @@ public class ModelManager implements Model {
 
     private int comparePrices(Price price1, Price price2) {
         // Remove commas and parse as BigDecimal for accurate numerical comparison
-        assert Price.isValidPrice(price1.value) && Price.isValidPrice(price2.value): "price values should be valid";
+        assert Price.isValidPrice(price1.value) && Price.isValidPrice(price2.value) : "price values should be valid";
         BigDecimal num1 = new BigDecimal(price1.value.replace(",", ""));
         BigDecimal num2 = new BigDecimal(price2.value.replace(",", ""));
         return num1.compareTo(num2);
