@@ -190,14 +190,10 @@ public class ModelManager implements Model {
     }
 
     private int comparePrices(Price price1, Price price2) {
-        try {
-            // Remove commas and parse as BigDecimal for accurate numerical comparison
-            BigDecimal num1 = new BigDecimal(price1.value.replace(",", ""));
-            BigDecimal num2 = new BigDecimal(price2.value.replace(",", ""));
-            return num1.compareTo(num2);
-        } catch (NumberFormatException e) {
-            // Fallback to string comparison if parsing fails
-            return price1.value.compareTo(price2.value);
-        }
+        // Remove commas and parse as BigDecimal for accurate numerical comparison
+        assert Price.isValidPrice(price1.value) && Price.isValidPrice(price2.value): "price values should be valid";
+        BigDecimal num1 = new BigDecimal(price1.value.replace(",", ""));
+        BigDecimal num2 = new BigDecimal(price2.value.replace(",", ""));
+        return num1.compareTo(num2);
     }
 }
